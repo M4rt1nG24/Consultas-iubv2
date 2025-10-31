@@ -486,49 +486,47 @@ function registrarUsuario() {
     form.addEventListener("submit", e => {
         e.preventDefault();
 
-        // Eliminar espacios en todos los campos
+        // ===============================
+        // 🧩 Captura y limpieza de datos
+        // ===============================
         const rol = form.rolUsuario.value.trim();
         const id = form.idUsuario.value.trim();
-        const nombre = form.nombreUsuario.value.trim().replace(/\s{2,}/g, " "); // quita espacios extra
+        const nombre = form.nombreUsuario.value.trim().replace(/\s{2,}/g, " "); // quita espacios dobles
         const id_programa = inputPrograma.value.trim();
-        const contra = form.contraUsuario.value.trim();
+        const contra = form.contraUsuario.value.replace(/\s+/g, ""); // elimina todos los espacios
 
-        // Validar campos vacíos
+        const datos = { rol, id, nombre, id_programa, contra };
+
+        // ===============================
+        // 🔒 Validaciones de seguridad
+        // ===============================
+
+        // 1️⃣ Campos obligatorios
         if (!rol || !id || !nombre || !contra) {
             alert("⚠️ Todos los campos son obligatorios.");
             return;
         }
 
+        // 2️⃣ Programa académico solo si es estudiante
         if (rol === "Estudiante" && !id_programa) {
             alert("⚠️ Debes ingresar el programa académico del estudiante.");
             return;
         }
 
-        // Validar formato del nombre (solo letras y espacios)
-        const regexNombre = /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]{3,50}$/;
-        if (!regexNombre.test(nombre)) {
-            alert("⚠️ El nombre solo puede contener letras y debe tener entre 3 y 50 caracteres.");
-            return;
-        }
-
-        // Validar contraseña segura (mínimo 8 caracteres, mayúscula, minúscula, número y símbolo)
+        // 3️⃣ Validación de contraseña segura
         const regexContra = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
         if (!regexContra.test(contra)) {
-            alert("⚠️ La contraseña debe tener mínimo 8 caracteres e incluir mayúscula, minúscula, número y símbolo.");
+            alert("⚠️ La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial.");
             return;
         }
 
-        // Crear objeto limpio
-        const datos = {
-            rol: rol,
-            id: id,
-            nombre: nombre,
-            id_programa: rol === "Estudiante" ? id_programa : "",
-            contra: contra
-        };
+        // Si no es estudiante, se envía vacío el programa
+        if (rol !== "Estudiante") datos.id_programa = "";
 
-        // Enviar al backend
-        fetch("https://api-prueba-2-r35v.onrender.com/registrar_usuario", {
+        // ===============================
+        // 📡 Envío al backend
+        // ===============================
+        fetch("http://127.0.0.1:5000/registrar_usuario", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
@@ -542,6 +540,7 @@ function registrarUsuario() {
                 inputPrograma.disabled = true;
                 inputPrograma.placeholder = "Solo disponible para estudiantes";
 
+                // Recargar tablas o datos
                 obtenerDocentes();
                 obtenerEstudiantes();
                 cargarProgramas();
@@ -554,7 +553,21 @@ function registrarUsuario() {
             alert("⚠️ Error en la conexión con el servidor.");
         });
     });
+
+    // ===============================
+    // ⛔ Evita que se escriban espacios en contraseña
+    // ===============================
+    const contraInput = document.getElementById("contraUsuario");
+    if (contraInput) {
+        contraInput.addEventListener("keydown", e => {
+            if (e.key === " ") {
+                e.preventDefault();
+                alert("🚫 No se permiten espacios en la contraseña.");
+            }
+        });
+    }
 }
+
 
 
 
@@ -607,4 +620,5 @@ function cerrarSesion() {
     localStorage.clear();
     window.location.href = "index.html";
 }
+
 
