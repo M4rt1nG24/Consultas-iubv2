@@ -306,7 +306,7 @@ function abrirModalEdicion(id, fecha, hora) {
 // =============================
 // 🔹 Cerrar modal
 // =============================
-function cerrarModalEdicion() {
+function cerrarModal() {
     document.getElementById("modalEditar").style.display = "none";
     idConsultaEditar = null;
 }
@@ -578,4 +578,5 @@ document.addEventListener("DOMContentLoaded", () => {
     obtenerEstudiantesDocentesolicitud();
     obtener_solicitudes_docente(idDocente);
 });
+
 
