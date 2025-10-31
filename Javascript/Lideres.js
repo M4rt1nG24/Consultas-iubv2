@@ -19,7 +19,7 @@ if (!idUsuario || !rolUsuario) {
     if (nombreUsuario) {
         if (nombreDiv) nombreDiv.textContent = `Hola, ${nombreUsuario}`;
     } else {
-        fetch(`https://api-prueba-2-zc3q.onrender.com/Lider/${idUsuario}`)
+        fetch(`https://api-prueba-2-r35v.onrender.com/Lider/${idUsuario}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.Lider) {
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 📥 Consultas
 // =============================
 function obtener_consultas_lider() {
-    fetch("https://api-prueba-2-zc3q.onrender.com/consultas_lider")
+    fetch("https://api-prueba-2-r35v.onrender.com/consultas_lider")
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -179,7 +179,7 @@ function actualizarTablaConsultas(consultas) {
 // 📥 Docentes
 // =============================
 function obtenerDocentes() {
-    fetch("https://api-prueba-2-zc3q.onrender.com/obtener_docentes")
+    fetch("https://api-prueba-2-r35v.onrender.com/obtener_docentes")
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -203,7 +203,7 @@ function obtenerestudianteFiltrado() {
         return;
     }
 
-    fetch("https://api-prueba-2-zc3q.onrender.com/obtener_estudiantes")
+    fetch("https://api-prueba-2-r35v.onrender.com/obtener_estudiantes")
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -244,7 +244,7 @@ function obtenerDocenteFiltrado() {
         return;
     }
 
-    fetch("https://api-prueba-2-zc3q.onrender.com/obtener_docentes")
+    fetch("https://api-prueba-2-r35v.onrender.com/obtener_docentes")
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -303,7 +303,7 @@ function llenarSelectProfesores(docentes) {
 // 📥 Estudiantes
 // =============================
 function obtenerEstudiantes() {
-    fetch("https://api-prueba-2-zc3q.onrender.com/obtener_estudiantes")
+    fetch("https://api-prueba-2-r35v.onrender.com/obtener_estudiantes")
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -315,7 +315,7 @@ function obtenerEstudiantes() {
 }
 
 function cargarProgramas() {
-    fetch('https://api-prueba-2-zc3q.onrender.com/programas')  
+    fetch('https://api-prueba-2-r35v.onrender.com/programas')  
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -363,7 +363,7 @@ function llenarSelectEstudiantes(estudiantes) {
 // 📥 Programas
 // =============================
 function obtener_programas() {
-    fetch("https://api-prueba-2-zc3q.onrender.com/programas")
+    fetch("https://api-prueba-2-r35v.onrender.com/programas")
         .then(res => res.json())
         .then(data => {
             if (data.success) actualizarTablaprogramas(data.programas);
@@ -391,7 +391,7 @@ function registrar_programa() {
         return;
     }
 
-    fetch("https://api-prueba-2-zc3q.onrender.com/programas", {
+    fetch("https://api-prueba-2-r35v.onrender.com/programas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, nombre })
@@ -416,7 +416,7 @@ function registrar_modulo() {
         return;
     }
 
-    fetch("https://api-prueba-2-zc3q.onrender.com/modulos", {
+    fetch("https://api-prueba-2-r35v.onrender.com/modulos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, nombre })
@@ -436,7 +436,7 @@ function registrar_modulo() {
 // 📥 Módulos
 // =============================
 function obtener_modulos() {
-    fetch("https://api-prueba-2-zc3q.onrender.com/modulos")
+    fetch("https://api-prueba-2-r35v.onrender.com/modulos")
         .then(res => res.json())
         .then(data => {
             if (data.success) actualizarTablamodulos(data.modulos);
@@ -486,27 +486,49 @@ function registrarUsuario() {
     form.addEventListener("submit", e => {
         e.preventDefault();
 
-        const datos = {
-            rol: form.rolUsuario.value.trim(),
-            id: form.idUsuario.value.trim(),
-            nombre: form.nombreUsuario.value.trim(),
-            id_programa: inputPrograma.value.trim(),
-            contra: form.contraUsuario.value.trim()
-        };
+        // Eliminar espacios en todos los campos
+        const rol = form.rolUsuario.value.trim();
+        const id = form.idUsuario.value.trim();
+        const nombre = form.nombreUsuario.value.trim().replace(/\s{2,}/g, " "); // quita espacios extra
+        const id_programa = inputPrograma.value.trim();
+        const contra = form.contraUsuario.value.trim();
 
-        if (!datos.rol || !datos.id || !datos.nombre || !datos.contra) {
+        // Validar campos vacíos
+        if (!rol || !id || !nombre || !contra) {
             alert("⚠️ Todos los campos son obligatorios.");
             return;
         }
 
-        if (datos.rol === "Estudiante" && !datos.id_programa) {
+        if (rol === "Estudiante" && !id_programa) {
             alert("⚠️ Debes ingresar el programa académico del estudiante.");
             return;
         }
 
-        if (datos.rol !== "Estudiante") datos.id_programa = "";
+        // Validar formato del nombre (solo letras y espacios)
+        const regexNombre = /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]{3,50}$/;
+        if (!regexNombre.test(nombre)) {
+            alert("⚠️ El nombre solo puede contener letras y debe tener entre 3 y 50 caracteres.");
+            return;
+        }
 
-        fetch("http://127.0.0.1:5000/registrar_usuario", {
+        // Validar contraseña segura (mínimo 8 caracteres, mayúscula, minúscula, número y símbolo)
+        const regexContra = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (!regexContra.test(contra)) {
+            alert("⚠️ La contraseña debe tener mínimo 8 caracteres e incluir mayúscula, minúscula, número y símbolo.");
+            return;
+        }
+
+        // Crear objeto limpio
+        const datos = {
+            rol: rol,
+            id: id,
+            nombre: nombre,
+            id_programa: rol === "Estudiante" ? id_programa : "",
+            contra: contra
+        };
+
+        // Enviar al backend
+        fetch("https://api-prueba-2-r35v.onrender.com/registrar_usuario", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
@@ -535,8 +557,9 @@ function registrarUsuario() {
 }
 
 
+
 function cargarProgramas() {
-    fetch('http://127.0.0.1:5000/programas')  
+    fetch('https://api-prueba-2-r35v.onrender.com/programas')  
         .then(response => response.json())
         .then(data => {
             if (data.success) {
