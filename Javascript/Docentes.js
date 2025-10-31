@@ -381,11 +381,6 @@ function registrarConsulta() {
         const fechaHoraIngresada = new Date(`${fecha}T${hora}`);
         const fechaHoraActual = new Date();
 
-        if (fechaHoraIngresada < fechaHoraActual) {
-            alert("⚠️ No puedes registrar una consulta en una fecha/hora pasada.");
-            return;
-        }
-
         const datos = {
             id_docente: idDocente,
             id_estudiante: document.getElementById("numeroDocumentoEstudiante").value,
@@ -583,3 +578,4 @@ document.addEventListener("DOMContentLoaded", () => {
     obtenerEstudiantesDocentesolicitud();
     obtener_solicitudes_docente(idDocente);
 });
+
