@@ -486,24 +486,12 @@ function registrarUsuario() {
     form.addEventListener("submit", e => {
         e.preventDefault();
 
-        // Elimina espacios de la contraseña
-        let contrasenia = form.contraUsuario.value.replace(/\s+/g, "");
-
-        // Validación de contraseña: 
-        // Mínimo 8 caracteres, una mayúscula, una minúscula y un carácter especial
-        const regexContrasenia = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_\-+=<>?{}[\]~]).{8,}$/;
-
-        if (!regexContrasenia.test(contrasenia)) {
-            alert("⚠️ La contraseña debe tener:\n- Mínimo 8 caracteres\n- Una mayúscula\n- Una minúscula\n- Un carácter especial\n(Ejemplo: MiClave@123)");
-            return;
-        }
-
         const datos = {
             rol: form.rolUsuario.value.trim(),
             id: form.idUsuario.value.trim(),
             nombre: form.nombreUsuario.value.trim(),
             id_programa: inputPrograma.value.trim(),
-            contra: contrasenia
+            contra: form.contraUsuario.value.trim()
         };
 
         if (!datos.rol || !datos.id || !datos.nombre || !datos.contra) {
@@ -545,7 +533,6 @@ function registrarUsuario() {
         });
     });
 }
-
 
 
 function cargarProgramas() {
