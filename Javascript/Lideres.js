@@ -526,7 +526,7 @@ function registrarUsuario() {
         // ===============================
         // 📡 Envío al backend
         // ===============================
-        fetch("http://127.0.0.1:5000/registrar_usuario", {
+        fetch("https://api-prueba-2-r35v.onrender.com/registrar_usuario", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
@@ -620,5 +620,6 @@ function cerrarSesion() {
     localStorage.clear();
     window.location.href = "index.html";
 }
+
 
 
