@@ -3,7 +3,6 @@ let idUsuario = localStorage.getItem('id_usuario');
 let rolUsuario = localStorage.getItem('rol'); // Se obtiene los datos guardados al iniciar sesión
 let nombreUsuario = localStorage.getItem("nombre_usuario");
 
-
 // =============================
 // 🔒 Seguridad de acceso
 // =============================
@@ -620,6 +619,7 @@ function cerrarSesion() {
     localStorage.clear();
     window.location.href = "index.html";
 }
+
 
 
 
