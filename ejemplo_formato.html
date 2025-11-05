@@ -5,7 +5,7 @@
   <title>Listado de Asistencia</title>
   <link rel="stylesheet" href="css/formato.css">
   <script defer>
-    // Función para mostrar la imagen seleccionada (centrada)
+    // Función para previsualizar la firma seleccionada (imagen)
     function mostrarImagenFirma(event, tipo) {
       const file = event.target.files[0];
       if (file) {
@@ -14,19 +14,13 @@
           const img = document.getElementById(`imagenFirma_${tipo}`);
           img.src = e.target.result;
           img.style.display = "block";
-          img.style.margin = "0 auto"; // Centra horizontalmente
-          img.style.maxWidth = "100%";
-          img.style.maxHeight = "120px";
-          img.style.objectFit = "contain";
-          img.style.textAlign = "center";
-
           document.getElementById(`lineaFirma_${tipo}`).style.display = "none";
         };
         reader.readAsDataURL(file);
       }
     }
 
-    // Abre el selector de archivo oculto
+    // Función para abrir el selector de archivo (simula clic oculto)
     function abrirSelectorFirma(tipo) {
       document.getElementById(`inputFirma_${tipo}`).click();
     }
@@ -95,19 +89,19 @@
         <td colspan="11">
           <div class="firmas">
             <div class="columna-izquierda">
-              
-              <!-- 🔹 Firma del Docente -->
-              <div class="firma-bloque" id="firmaDocente" onclick="abrirSelectorFirma('docente')">
+
+              <!-- 🔹 Firma Docente -->
+              <div class="firma-bloque" onclick="abrirSelectorFirma('docente')">
                 <input type="file" id="inputFirma_docente" accept="image/*" style="display:none" onchange="mostrarImagenFirma(event, 'docente')">
-                <img id="imagenFirma_docente" style="display:none;">
+                <img id="imagenFirma_docente" style="display:none; max-height:80px;">
                 <hr id="lineaFirma_docente">
                 <p>Firma del Docente</p>
               </div>
 
-              <!-- 🔹 Firma del Líder o Decano -->
-              <div class="firma-bloque" id="firmaDecano" onclick="abrirSelectorFirma('decano')">
+              <!-- 🔹 Firma Decano -->
+              <div class="firma-bloque" onclick="abrirSelectorFirma('decano')">
                 <input type="file" id="inputFirma_decano" accept="image/*" style="display:none" onchange="mostrarImagenFirma(event, 'decano')">
-                <img id="imagenFirma_decano" style="display:none;">
+                <img id="imagenFirma_decano" style="display:none; max-height:80px;">
                 <hr id="lineaFirma_decano">
                 <p>Firma del Líder o Decano</p>
               </div>
@@ -123,7 +117,6 @@
       </tr>
     </tfoot>
   </table>
-
 </div>
 </body>
 </html>
