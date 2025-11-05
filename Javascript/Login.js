@@ -53,7 +53,7 @@ document.getElementById("modalRecuperar").addEventListener("click", async () => 
   }
 
   try {
-    const response = await fetch("fetch("http://3.129.59.49:8000/usuarios")
+    const response = await fetch("http://3.129.59.49:8000/usuarios")
 /recuperar_contraseña", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -75,5 +75,6 @@ document.getElementById("modalRecuperar").addEventListener("click", async () => 
     console.error("Error:", error);
   }
 });
+
 
 
