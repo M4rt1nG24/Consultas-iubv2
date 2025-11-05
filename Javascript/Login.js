@@ -8,7 +8,7 @@ function loginUsuario() {
     const password = document.getElementById('password').value.trim();
     const mensajeLogin = document.getElementById('error-message');
 
-    fetch('https://api-prueba-2-r35v.onrender.com/login', {
+    fetch('http://3.129.59.49:8000/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }) 
@@ -36,45 +36,5 @@ function loginUsuario() {
         mensajeLogin.innerText = 'Error de conexión con el servidor.';
     }); 
 }
-
-// =============================
-// 📲 Recuperar contraseña
-// =============================
-document.getElementById("modalRecuperar").addEventListener("click", async () => {
-  const documento = document.getElementById("docUsuario").value.trim();
-  const correo = document.getElementById("correoUsuario").value.trim();
-  const telefono = document.getElementById("telefonoUsuario").value.trim();
-  const mensaje = document.getElementById("mensajeRecuperar");
-
-  if (!documento || !correo || !telefono) {
-    mensaje.textContent = "Por favor, completa todos los campos.";
-    mensaje.style.color = "red";
-    return;
-  }
-
-  try {
-    const response = await fetch("http://3.129.59.49:8000/usuarios")
-/recuperar_contraseña", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ documento, correo, telefono })
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      mensaje.textContent = "✅ Nueva contraseña enviada al correo y por SMS.";
-      mensaje.style.color = "green";
-    } else {
-      mensaje.textContent = `❌ ${data.error || "Error al enviar la contraseña."}`;
-      mensaje.style.color = "red";
-    }
-  } catch (error) {
-    mensaje.textContent = "⚠️ Error en la conexión con el servidor.";
-    mensaje.style.color = "red";
-    console.error("Error:", error);
-  }
-});
-
 
 
