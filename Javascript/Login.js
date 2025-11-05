@@ -8,7 +8,7 @@ function loginUsuario() {
     const password = document.getElementById('password').value.trim();
     const mensajeLogin = document.getElementById('error-message');
 
-    fetch(' https://lc0t8ehm6k.execute-api.us-east-2.amazonaws.com/default/app/login', {
+    fetch('https://lc0t8ehm6k.execute-api.us-east-2.amazonaws.com/default/appi/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }) 
@@ -36,6 +36,7 @@ function loginUsuario() {
         mensajeLogin.innerText = 'Error de conexión con el servidor.';
     }); 
 }
+
 
 
 
