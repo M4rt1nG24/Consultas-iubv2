@@ -4,7 +4,33 @@
   <meta charset="UTF-8">
   <title>Listado de Asistencia</title>
   <link rel="stylesheet" href="css/formato.css">
-  <script src="Javascript/formato.js" defer></script>
+  <script defer>
+    // Función para mostrar la imagen seleccionada (centrada)
+    function mostrarImagenFirma(event, tipo) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.getElementById(`imagenFirma_${tipo}`);
+          img.src = e.target.result;
+          img.style.display = "block";
+          img.style.margin = "0 auto"; // Centra horizontalmente
+          img.style.maxWidth = "100%";
+          img.style.maxHeight = "120px";
+          img.style.objectFit = "contain";
+          img.style.textAlign = "center";
+
+          document.getElementById(`lineaFirma_${tipo}`).style.display = "none";
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Abre el selector de archivo oculto
+    function abrirSelectorFirma(tipo) {
+      document.getElementById(`inputFirma_${tipo}`).click();
+    }
+  </script>
 </head>
 
 <body>
@@ -30,18 +56,19 @@
             </div>
           </div>
 
-      <div class="bloque-docente-programa">
-        <div class="bloque-pequeno">
-          <label><b>Docente:</b></label>
-          <span id="nombre_docente"></span>
-        </div>
+          <div class="bloque-docente-programa">
+            <div class="bloque-pequeno">
+              <label><b>Docente:</b></label>
+              <span id="nombre_docente"></span>
+            </div>
 
-  <div class="bloque-pequeno">
-    <label><b>Programa:</b></label>
-    <input type="text" id="programa_academico" placeholder="Programa académico">
-  </div>
-</div>
-
+            <div class="bloque-pequeno">
+              <label><b>Programa:</b></label>
+              <input type="text" id="programa_academico" placeholder="Programa académico">
+            </div>
+          </div>
+        </th>
+      </tr>
 
       <!-- ENCABEZADOS DE LISTA -->
       <tr>
@@ -68,15 +95,23 @@
         <td colspan="11">
           <div class="firmas">
             <div class="columna-izquierda">
-              <div class="firma-bloque" id="firmaDocente" onclick="abrirModalFirma('docente')">
-                <hr>
+              
+              <!-- 🔹 Firma del Docente -->
+              <div class="firma-bloque" id="firmaDocente" onclick="abrirSelectorFirma('docente')">
+                <input type="file" id="inputFirma_docente" accept="image/*" style="display:none" onchange="mostrarImagenFirma(event, 'docente')">
+                <img id="imagenFirma_docente" style="display:none;">
+                <hr id="lineaFirma_docente">
                 <p>Firma del Docente</p>
               </div>
 
-              <div class="firma-bloque" id="firmaDecano" onclick="abrirModalFirma('decano')">
-                <hr>
+              <!-- 🔹 Firma del Líder o Decano -->
+              <div class="firma-bloque" id="firmaDecano" onclick="abrirSelectorFirma('decano')">
+                <input type="file" id="inputFirma_decano" accept="image/*" style="display:none" onchange="mostrarImagenFirma(event, 'decano')">
+                <img id="imagenFirma_decano" style="display:none;">
+                <hr id="lineaFirma_decano">
                 <p>Firma del Líder o Decano</p>
               </div>
+
             </div>
 
             <div class="columna-derecha">
@@ -88,8 +123,6 @@
       </tr>
     </tfoot>
   </table>
-
-
 
 </div>
 </body>
