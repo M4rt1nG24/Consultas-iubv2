@@ -12,6 +12,20 @@ body {
   padding: 0;
 }
 
+.firma-bloque {
+  text-align: center;
+  position: relative;
+  width: 100%;
+  height: 100px; /* controla el alto del recuadro de firma */
+  border: 1px solid #ccc;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centra verticalmente */
+  align-items: center; /* centra horizontalmente */
+}
+
 .container {
   width: 100%;
   max-width: 297mm;
@@ -231,4 +245,5 @@ tbody tr { page-break-inside: avoid !important; }
 }
 
 .modal-firma .botones button:hover { background: #0056b3; }
+
 
