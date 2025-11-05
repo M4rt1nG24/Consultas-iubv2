@@ -53,7 +53,8 @@ document.getElementById("modalRecuperar").addEventListener("click", async () => 
   }
 
   try {
-    const response = await fetch("https://api-prueba-2-r35v.onrender.com/recuperar_contraseña", {
+    const response = await fetch("fetch("http://3.129.59.49:8000/usuarios")
+/recuperar_contraseña", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ documento, correo, telefono })
@@ -74,4 +75,5 @@ document.getElementById("modalRecuperar").addEventListener("click", async () => 
     console.error("Error:", error);
   }
 });
+
 
