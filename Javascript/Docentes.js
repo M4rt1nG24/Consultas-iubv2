@@ -564,7 +564,7 @@ function cerrarSesion() {
 }
 
 function exportarformato() {
-    window.location.href = "ejemplo_formato.html";
+    window.location.href = "formato.html";
 }
 
 // =============================
@@ -578,5 +578,6 @@ document.addEventListener("DOMContentLoaded", () => {
     obtenerEstudiantesDocentesolicitud();
     obtener_solicitudes_docente(idDocente);
 });
+
 
 
