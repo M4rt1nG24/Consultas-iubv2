@@ -567,6 +567,75 @@ function exportarformato() {
     window.location.href = "formato.html";
 }
 
+// ==========================
+// MOSTRAR REPORTES GUARDADOS
+// ==========================
+async function cargarReportes() {
+  const idUsuario = localStorage.getItem("id_usuario");
+  if (!idUsuario) {
+    alert("No se encontró el ID del usuario. Inicie sesión primero.");
+    return;
+  }
+
+  try {
+    const respuesta = await fetch(`https://api-prueba-2-r35v.onrender.com/reportes/${idUsuario}`);
+    const reportes = await respuesta.json();
+
+    const tbody = document.getElementById("tbody_reportes");
+    tbody.innerHTML = "";
+
+    if (reportes.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='4'>No hay reportes guardados</td></tr>";
+      return;
+    }
+
+    reportes.forEach(r => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td>${r.id_reporte}</td>
+        <td>${r.nombre_reporte}</td>
+        <td>${new Date(r.fecha_creacion).toLocaleString()}</td>
+        <td>
+          <button onclick="verReporte(${r.id_reporte})">👁️ Ver</button>
+          <button onclick="descargarReporte(${r.id_reporte}, '${r.nombre_reporte}')">⬇️ Descargar</button>
+        </td>
+      `;
+      tbody.appendChild(fila);
+    });
+  } catch (error) {
+    console.error("Error al cargar reportes:", error);
+    alert("⚠️ Error al cargar los reportes.");
+  }
+}
+
+// ==========================
+// VER REPORTE EN UNA NUEVA PESTAÑA
+// ==========================
+function verReporte(id) {
+  window.open(`https://api-prueba-2-r35v.onrender.com/ver_reporte/${id}`, "_blank");
+}
+
+// ==========================
+// DESCARGAR REPORTE
+// ==========================
+function descargarReporte(id, nombre) {
+  fetch(`https://api-prueba-2-r35v.onrender.com/ver_reporte/${id}`)
+    .then(res => res.blob())
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${nombre}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+}
+
+// Cargar reportes al iniciar
+window.onload = cargarReportes;
+
+
 // =============================
 // 🚀 INICIO AUTOMÁTICO
 // =============================
@@ -578,6 +647,7 @@ document.addEventListener("DOMContentLoaded", () => {
     obtenerEstudiantesDocentesolicitud();
     obtener_solicitudes_docente(idDocente);
 });
+
 
 
 
