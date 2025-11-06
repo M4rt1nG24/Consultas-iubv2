@@ -306,7 +306,7 @@ function abrirModalEdicion(id, fecha, hora) {
 // =============================
 // 🔹 Cerrar modal
 // =============================
-function cerrarModal() {
+function cerrarModalEdicion() {
     document.getElementById("modalEditar").style.display = "none";
     idConsultaEditar = null;
 }
@@ -380,6 +380,11 @@ function registrarConsulta() {
         const hora = document.getElementById("horaConsulta").value;
         const fechaHoraIngresada = new Date(`${fecha}T${hora}`);
         const fechaHoraActual = new Date();
+
+        if (fechaHoraIngresada < fechaHoraActual) {
+            alert("⚠️ No puedes registrar una consulta en una fecha/hora pasada.");
+            return;
+        }
 
         const datos = {
             id_docente: idDocente,
@@ -564,12 +569,9 @@ function cerrarSesion() {
 }
 
 function exportarformato() {
-    window.location.href = "formato.html";
+    window.location.href = "ejemplo_formato.html";
 }
 
-// ==========================
-// MOSTRAR REPORTES GUARDADOS
-// ==========================
 async function cargarReportes() {
   const idUsuario = localStorage.getItem("id_usuario");
   if (!idUsuario) {
@@ -608,16 +610,10 @@ async function cargarReportes() {
   }
 }
 
-// ==========================
-// VER REPORTE EN UNA NUEVA PESTAÑA
-// ==========================
 function verReporte(id) {
   window.open(`https://api-prueba-2-r35v.onrender.com/ver_reporte/${id}`, "_blank");
 }
 
-// ==========================
-// DESCARGAR REPORTE
-// ==========================
 function descargarReporte(id, nombre) {
   fetch(`https://api-prueba-2-r35v.onrender.com/ver_reporte/${id}`)
     .then(res => res.blob())
@@ -632,8 +628,17 @@ function descargarReporte(id, nombre) {
     });
 }
 
-// Cargar reportes al iniciar
-window.onload = cargarReportes;
+// Cargar reportes al abrir la pestaña "Reportes"
+document.addEventListener("DOMContentLoaded", () => {
+  const tabBotones = document.querySelectorAll(".tablink");
+  tabBotones.forEach(btn => {
+    btn.addEventListener("click", e => {
+      if (btn.textContent.includes("Reportes")) {
+        cargarReportes();
+      }
+    });
+  });
+});
 
 
 // =============================
@@ -647,7 +652,3 @@ document.addEventListener("DOMContentLoaded", () => {
     obtenerEstudiantesDocentesolicitud();
     obtener_solicitudes_docente(idDocente);
 });
-
-
-
-
