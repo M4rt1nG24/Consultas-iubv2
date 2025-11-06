@@ -8,7 +8,7 @@ function loginUsuario() {
     const password = document.getElementById('password').value.trim();
     const mensajeLogin = document.getElementById('error-message');
 
-    fetch('http://consultas-iub.us-east-2.elasticbeanstalk.com//login', {
+    fetch('https://api-prueba-2-r35v.onrender.com/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }) 
@@ -36,6 +36,7 @@ function loginUsuario() {
         mensajeLogin.innerText = 'Error de conexión con el servidor.';
     }); 
 }
+
 
 
 
