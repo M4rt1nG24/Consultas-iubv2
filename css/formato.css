@@ -26,6 +26,9 @@ body {
   align-items: center; /* centra horizontalmente */
 }
 
+
+
+
 .container {
   width: 100%;
   max-width: 297mm;
@@ -50,11 +53,16 @@ body {
 .columna_vigencia {
   width: 160px;
   text-align: center;
-  border: 1px solid #000;
+  border: none;
   padding: 3px;
 }
 
-.logo { width: 50px; margin-bottom: 2px; }
+.logo { 
+   width: 100px; 
+  height: auto;  
+  margin-bottom: 2px;
+  border: #000;
+ }
 
 .titulo {
   flex: 1;
@@ -245,5 +253,4 @@ tbody tr { page-break-inside: avoid !important; }
 }
 
 .modal-firma .botones button:hover { background: #0056b3; }
-
 
