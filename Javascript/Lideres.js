@@ -612,13 +612,14 @@ function exportarExcel() {
 }
 
 function exportarformato() {
-    window.location.href = "ejemplo_formato.html";
+    window.location.href = "formato.html";
 }
 
 function cerrarSesion() {
     localStorage.clear();
     window.location.href = "index.html";
 }
+
 
 
 
