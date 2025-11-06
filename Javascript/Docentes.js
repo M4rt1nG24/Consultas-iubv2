@@ -581,17 +581,19 @@ async function cargarReportes() {
 
   try {
     const respuesta = await fetch(`https://api-prueba-2-r35v.onrender.com/reportes/${idUsuario}`);
-    const reportes = await respuesta.json();
+    const data = await respuesta.json(); // data es un objeto con "success" y "reportes"
 
     const tbody = document.getElementById("tbody_reportes");
     tbody.innerHTML = "";
 
-    if (reportes.length === 0) {
+  
+    if (!data.success || !Array.isArray(data.reportes) || data.reportes.length === 0) {
       tbody.innerHTML = "<tr><td colspan='4'>No hay reportes guardados</td></tr>";
       return;
     }
 
-    reportes.forEach(r => {
+   
+    data.reportes.forEach(r => {
       const fila = document.createElement("tr");
       fila.innerHTML = `
         <td>${r.id_reporte}</td>
@@ -610,36 +612,6 @@ async function cargarReportes() {
   }
 }
 
-function verReporte(id) {
-  window.open(`https://api-prueba-2-r35v.onrender.com/ver_reporte/${id}`, "_blank");
-}
-
-function descargarReporte(id, nombre) {
-  fetch(`https://api-prueba-2-r35v.onrender.com/ver_reporte/${id}`)
-    .then(res => res.blob())
-    .then(blob => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${nombre}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    });
-}
-
-// Cargar reportes al abrir la pestaña "Reportes"
-document.addEventListener("DOMContentLoaded", () => {
-  const tabBotones = document.querySelectorAll(".tablink");
-  tabBotones.forEach(btn => {
-    btn.addEventListener("click", e => {
-      if (btn.textContent.includes("Reportes")) {
-        cargarReportes();
-      }
-    });
-  });
-});
-
 
 // =============================
 // 🚀 INICIO AUTOMÁTICO
@@ -652,3 +624,4 @@ document.addEventListener("DOMContentLoaded", () => {
     obtenerEstudiantesDocentesolicitud();
     obtener_solicitudes_docente(idDocente);
 });
+
