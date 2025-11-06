@@ -569,7 +569,7 @@ function cerrarSesion() {
 }
 
 function exportarformato() {
-    window.location.href = "ejemplo_formato.html";
+    window.location.href = "formato.html";
 }
 
 async function cargarReportes() {
@@ -624,4 +624,5 @@ document.addEventListener("DOMContentLoaded", () => {
     obtenerEstudiantesDocentesolicitud();
     obtener_solicitudes_docente(idDocente);
 });
+
 
