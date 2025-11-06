@@ -572,45 +572,51 @@ function exportarformato() {
     window.location.href = "formato.html";
 }
 
-async function cargarReportes() {
+function cargarReportes() {
   const idUsuario = localStorage.getItem("id_usuario");
   if (!idUsuario) {
-    alert("No se encontró el ID del usuario. Inicie sesión primero.");
+    alert("⚠️ No se encontró el ID del usuario. Inicie sesión primero.");
     return;
   }
 
-  try {
-    const respuesta = await fetch(`https://api-prueba-2-r35v.onrender.com/reportes/${idUsuario}`);
-    const data = await respuesta.json(); // data es un objeto con "success" y "reportes"
+  fetch(`https://api-prueba-2-r35v.onrender.com/reportes/${idUsuario}`)
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.getElementById("tbody_reportes");
+      tbody.innerHTML = "";
 
-    const tbody = document.getElementById("tbody_reportes");
-    tbody.innerHTML = "";
+      if (data.success) {
+        // 🟢 Guardamos los reportes globalmente
+        todosLosReportes = data.reportes;
 
-  
-    if (!data.success || !Array.isArray(data.reportes) || data.reportes.length === 0) {
-      tbody.innerHTML = "<tr><td colspan='4'>No hay reportes guardados</td></tr>";
-      return;
-    }
-
-   
-    data.reportes.forEach(r => {
-      const fila = document.createElement("tr");
-      fila.innerHTML = `
-        <td>${r.id_reporte}</td>
-        <td>${r.nombre_reporte}</td>
-        <td>${new Date(r.fecha_creacion).toLocaleString()}</td>
-        <td>
-          <button onclick="verReporte(${r.id_reporte})">👁️ Ver</button>
-          <button onclick="descargarReporte(${r.id_reporte}, '${r.nombre_reporte}')">⬇️ Descargar</button>
-        </td>
-      `;
-      tbody.appendChild(fila);
+        // 🟩 Llenar la tabla con los reportes
+        data.reportes.forEach(r => {
+          const fila = document.createElement("tr");
+          fila.innerHTML = `
+            <td>${r.id_reporte}</td>
+            <td>${r.nombre_reporte}</td>
+            <td>${new Date(r.fecha_creacion).toLocaleString()}</td>
+            <td>
+              <button onclick="verReporte(${r.id_reporte})">👁️ Ver</button>
+              <button onclick="descargarReporte(${r.id_reporte}, '${r.nombre_reporte}')">⬇️ Descargar</button>
+            </td>
+          `;
+          tbody.appendChild(fila);
+        });
+      } else {
+        // 🟠 Si no hay éxito o no hay reportes
+        todosLosReportes = [];
+        tbody.innerHTML = "<tr><td colspan='4'>No hay reportes guardados</td></tr>";
+      }
+    })
+    .catch(err => {
+      console.error("Error al cargar reportes:", err);
+      const tbody = document.getElementById("tbody_reportes");
+      tbody.innerHTML = "<tr><td colspan='4'>Error al conectar con el servidor.</td></tr>";
+      todosLosReportes = [];
     });
-  } catch (error) {
-    console.error("Error al cargar reportes:", error);
-    alert("⚠️ Error al cargar los reportes.");
-  }
 }
+
 
 
 // =============================
