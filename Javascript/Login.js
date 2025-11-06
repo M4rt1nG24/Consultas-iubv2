@@ -21,7 +21,7 @@ function loginUsuario() {
             localStorage.setItem('nombre_usuario',data.nombre)
 
             if (data.rol === 'Lider') {
-                window.location.href = 'Lideres.html';
+                window.location.href = 'lideres.html';
             } else if (data.rol === 'Docente') {
                 window.location.href = 'docentes.html';
             } else if (data.rol === 'Estudiante') {
@@ -36,6 +36,7 @@ function loginUsuario() {
         mensajeLogin.innerText = 'Error de conexión con el servidor.';
     }); 
 }
+
 
 
 
