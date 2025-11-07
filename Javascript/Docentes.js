@@ -663,7 +663,6 @@ document.addEventListener("DOMContentLoaded", () => {
     obtenerEstudiantesDocente();
     obtenerEstudiantesDocentesolicitud();
     obtener_solicitudes_docente(idDocente);
-    cargarReportes();
 });
 
 
