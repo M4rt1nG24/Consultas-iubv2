@@ -142,7 +142,7 @@ async function guardarReporte() {
     return;
   }
 
-  const tabla = document.querySelector("table");
+  const tabla = document.querySelector("tabla_estudiantes");
   if (!tabla) {
     alert("No se encontró la tabla para generar el reporte.");
     return;
