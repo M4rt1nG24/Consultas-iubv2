@@ -127,7 +127,7 @@ function abrirSelectorFirma(tipo) {
 }
 
 // ================================
-// 💾 GUARDAR REPORTE (PDF + BD)
+// 💾 GUARDAR TODO EL HTML COMO PDF + GUARDAR EN BD
 // ================================
 async function guardarReporte() {
   const nombreReporte = prompt("Ingrese el nombre del reporte:");
@@ -142,22 +142,30 @@ async function guardarReporte() {
     return;
   }
 
-  const tabla = document.querySelector("tabla_estudiantes");
-  if (!tabla) {
-    alert("No se encontró la tabla para generar el reporte.");
-    return;
-  }
+  // 📸 Capturar TODO el body del HTML
+  const contenido = document.body;
 
-  const boton = tabla.querySelector("button");
-  if (boton) boton.style.display = "none";
+  // Ocultar botones durante la captura
+  const botones = contenido.querySelectorAll("button");
+  botones.forEach(btn => (btn.style.visibility = "hidden"));
 
-  // Capturar tabla como imagen
-  const canvas = await html2canvas(tabla, { scale: 2 });
+  // Generar imagen del documento
+  const canvas = await html2canvas(contenido, {
+    scale: 2,
+    useCORS: true,
+    scrollX: 0,
+    scrollY: -window.scrollY
+  });
+
+  // Restaurar visibilidad de los botones
+  botones.forEach(btn => (btn.style.visibility = "visible"));
+
   const imgData = canvas.toDataURL("image/png");
 
-  // Crear PDF
+  // Crear PDF con jsPDF
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF("p", "pt", "a4");
+
   const imgWidth = 550;
   const pageHeight = 780;
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -167,17 +175,18 @@ async function guardarReporte() {
   pdf.addImage(imgData, "PNG", 25, position + 20, imgWidth, imgHeight);
   heightLeft -= pageHeight;
 
-  while (heightLeft >= 0) {
+  // Si el contenido ocupa más de una página
+  while (heightLeft > 0) {
     position = heightLeft - imgHeight;
     pdf.addPage();
     pdf.addImage(imgData, "PNG", 25, position + 20, imgWidth, imgHeight);
     heightLeft -= pageHeight;
   }
 
+  // Convertir a base64
   const pdfBase64 = pdf.output("datauristring").split(",")[1];
 
-  if (boton) boton.style.display = "block";
-
+  // 📤 Enviar al backend
   const datos = {
     id_usuario: idUsuario,
     nombre_reporte: nombreReporte,
@@ -193,7 +202,7 @@ async function guardarReporte() {
 
     const resultado = await respuesta.json();
     if (respuesta.ok) {
-      alert("✅ Reporte y PDF guardados correctamente.");
+      alert("✅ Reporte completo guardado correctamente.");
     } else {
       alert("❌ Error al guardar el reporte: " + resultado.message);
     }
@@ -202,6 +211,7 @@ async function guardarReporte() {
     alert("⚠️ Ocurrió un error al conectar con el servidor.");
   }
 }
+
 
 // =============================
 // 🖨️ Repetir observaciones y programa en impresión
