@@ -8,21 +8,17 @@
 
 <body>
 <div class="container">
-
   <table>
     <thead>
-      <!-- ENCABEZADO -->
       <tr>
         <th colspan="11">
           <div class="header">
             <div class="logo-docente">
               <img src="Fotos/Logo de la u.png" alt="Logo Universidad" class="logo">
             </div>
-
             <div class="titulo">
               <h2>CONSULTA ESTUDIANTES</h2>
             </div>
-
             <div class="columna_vigencia">
               <p><b>FR-GPA-16-V8</b></p>
               <p>Vigencia: 15/12/2022</p>
@@ -43,7 +39,6 @@
         </th>
       </tr>
 
-      <!-- ENCABEZADOS DE LISTA -->
       <tr>
         <th>No.</th>
         <th>Nombre completo del estudiante</th>
@@ -59,17 +54,13 @@
       </tr>
     </thead>
 
-    <tbody id="tabla_estudiantes">
-      <!-- Filas dinámicas -->
-    </tbody>
+    <tbody id="tabla_estudiantes"></tbody>
 
     <tfoot>
       <tr>
         <td colspan="11">
           <div class="firmas">
             <div class="columna-izquierda">
-
-              <!-- 🔹 Firma Docente -->
               <div class="firma-bloque" onclick="abrirSelectorFirma('docente')">
                 <input type="file" id="inputFirma_docente" accept="image/*" style="display:none" onchange="mostrarImagenFirma(event, 'docente')">
                 <img id="imagenFirma_docente" style="display:none; max-height:80px;">
@@ -77,7 +68,6 @@
                 <p>Firma del Docente</p>
               </div>
 
-              <!-- 🔹 Firma Decano -->
               <div class="firma-bloque" onclick="abrirSelectorFirma('decano')">
                 <input type="file" id="inputFirma_decano" accept="image/*" style="display:none" onchange="mostrarImagenFirma(event, 'decano')">
                 <img id="imagenFirma_decano" style="display:none; max-height:80px;">
@@ -85,13 +75,11 @@
                 <p>Firma del Líder o Decano</p>
               </div>
 
-              <!-- 🔹 BOTÓN GUARDAR REPORTE -->
               <div style="margin-top:20px; text-align:center;">
                 <button onclick="guardarReporte()" style="padding:10px 20px; background-color:#004aad; color:white; border:none; border-radius:8px; cursor:pointer;">
                   💾 Guardar Reporte
                 </button>
               </div>
-
             </div>
 
             <div class="columna-derecha">
@@ -105,12 +93,8 @@
   </table>
 </div>
 
-<script src="Javascript/formato.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+<script src="Javascript/formato.js"></script>
 </body>
 </html>
-
-
-
