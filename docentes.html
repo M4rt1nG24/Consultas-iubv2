@@ -172,28 +172,30 @@
       <button type="submit">Registrar Consulta</button>
     </form>
   </section>
+<!-- ==========================
+     📄 REPORTES GUARDADOS
+=========================== -->
+<section id="reportesGuardados" class="tabcontent">
+  <h2>📁 Reportes Guardados</h2>
+  <p>Consulta, visualiza y descarga los reportes en PDF que has generado.</p>
 
-  <!-- ==========================
-       🔹 NUEVA SECCIÓN: REPORTES
-  =========================== -->
-  <section id="reportes" class="tabcontent">
-    <h2>📂 Reportes Guardados</h2>
-    <p>Consulta, visualiza y descarga los reportes en PDF que has generado.</p>
-
-    <table id="tabla_reportes" border="1" style="width:100%; text-align:center;">
+  <div class="tabla-container">
+    <table id="tablaReportes">
       <thead>
         <tr>
           <th>ID</th>
           <th>Nombre del Reporte</th>
-          <th>Fecha</th>
+          <th>Fecha de Creación</th>
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id="tbody_reportes">
-        <!-- Reportes cargados dinámicamente -->
+      <tbody>
+        <!-- Los reportes se cargan dinámicamente desde JS -->
       </tbody>
     </table>
-  </section>
+  </div>
+</section>
+
 
   <!-- ==========================
        🔹 MODAL EDITAR CONSULTA
