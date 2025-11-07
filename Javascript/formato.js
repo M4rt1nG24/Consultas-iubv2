@@ -114,38 +114,6 @@ if (inputPrograma) {
   });
 }
 
-// =============================
-// ✍️ Modal y canvas para firmas
-// =============================
-let tipoFirmaActual = null;
-let canvas, ctx;
-let dibujando = false;
-
-let firmaDocenteData = null;
-let firmaDecanoData = null;
-
-// Crear modal único
-const modal = document.createElement("div");
-modal.className = "modal-firma";
-modal.style.display = "none";
-modal.innerHTML = `
-  <div class="modal-contenido">
-    <h3 id="tituloModal">Firma</h3>
-    <canvas id="canvasFirma" width="400" height="150"></canvas>
-    <div class="botones">
-      <button id="btnLimpiar">🧹 Limpiar</button>
-      <button id="btnGuardar">💾 Guardar</button>
-      <button id="btnCerrar">❌ Cerrar</button>
-    </div>
-  </div>
-`;
-document.body.appendChild(modal);
-
-canvas = modal.querySelector("#canvasFirma");
-ctx = canvas.getContext("2d");
-ctx.lineWidth = 2;
-ctx.lineCap = "round";
-ctx.strokeStyle = "#000";
 
 // Guardar firma (solo en memoria, no en localStorage)
 function guardarFirma() {
