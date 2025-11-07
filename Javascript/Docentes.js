@@ -652,10 +652,6 @@ function filtrarReportes() {
 }
 
 
-if (tabName === "reportes") {
-  cargarReportes();
-}
-
 
 // =============================
 // 🚀 INICIO AUTOMÁTICO
