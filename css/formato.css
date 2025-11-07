@@ -184,16 +184,36 @@ tbody tr { page-break-inside: avoid !important; }
    🖨️ MODO IMPRESIÓN
 ========================================= */
 @media print {
-  @page { size: A4 landscape; margin: 8mm 5mm; }
-  html, body { width: 297mm; height: 210mm; background: #fff; color: #000; }
-  textarea, input { border: none; background: #fff; }
-  .container { border: none; padding-left: 3mm; }
+  @page {
+    size: auto; /* Se ajusta automáticamente al tamaño del papel */
+    margin: 8mm 5mm; /* Márgenes moderados para todas las hojas */
+  }
+
+  html, body {
+    width: auto;
+    height: auto;
+    background: #fff;
+    color: #000;
+    margin: 0;
+    padding: 0;
+  }
+
+  textarea, input {
+    border: none;
+    background: #fff;
+  }
+
+  .container {
+    border: none;
+    padding-left: 3mm;
+  }
 
   .firma-bloque img {
-    max-width: 70px; /* más pequeña para impresión */
+    max-width: 70px;  /* tamaño adaptable */
     max-height: 35px;
   }
 }
+
 
 /* =========================================
    🖌️ MODAL DE FIRMAS
