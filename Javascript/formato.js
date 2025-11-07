@@ -147,46 +147,6 @@ ctx.lineWidth = 2;
 ctx.lineCap = "round";
 ctx.strokeStyle = "#000";
 
-function iniciarDibujo(e) {
-  dibujando = true;
-  ctx.beginPath();
-  ctx.moveTo(e.offsetX, e.offsetY);
-}
-function dibujar(e) {
-  if (!dibujando) return;
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.stroke();
-}
-function detenerDibujo() {
-  dibujando = false;
-  ctx.closePath();
-}
-function getPosTouch(e) {
-  const rect = canvas.getBoundingClientRect();
-  const touch = e.touches[0];
-  return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
-}
-function iniciarDibujoTouch(e) {
-  e.preventDefault();
-  const pos = getPosTouch(e);
-  dibujando = true;
-  ctx.beginPath();
-  ctx.moveTo(pos.x, pos.y);
-}
-function dibujarTouch(e) {
-  e.preventDefault();
-  if (!dibujando) return;
-  const pos = getPosTouch(e);
-  ctx.lineTo(pos.x, pos.y);
-  ctx.stroke();
-}
-function limpiarFirma() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-function cerrarModal() {
-  modal.style.display = "none";
-}
-
 // Guardar firma (solo en memoria, no en localStorage)
 function guardarFirma() {
   const imagenFirma = canvas.toDataURL("image/png");
