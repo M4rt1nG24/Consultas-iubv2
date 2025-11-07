@@ -146,22 +146,7 @@ function guardarFirma() {
   cerrarModal();
 }
 
-// Eventos canvas
 
-// Botones modal
-modal.querySelector("#btnLimpiar").addEventListener("click", limpiarFirma);
-modal.querySelector("#btnGuardar").addEventListener("click", guardarFirma);
-modal.querySelector("#btnCerrar").addEventListener("click", cerrarModal);
-modal.addEventListener("click", e => { if (e.target === modal) cerrarModal(); });
-
-// Función global para abrir modal
-window.abrirModalFirma = function(tipo) {
-  tipoFirmaActual = tipo;
-  modal.querySelector("#tituloModal").textContent =
-    tipo === "docente" ? "Firma del Docente" : "Firma del Líder o Decano";
-  limpiarFirma();
-  modal.style.display = "flex";
-};
 
 // =============================
 // Repetir firmas en la impresión
