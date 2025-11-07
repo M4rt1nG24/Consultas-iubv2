@@ -180,13 +180,10 @@ tbody tr { page-break-inside: avoid !important; }
   background: #fff;
 }
 
-/* =========================================
-   🖨️ MODO IMPRESIÓN
-========================================= */
 @media print {
   @page {
     size: auto; /* Se ajusta automáticamente al tamaño del papel */
-    margin: 8mm 5mm; /* Márgenes moderados para todas las hojas */
+    margin: 8mm 5mm; /* Márgenes moderados */
   }
 
   html, body {
@@ -205,11 +202,13 @@ tbody tr { page-break-inside: avoid !important; }
 
   .container {
     border: none;
-    padding-left: 3mm;
+    margin-left: 0;     /* 🔹 quitamos margen extra */
+    padding-left: 0;    /* 🔹 quitamos padding a la izquierda */
+    padding-right: 3mm; /* mantenemos leve margen interno derecho */
   }
 
   .firma-bloque img {
-    max-width: 70px;  /* tamaño adaptable */
+    max-width: 70px;
     max-height: 35px;
   }
 }
