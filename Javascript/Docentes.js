@@ -572,6 +572,9 @@ function exportarformato() {
     window.location.href = "formato.html";
 }
 
+let todosLosReportes = [];
+
+// 🔹 Cargar los reportes guardados del docente
 function cargarReportes() {
   const idUsuario = localStorage.getItem("id_usuario");
   if (!idUsuario) {
@@ -585,38 +588,73 @@ function cargarReportes() {
       const tbody = document.getElementById("tbody_reportes");
       tbody.innerHTML = "";
 
-      if (data.success) {
-        // 🟢 Guardamos los reportes globalmente
+      if (data.success && data.reportes.length > 0) {
         todosLosReportes = data.reportes;
-
-        // 🟩 Llenar la tabla con los reportes
-        data.reportes.forEach(r => {
-          const fila = document.createElement("tr");
-          fila.innerHTML = `
-            <td>${r.id_reporte}</td>
-            <td>${r.nombre_reporte}</td>
-            <td>${new Date(r.fecha_creacion).toLocaleString()}</td>
-            <td>
-              <button onclick="verReporte(${r.id_reporte})">👁️ Ver</button>
-              <button onclick="descargarReporte(${r.id_reporte}, '${r.nombre_reporte}')">⬇️ Descargar</button>
-            </td>
-          `;
-          tbody.appendChild(fila);
-        });
+        actualizarTablaReportes(todosLosReportes);
       } else {
-        // 🟠 Si no hay éxito o no hay reportes
-        todosLosReportes = [];
-        tbody.innerHTML = "<tr><td colspan='4'>No hay reportes guardados</td></tr>";
+        const fila = tbody.insertRow();
+        const celda = fila.insertCell(0);
+        celda.colSpan = 4;
+        celda.textContent = "⚠️ No hay reportes disponibles.";
+        celda.style.textAlign = "center";
       }
     })
-    .catch(err => {
-      console.error("Error al cargar reportes:", err);
-      const tbody = document.getElementById("tbody_reportes");
-      tbody.innerHTML = "<tr><td colspan='4'>Error al conectar con el servidor.</td></tr>";
-      todosLosReportes = [];
-    });
+    .catch(err => console.error("Error al cargar reportes:", err));
 }
 
+// 🔹 Mostrar los reportes en tabla
+function actualizarTablaReportes(reportes) {
+  const tbody = document.getElementById("tbody_reportes");
+  tbody.innerHTML = "";
+
+  reportes.forEach(r => {
+    const fila = tbody.insertRow();
+    fila.insertCell(0).textContent = r.id_reporte;
+    fila.insertCell(1).textContent = r.nombre_reporte;
+    fila.insertCell(2).textContent = r.fecha;
+
+    // Botones de acción
+    const celdaAcciones = fila.insertCell(3);
+    celdaAcciones.classList.add("celda-acciones");
+
+    const btnVer = document.createElement("button");
+    btnVer.textContent = "👁️ Ver";
+    btnVer.onclick = () => window.open(r.url_pdf, "_blank");
+    celdaAcciones.appendChild(btnVer);
+
+    const btnDescargar = document.createElement("button");
+    btnDescargar.textContent = "⬇️ Descargar";
+    btnDescargar.onclick = () => descargarPDF(r.url_pdf, r.nombre_reporte);
+    celdaAcciones.appendChild(btnDescargar);
+  });
+}
+
+// 🔹 Descargar PDF
+function descargarPDF(url, nombre) {
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${nombre}.pdf`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// 🔹 Filtrar reportes por fecha/mes
+function filtrarReportes() {
+  const fecha = document.getElementById("buscarFechaReporte").value;
+  const mes = document.getElementById("buscarMesReporte").value;
+
+  let filtrados = [...todosLosReportes];
+  if (fecha) filtrados = filtrados.filter(r => r.fecha === fecha);
+  if (mes) filtrados = filtrados.filter(r => (new Date(r.fecha).getMonth() + 1) === parseInt(mes));
+
+  actualizarTablaReportes(filtrados);
+}
+
+
+if (tabName === "reportes") {
+  cargarReportes();
+}
 
 
 // =============================
