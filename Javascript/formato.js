@@ -147,14 +147,6 @@ function guardarFirma() {
 }
 
 // Eventos canvas
-canvas.addEventListener("mousedown", iniciarDibujo);
-canvas.addEventListener("mousemove", dibujar);
-canvas.addEventListener("mouseup", detenerDibujo);
-canvas.addEventListener("mouseleave", detenerDibujo);
-
-canvas.addEventListener("touchstart", iniciarDibujoTouch);
-canvas.addEventListener("touchmove", dibujarTouch);
-canvas.addEventListener("touchend", detenerDibujo);
 
 // Botones modal
 modal.querySelector("#btnLimpiar").addEventListener("click", limpiarFirma);
