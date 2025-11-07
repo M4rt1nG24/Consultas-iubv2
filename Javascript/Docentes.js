@@ -604,7 +604,7 @@ function cargarReportes() {
 
 // 🔹 Mostrar los reportes en tabla
 function actualizarTablaReportes(reportes) {
-  const tbody = document.getElementById("tbody_reportes");
+  const tbody = document.getElementById("tabla_reportes");
   tbody.innerHTML = "";
 
   reportes.forEach(r => {
