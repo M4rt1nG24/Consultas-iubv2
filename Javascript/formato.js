@@ -172,6 +172,100 @@ document.addEventListener("DOMContentLoaded", () => {
   cargarAsistenciaFiltrada();
 });
 
+// Función para previsualizar la firma seleccionada (imagen)
+    function mostrarImagenFirma(event, tipo) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.getElementById(`imagenFirma_${tipo}`);
+          img.src = e.target.result;
+          img.style.display = "block";
+          document.getElementById(`lineaFirma_${tipo}`).style.display = "none";
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Función para abrir el selector de archivo (simula clic oculto)
+    function abrirSelectorFirma(tipo) {
+      document.getElementById(`inputFirma_${tipo}`).click();
+    }
+  // ================================
+  // GUARDAR REPORTE EN BASE DE DATOS Y PDF
+  // ================================
+  async function guardarReporte() {
+    const nombreReporte = prompt("Ingrese el nombre del reporte:");
+    if (!nombreReporte) {
+      alert("Debe ingresar un nombre para el reporte.");
+      return;
+    }
+
+    const idUsuario = localStorage.getItem("id_usuario");
+    if (!idUsuario) {
+      alert("No se encontró el ID del usuario. Por favor inicie sesión.");
+      return;
+    }
+
+    // 🔹 Selecciona la tabla (sin el botón)
+    const tabla = document.querySelector("tabla_estudiantes");
+    const boton = tabla.querySelector("button");
+    boton.style.display = "none"; // ocultar antes de capturar
+
+    // 🔹 Capturar la tabla como imagen con html2canvas
+    const canvas = await html2canvas(tabla, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+
+    // 🔹 Crear PDF con jsPDF
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "pt", "a4");
+    const imgWidth = 550;
+    const pageHeight = 780;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, "PNG", 25, position + 20, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 25, position + 20, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    // 🔹 Convertir PDF a Base64
+    const pdfBase64 = pdf.output("datauristring").split(",")[1];
+
+    boton.style.display = "block"; // mostrar de nuevo
+
+    // 🔹 Enviar datos al backend
+    const datos = {
+      id_usuario: idUsuario,
+      nombre_reporte: nombreReporte,
+      archivo_pdf: pdfBase64
+    };
+
+    try {
+      const respuesta = await fetch("https://api-prueba-2-r35v.onrender.com/guardar_reporte", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos)
+      });
+
+      const resultado = await respuesta.json();
+      if (respuesta.ok) {
+        alert("✅ Reporte y PDF guardados correctamente.");
+      } else {
+        alert("❌ Error al guardar el reporte: " + resultado.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("⚠️ Ocurrió un error al conectar con el servidor.");
+    }
+  }
+
 
 // =============================
 // 📝 Repetir observaciones al imprimir
