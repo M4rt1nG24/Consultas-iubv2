@@ -111,7 +111,7 @@ function obtener_consultas_docente(id_docente) {
 // =============================
 // 🔍 FILTRO DE CONSULTAS
 // =============================
-function obtenerConsultasFiltradas() {
+function obtenerConsultasFiltadas() {
     const fecha = document.getElementById("buscarFecha").value;
     const hora = document.getElementById("buscarHora").value;
     const mes = document.getElementById("buscarMes").value;
