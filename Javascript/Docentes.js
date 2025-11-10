@@ -300,8 +300,8 @@ function abrirModalEdicion(id, fecha, hora, tema, lugar) {
   document.getElementById("idConsultaEditar").value = id;
   document.getElementById("nuevaFecha").value = fecha;
   document.getElementById("nuevaHora").value = hora;
-  document.getElementById("nuevoTema").value = tema;
-  document.getElementById("nuevoLugar").value = lugar;
+  document.getElementById("nuevo_Tema").value = tema;
+  document.getElementById("nuevo_Lugar").value = lugar;
   document.getElementById("modalEditar").style.display = "flex";
 }
 
