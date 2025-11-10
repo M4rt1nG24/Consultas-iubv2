@@ -154,14 +154,6 @@ function llenarSelectEstudiantes(estudiantes) {
     });
 }
 
-function obtenerEstudiantesDocentesolicitud() {
-    fetch(`https://api-prueba-2-r35v.onrender.com/estudiantes_docente_solicitud/${idDocente}`)
-        .then(res => res.json())
-        .then(data => {
-        })
-        .catch(err => console.error("Error al traer estudiantes:", err));
-}
-
 
 
 let todasLassolicitudes = [];
