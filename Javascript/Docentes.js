@@ -615,8 +615,6 @@ document.addEventListener("DOMContentLoaded", () => {
     registrarConsulta();
     cargarmodulos();
     obtener_consultas_docente(idDocente);
-    obtenerEstudiantesDocente();
-    obtenerEstudiantesDocentesolicitud();
     obtener_solicitudes_docente(idDocente);
 });
 
