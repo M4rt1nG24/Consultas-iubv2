@@ -1,41 +1,140 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Login</title>
-
-<link rel="stylesheet" href="css/Login.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Docentes</title>
+  <link rel="stylesheet" href="css/docentes.css">
 </head>
 <body>
+  <header>
+    <img src="Fotos/Logo de la u.png" alt="Logo Universidad" class="logo">
+    <div class="usuario" id="nombreDocente"></div>
+    <button class="cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>
+  </header>
 
-  <div class="login-container">
-    <img src="Fotos/Logo de la u.png" alt="Logo U">
-    <div class="Textologin">
-      <h1>Identifíquese usando su cuenta en:</h1>
+  <nav class="menu">
+    <button class="tablink active" onclick="openTab(event, 'consultas')">Listado de Consultas</button>
+    <button class="tablink" onclick="openTab(event, 'registroConsultas')">Registro de Consultas</button>
+    <button class="tablink" onclick="openTab(event, 'solicitudConsultas')">Solicitud de Consultas</button>
+    <button class="tablink" onclick="openTab(event, 'Proximamente')">Próximamente..</button>
+  </nav>
+
+  <!-- ==========================
+       🔹 LISTADO DE CONSULTAS
+  =========================== -->
+  <section id="consultas" class="tabcontent active">
+    <h1>Listado de consultas de estudiantes</h1>
+
+    <div class="filtros">
+      <label>Fecha:</label>
+      <input type="date" id="buscarFecha">
+
+      <label>Hora:</label>
+      <input type="time" id="buscarHora">
+
+      <label>Mes:</label>
+      <select id="buscarMes">
+        <option value="">Todos</option>
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
+
+      <label>Documento del estudiante:</label>
+      <input type="text" id="buscarDocumentoEstudiante" placeholder="Ej: 123456789">
+
+      <button onclick="obtenerConsultasFiltradas()">Filtrar</button>
+      <button onclick="exportarExcel()">Exportar a Excel</button>
+      <button onclick="exportarformato()">Exportar a formato</button>
     </div>
 
-    <!-- Formulario de Login -->
-    <form id="loginForm" autocomplete="off">
-      <input type="text" id="username" placeholder="Numero de documento" required>
-      <input type="password" id="password" placeholder="Contraseña" required>
-      <button type="submit">Ingresar</button>
-      <p id="error-message"></p>
-    </form>
+    <table id="tablaconsultas">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre del estudiante</th>
+          <th>ID del estudiante</th>
+          <th>Módulo</th>
+          <th>Tema</th>
+          <th>Programa</th>
+          <th>Hora</th>
+          <th>Fecha</th>
+          <th>Lugar</th>
+          <th>Firma</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
 
-    <a href="Registro.html">Registro</a>
+  <!-- ==========================
+       🔹 SOLICITUDES DE CONSULTAS
+  =========================== -->
+  <section id="solicitudConsultas" class="tabcontent">
+    <h2>Solicitudes de Consultas de Estudiantes</h2>
 
-  <div>
+    <div class="filtros">
+      <label>Fecha:</label>
+      <input type="date" id="buscarFechaSolicitud">
 
+      <label>Hora:</label>
+      <input type="time" id="buscarHoraSolicitud">
 
-<script src="Javascript/Login.js"></script>
+      <label>Mes:</label>
+      <select id="buscarMesSolicitud">
+        <option value="">Todos</option>
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
 
-    
+      <label>Documento del estudiante:</label>
+      <input type="text" id="buscarDocumentoSolicitud" placeholder="Ej: 123456789">
+
+      <button onclick="obtenerSolicitudesFiltradas()">Filtrar</button>
+    </div>
+
+    <table id="tablaSolicitudes">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Estudiante</th>
+          <th>Programa</th>
+          <th>Módulo</th>
+          <th>Tema</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Lugar</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="Javascript/Docentes.js"></script>
 </body>
-  
 </html>
-
-
-
-
