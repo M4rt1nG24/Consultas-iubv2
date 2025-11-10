@@ -143,16 +143,6 @@ function obtenerEstudiantesDocente() {
         .catch(err => console.error("Error al traer estudiantes:", err));
 }
 
-function llenarSelectEstudiantes(estudiantes) {
-    const select = document.getElementById("buscarEstudiante");
-    select.innerHTML = '<option value="">Todos</option>';
-    estudiantes.forEach(e => {
-        const option = document.createElement("option");
-        option.value = e.id;
-        option.textContent = e.nombre;
-        select.appendChild(option);
-    });
-}
 
 
 
