@@ -158,8 +158,6 @@ function obtenerEstudiantesDocentesolicitud() {
     fetch(`https://api-prueba-2-r35v.onrender.com/estudiantes_docente_solicitud/${idDocente}`)
         .then(res => res.json())
         .then(data => {
-            if (data.success) llenarSelectEstudiantesolicitud(data.estudiantes);
-            else llenarSelectEstudiantesolicitud([]);
         })
         .catch(err => console.error("Error al traer estudiantes:", err));
 }
