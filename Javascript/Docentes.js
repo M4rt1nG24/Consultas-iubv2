@@ -385,7 +385,7 @@ function obtenerSolicitudesFiltradas() {
     if (hora) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.hora === hora);
     // Corrección para el filtro de mes: se recomienda usar la función parseInt dentro del filtro
     if (mes) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
-    if (estudiante) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => String(c.id_estudiante) === estudiante);
+    if (estudiante) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => String(c.id_estudiante) === idestudiante);
 
     actualizarTablaSolicitudes(Solicitudes_filtradas);
 
