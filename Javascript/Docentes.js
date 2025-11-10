@@ -473,9 +473,7 @@ function exportarExcel() {
     XLSX.writeFile(wb, "consultas.xlsx");
 }
 
-// =============================
-// 🧭 TABS Y SESIÓN
-// =============================
+
 // =============================
 // 🧭 TABS (funcional)
 // =============================
@@ -518,4 +516,5 @@ function exportarformato() {
 document.addEventListener("DOMContentLoaded", () => {
   cargarmodulos();
   obtener_consultas_docente(idDocente);
+  obtener_solicitudes_docente(idDocente);
 });
