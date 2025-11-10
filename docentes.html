@@ -26,65 +26,64 @@
     <button class="tablink" onclick="openTab(event, 'Proximamente')">Próximamente..</button> 
   </nav>
 
-  <!-- ==========================
-       🔹 LISTADO DE CONSULTAS
-  =========================== -->
-  <section id="consultas" class="tabcontent active">
-    <h1>Listado de consultas de estudiantes</h1>
+<!-- ==========================
+     🔹 LISTADO DE CONSULTAS
+=========================== -->
+<section id="consultas" class="tabcontent active">
+  <h1>Listado de consultas de estudiantes</h1>
 
-    <div class="filtros">
-      <label>Fecha:</label>
-      <input type="date" id="buscarFecha">
+  <div class="filtros">
+    <label>Fecha:</label>
+    <input type="date" id="buscarFecha">
 
-      <label>Hora:</label>
-      <input type="time" id="buscarHora">
+    <label>Hora:</label>
+    <input type="time" id="buscarHora">
 
-      <label>Mes:</label>
-      <select id="buscarMes">
-        <option value="">Todos</option>
-        <option value="1">Enero</option>
-        <option value="2">Febrero</option>
-        <option value="3">Marzo</option>
-        <option value="4">Abril</option>
-        <option value="5">Mayo</option>
-        <option value="6">Junio</option>
-        <option value="7">Julio</option>
-        <option value="8">Agosto</option>
-        <option value="9">Septiembre</option>
-        <option value="10">Octubre</option>
-        <option value="11">Noviembre</option>
-        <option value="12">Diciembre</option>
-      </select>
+    <label>Mes:</label>
+    <select id="buscarMes">
+      <option value="">Todos</option>
+      <option value="1">Enero</option>
+      <option value="2">Febrero</option>
+      <option value="3">Marzo</option>
+      <option value="4">Abril</option>
+      <option value="5">Mayo</option>
+      <option value="6">Junio</option>
+      <option value="7">Julio</option>
+      <option value="8">Agosto</option>
+      <option value="9">Septiembre</option>
+      <option value="10">Octubre</option>
+      <option value="11">Noviembre</option>
+      <option value="12">Diciembre</option>
+    </select>
 
-      <label>Estudiante:</label>
-      <select id="buscarEstudiante">
-        <option value="">Todos</option>
-      </select>
+    <label>Número de Documento:</label>
+    <input type="text" id="buscarDocumento" placeholder="Ingrese documento del estudiante">
 
-      <button onclick="obtenerConsultasFiltradas()">Filtrar</button>
-      <button onclick="exportarExcel()">Exportar a Excel</button>
-      <button onclick="exportarformato()">Exportar a formato</button>
-    </div>
+    <button onclick="obtenerConsultasFiltradas()">Filtrar</button>
+    <button onclick="exportarExcel()">Exportar a Excel</button>
+    <button onclick="exportarformato()">Exportar a formato</button>
+  </div>
 
-    <table id="tablaconsultas">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre del estudiante</th>
-          <th>ID del estudiante</th>
-          <th>Módulo</th>
-          <th>Tema</th>
-          <th>Programa</th>
-          <th>Hora</th>
-          <th>Fecha</th>
-          <th>Lugar</th>
-          <th>Firma</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
+  <table id="tablaconsultas">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre del estudiante</th>
+        <th>ID del estudiante</th>
+        <th>Módulo</th>
+        <th>Tema</th>
+        <th>Programa</th>
+        <th>Hora</th>
+        <th>Fecha</th>
+        <th>Lugar</th>
+        <th>Firma</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
 
   <!-- ==========================
        🔹 SOLICITUDES DE CONSULTAS
