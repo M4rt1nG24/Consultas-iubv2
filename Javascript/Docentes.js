@@ -295,7 +295,7 @@ let idConsultaEditar = null;
 // =============================
 // 🔹 Abrir modal de edición
 // =============================
-function abrirModalEdicion(id, fecha, hora, tema, lugar) {
+function abrirModalEdicion(id, fecha, hora, tema, lugar_consulta) {
   idConsultaEditar = id;
   document.getElementById("idConsultaEditar").value = id;
   document.getElementById("nuevaFecha").value = fecha;
