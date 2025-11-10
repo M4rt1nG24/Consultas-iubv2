@@ -317,14 +317,14 @@ function cerrarModalEdicion() {
 // =============================
 // 🔹 Actualizar consulta en backend
 // =============================
-async function actualizarConsultaBackend(fecha, hora,lugar_consulta,tema) {
+async function actualizarConsultaBackend(fecha, hora,lugar,tema) {
     if (!idConsultaEditar) return { success: false, message: "ID de consulta no definido" };
 
     try {
         const response = await fetch(`https://api-prueba-2-r35v.onrender.com/editar_consulta/${idConsultaEditar}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ fecha, hora })
+            body: JSON.stringify({ fecha, hora,lugar,tema })
         });
         return await response.json();
     } catch (error) {
