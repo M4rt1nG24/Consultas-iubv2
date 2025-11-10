@@ -317,7 +317,7 @@ function cerrarModalEdicion() {
 // =============================
 // 🔹 Actualizar consulta en backend
 // =============================
-async function actualizarConsultaBackend(fecha, hora) {
+async function actualizarConsultaBackend(fecha, hora,lugar_consulta,tema) {
     if (!idConsultaEditar) return { success: false, message: "ID de consulta no definido" };
 
     try {
