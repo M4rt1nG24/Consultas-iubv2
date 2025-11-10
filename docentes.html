@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal de Docentes</title>
   <link rel="stylesheet" href="css/docentes.css">
-  <link rel="icon" type="img/" href="favicon.ico">
 </head>
 <body>
   <!-- ==========================
@@ -27,64 +26,63 @@
     <button class="tablink" onclick="openTab(event, 'Proximamente')">Próximamente..</button> 
   </nav>
 
-<!-- ==========================
-     🔹 LISTADO DE CONSULTAS
-=========================== -->
-<section id="consultas" class="tabcontent active">
-  <h1>Listado de consultas de estudiantes</h1>
+  <!-- ==========================
+       🔹 LISTADO DE CONSULTAS
+  =========================== -->
+  <section id="consultas" class="tabcontent active">
+    <h1>Listado de consultas de estudiantes</h1>
 
-  <div class="filtros">
-    <label>Fecha:</label>
-    <input type="date" id="buscarFecha">
+    <div class="filtros">
+      <label>Fecha:</label>
+      <input type="date" id="buscarFecha">
 
-    <label>Hora:</label>
-    <input type="time" id="buscarHora">
+      <label>Hora:</label>
+      <input type="time" id="buscarHora">
 
-    <label>Mes:</label>
-    <select id="buscarMes">
-      <option value="">Todos</option>
-      <option value="1">Enero</option>
-      <option value="2">Febrero</option>
-      <option value="3">Marzo</option>
-      <option value="4">Abril</option>
-      <option value="5">Mayo</option>
-      <option value="6">Junio</option>
-      <option value="7">Julio</option>
-      <option value="8">Agosto</option>
-      <option value="9">Septiembre</option>
-      <option value="10">Octubre</option>
-      <option value="11">Noviembre</option>
-      <option value="12">Diciembre</option>
-    </select>
+      <label>Mes:</label>
+      <select id="buscarMes">
+        <option value="">Todos</option>
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
 
-    <label>ID del Estudiante:</label>
-<input type="text" id="documento_estudiante" placeholder="Ingrese ID del estudiante">
+      <label>ID del Estudiante:</label>
+      <input type="text" id="buscarIdEstudiante" placeholder="Ingrese el ID del estudiante">
 
-    <button onclick="obtenerConsultasFiltradas()">Filtrar</button>
-    <button onclick="exportarExcel()">Exportar a Excel</button>
-    <button onclick="exportarformato()">Exportar a formato</button>
-  </div>
+      <button onclick="obtenerConsultasFiltradas()">Filtrar</button>
+      <button onclick="exportarExcel()">Exportar a Excel</button>
+      <button onclick="exportarformato()">Exportar a formato</button>
+    </div>
 
-  <table id="tablaconsultas">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre del estudiante</th>
-        <th>ID del estudiante</th>
-        <th>Módulo</th>
-        <th>Tema</th>
-        <th>Programa</th>
-        <th>Hora</th>
-        <th>Fecha</th>
-        <th>Lugar</th>
-        <th>Firma</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</section>
-
+    <table id="tablaconsultas">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre del estudiante</th>
+          <th>ID del estudiante</th>
+          <th>Módulo</th>
+          <th>Tema</th>
+          <th>Programa</th>
+          <th>Hora</th>
+          <th>Fecha</th>
+          <th>Lugar</th>
+          <th>Firma</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
 
   <!-- ==========================
        🔹 SOLICITUDES DE CONSULTAS
@@ -116,10 +114,8 @@
         <option value="12">Diciembre</option>
       </select>
 
-      <label>Estudiante:</label>
-      <select id="buscarEstudianteSolicitud">
-        <option value="">Todos</option>
-      </select>
+      <label>ID del Estudiante:</label>
+      <input type="text" id="buscarIdEstudianteSolicitud" placeholder="Ingrese el ID del estudiante">
 
       <button onclick="obtenerSolicitudesFiltradas()">Filtrar</button>
     </div>
@@ -182,41 +178,41 @@
     <div class="proximamente-icono">🛠️</div>
   </section>
 
-<!-- ==========================
-     🔹 MODAL EDITAR CONSULTA
-=========================== -->
-<div id="modalEditar" class="modal">
-  <div class="modal-content">
-    <h3>Editar Consulta</h3>
-    <form id="formEditarConsulta">
-      <input type="hidden" id="idConsultaEditar">
+  <!-- ==========================
+       🔹 MODAL EDITAR CONSULTA
+  =========================== -->
+  <div id="modalEditar" class="modal">
+    <div class="modal-content">
+      <h3>Editar Consulta</h3>
+      <form id="formEditarConsulta">
+        <input type="hidden" id="idConsultaEditar">
 
-      <label for="nuevaFecha">Nueva Fecha:</label>
-      <input type="date" id="nuevaFecha" required>
+        <label for="nuevaFecha">Nueva Fecha:</label>
+        <input type="date" id="nuevaFecha" required>
 
-      <label for="nuevaHora">Nueva Hora:</label>
-      <input type="time" id="nuevaHora" required>
+        <label for="nuevaHora">Nueva Hora:</label>
+        <input type="time" id="nuevaHora" required>
 
-      <label for="nuevoTema">Nuevo Tema:</label>
-      <input type="text" id="nuevoTema" placeholder="Ingrese el nuevo tema" required>
+        <label for="nuevoTema">Nuevo Tema:</label>
+        <input type="text" id="nuevoTema" placeholder="Ingrese el nuevo tema" required>
 
-      <label for="nuevoLugar">Nuevo Lugar:</label>
-      <input type="text" id="nuevoLugar" placeholder="Ingrese el nuevo lugar" required>
+        <label for="nuevoLugar">Nuevo Lugar:</label>
+        <input type="text" id="nuevoLugar" placeholder="Ingrese el nuevo lugar" required>
 
-      <div class="modal-actions">
-        <button type="submit" class="btn-guardar">💾 Guardar</button>
-        <button type="button" class="btn-cancelar" onclick="cerrarModalEdicion()">❌ Cancelar</button>
-      </div>
-    </form>
+        <div class="modal-actions">
+          <button type="submit" class="btn-guardar">💾 Guardar</button>
+          <button type="button" class="btn-cancelar" onclick="cerrarModalEdicion()">❌ Cancelar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
-
 
   <!-- ==========================
        🔹 SCRIPTS
   =========================== -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="Javascript/Docentes.js"></script>
 </body>
 </html>
+

@@ -133,29 +133,23 @@ function obtenerConsultasFiltadas() {
 
 let todasLassolicitudes = [];
 
-function obtenerConsultasFiltradas() {
-    const fecha = document.getElementById("buscarFechaSolicitud")?.value || "";
-    const hora = document.getElementById("buscarHoraSolicitud")?.value || "";
-    const mes = document.getElementById("buscarMesSolicitud")?.value || "";
-    const idEstudiante = document.getElementById("buscarIdEstudiante")?.value || "";
 
-    // Copiamos todas las solicitudes
-    let solicitudesFiltradas = [...todasLassolicitudes];
+function obtenerSolicitudesFiltradas() {
+  const fecha = document.getElementById("buscarFechaSolicitud")?.value || "";
+  const hora = document.getElementById("buscarHoraSolicitud")?.value || "";
+  const mes = document.getElementById("buscarMesSolicitud")?.value || "";
+  const idEstudiante = document.getElementById("buscarIdEstudianteSolicitud")?.value || "";
 
-    // Filtros opcionales
-    if (fecha) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.fecha === fecha);
-    if (hora) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.hora === hora);
-    if (mes) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.fecha?.startsWith(mes));
-    if (idEstudiante) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.id_estudiante == idEstudiante);
+  let filtradas = [...todasLassolicitudes];
 
-    // Mostrar resultados
-    mostrarSolicitudes(solicitudesFiltradas);
+  if (fecha) filtradas = filtradas.filter(s => s.fecha === fecha);
+  if (hora) filtradas = filtradas.filter(s => s.hora === hora);
+  if (mes) filtradas = filtradas.filter(s => new Date(s.fecha).getMonth() + 1 == mes);
+  if (idEstudiante) filtradas = filtradas.filter(s => s.id_estudiante == idEstudiante);
 
-    actualizarTablaSolicitudes(Solicitudes_filtradas);
-
-    localStorage.setItem("Solicitudes_filtradas", JSON.stringify(Solicitudes_filtradas));
-    localStorage.setItem("nombre_docente", nombreUsuario);
+  mostrarSolicitudes(filtradas);
 }
+
 
 
 
