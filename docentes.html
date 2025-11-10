@@ -7,17 +7,23 @@
   <link rel="stylesheet" href="css/docentes.css">
 </head>
 <body>
+  <!-- ==========================
+       🔹 ENCABEZADO PRINCIPAL
+  =========================== -->
   <header>
     <img src="Fotos/Logo de la u.png" alt="Logo Universidad" class="logo">
     <div class="usuario" id="nombreDocente"></div>
     <button class="cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>
   </header>
 
+  <!-- ==========================
+       🔹 MENÚ PRINCIPAL
+  =========================== -->
   <nav class="menu">
     <button class="tablink active" onclick="openTab(event, 'consultas')">Listado de Consultas</button>
     <button class="tablink" onclick="openTab(event, 'registroConsultas')">Registro de Consultas</button>
     <button class="tablink" onclick="openTab(event, 'solicitudConsultas')">Solicitud de Consultas</button>
-    <button class="tablink" onclick="openTab(event, 'Proximamente')">Próximamente..</button>
+    <button class="tablink" onclick="openTab(event, 'Proximamente')">Próximamente..</button> 
   </nav>
 
   <!-- ==========================
@@ -50,8 +56,10 @@
         <option value="12">Diciembre</option>
       </select>
 
-      <label>Documento del estudiante:</label>
-      <input type="text" id="buscarDocumentoEstudiante" placeholder="Ej: 123456789">
+      <label>Estudiante:</label>
+      <select id="buscarEstudiante">
+        <option value="">Todos</option>
+      </select>
 
       <button onclick="obtenerConsultasFiltradas()">Filtrar</button>
       <button onclick="exportarExcel()">Exportar a Excel</button>
@@ -108,8 +116,10 @@
         <option value="12">Diciembre</option>
       </select>
 
-      <label>Documento del estudiante:</label>
-      <input type="text" id="buscarDocumentoSolicitud" placeholder="Ej: 123456789">
+      <label>Estudiante:</label>
+      <select id="buscarEstudianteSolicitud">
+        <option value="">Todos</option>
+      </select>
 
       <button onclick="obtenerSolicitudesFiltradas()">Filtrar</button>
     </div>
@@ -133,6 +143,71 @@
     </table>
   </section>
 
+  <!-- ==========================
+       🔹 REGISTRO DE CONSULTAS
+  =========================== -->
+  <section id="registroConsultas" class="tabcontent">
+    <h2>Registrar Consulta</h2>
+    <form id="consultaForm">
+      <label>Número de Documento del estudiante:</label>
+      <input type="text" id="numeroDocumentoEstudiante" required>
+
+      <label>Módulo</label>
+      <select id="buscar_modulo" required>
+        <option value="">Seleccione un módulo</option>
+      </select>
+
+      <label>Tema:</label>
+      <input type="text" id="temaConsulta" required>
+
+      <label>Fecha:</label>
+      <input type="date" id="fechaConsulta" required>
+
+      <label>Hora:</label>
+      <input type="time" id="horaConsulta" required>
+
+      <label>Lugar:</label>
+      <input type="text" id="Lugar_consulta" required>
+
+      <button type="submit">Registrar Consulta</button>
+    </form>
+  </section>
+
+  <!-- ==========================
+       🔹 SECCIÓN PRÓXIMAMENTE
+  =========================== -->
+  <section id="Proximamente" class="tabcontent">
+    <h2>🚀 Próximamente...</h2>
+    <p>Estamos trabajando en nuevas funciones para mejorar tu experiencia en el portal docente.</p>
+    <div class="proximamente-icono">🛠️</div>
+  </section>
+
+  <!-- ==========================
+       🔹 MODAL EDITAR CONSULTA
+  =========================== -->
+  <div id="modalEditar" class="modal">
+    <div class="modal-content">
+      <h3>Editar Consulta</h3>
+      <form id="formEditarConsulta">
+        <input type="hidden" id="idConsultaEditar">
+
+        <label>Nueva Fecha:</label>
+        <input type="date" id="nuevaFecha" required>
+
+        <label>Nueva Hora:</label>
+        <input type="time" id="nuevaHora" required>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn-guardar">Guardar</button>
+          <button type="button" class="btn-cancelar" onclick="cerrarModalEdicion()">❌ Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================
+       🔹 SCRIPTS
+  =========================== -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="Javascript/Docentes.js"></script>
