@@ -131,9 +131,6 @@ function obtenerConsultasFiltradas() {
 }
 
 
-
-
-
 let todasLassolicitudes = [];
 
 function obtenerConsultasFiltradas() {
