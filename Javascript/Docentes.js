@@ -239,5 +239,4 @@ function actualizarTablaConsultas(consultas) {
 document.addEventListener("DOMContentLoaded", () => {
   cargarmodulos();
   obtener_consultas_docente(idDocente);
-  obtenerEstudiantesDocente();
 });
