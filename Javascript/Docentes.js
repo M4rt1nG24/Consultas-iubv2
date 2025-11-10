@@ -373,7 +373,7 @@ function obtenerSolicitudesFiltradas() {
     const fecha = document.getElementById("buscarFechaSolicitud").value;
     const hora = document.getElementById("buscarHoraSolicitud").value;
     const mes = document.getElementById("buscarMesSolicitud").value;
-    const estudiante = document.getElementById("buscarEstudianteSolicitud").value;
+    const estudiante = document.getElementById("buscarIdEstudianteSolicitud").value;
 
     // Antes:
     // let Solicitudes_filtradas = todasLassolicitudes.filter(c => String(c.id_docente) === idDocente); 
