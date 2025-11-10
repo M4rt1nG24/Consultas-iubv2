@@ -111,7 +111,7 @@ function obtener_consultas_docente(id_docente) {
 // =============================
 // 🔍 FILTRO DE CONSULTAS
 // =============================
-function obtenerConsultasFiltadas() {
+function obtenerConsultasFiltradas() {
     const fecha = document.getElementById("buscarFecha").value;
     const hora = document.getElementById("buscarHora").value;
     const mes = document.getElementById("buscarMes").value;
@@ -130,27 +130,73 @@ function obtenerConsultasFiltadas() {
     localStorage.setItem("nombre_docente", nombreUsuario);
 }
 
+// =============================
+// 🧑‍🎓 ESTUDIANTES DEL DOCENTE
+// =============================
+function obtenerEstudiantesDocente() {
+    fetch(`https://api-prueba-2-r35v.onrender.com/estudiantes_docente/${idDocente}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) llenarSelectEstudiantes(data.estudiantes);
+            else llenarSelectEstudiantes([]);
+        })
+        .catch(err => console.error("Error al traer estudiantes:", err));
+}
+
+function llenarSelectEstudiantes(estudiantes) {
+    const select = document.getElementById("buscarEstudiante");
+    select.innerHTML = '<option value="">Todos</option>';
+    estudiantes.forEach(e => {
+        const option = document.createElement("option");
+        option.value = e.id;
+        option.textContent = e.nombre;
+        select.appendChild(option);
+    });
+}
+
+function obtenerEstudiantesDocentesolicitud() {
+    fetch(`https://api-prueba-2-r35v.onrender.com/estudiantes_docente_solicitud/${idDocente}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) llenarSelectEstudiantesolicitud(data.estudiantes);
+            else llenarSelectEstudiantesolicitud([]);
+        })
+        .catch(err => console.error("Error al traer estudiantes:", err));
+}
+
+function llenarSelectEstudiantesolicitud(estudiantes) {
+    const select = document.getElementById("buscarEstudianteSolicitud");
+    select.innerHTML = '<option value="">Todos</option>';
+    estudiantes.forEach(e => {
+        const option = document.createElement("option");
+        option.value = e.id;
+        option.textContent = e.nombre;
+        select.appendChild(option);
+    });
+}
 
 let todasLassolicitudes = [];
 
 
 function obtenerSolicitudesFiltradas() {
-  const fecha = document.getElementById("buscarFechaSolicitud")?.value || "";
-  const hora = document.getElementById("buscarHoraSolicitud")?.value || "";
-  const mes = document.getElementById("buscarMesSolicitud")?.value || "";
-  const idEstudiante = document.getElementById("buscarIdEstudianteSolicitud")?.value || "";
+    const fecha = document.getElementById("buscarFechaSolicitud").value;
+    const hora = document.getElementById("buscarHoraSolicitud").value;
+    const mes = document.getElementById("buscarMesSolicitud").value;
+    const estudiante = document.getElementById("buscarEstudianteSolicitud").value;
 
-  let filtradas = [...todasLassolicitudes];
 
-  if (fecha) filtradas = filtradas.filter(s => s.fecha === fecha);
-  if (hora) filtradas = filtradas.filter(s => s.hora === hora);
-  if (mes) filtradas = filtradas.filter(s => new Date(s.fecha).getMonth() + 1 == mes);
-  if (idEstudiante) filtradas = filtradas.filter(s => s.id_estudiante == idEstudiante);
+    let Solicitudes_filtradas = todasLassolicitudes.filter(c => String(c.id_docente) === idDocente);
 
-  mostrarSolicitudes(filtradas);
+    if (fecha) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.fecha === fecha);
+    if (hora) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.hora === hora);
+    if (mes) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
+    if (estudiante) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => String(c.id_estudiante) === estudiante);
+
+    actualizarTablaSolicitudes(Solicitudes_filtradas);
+
+    localStorage.setItem("Solicitudes_filtradas", JSON.stringify(Solicitudes_filtradas));
+    localStorage.setItem("nombre_docente", nombreUsuario);
 }
-
-
 
 
 // =============================
@@ -278,7 +324,7 @@ async function actualizarConsultaBackend(fecha, hora,lugar,tema) {
         const response = await fetch(`https://api-prueba-2-r35v.onrender.com/editar_consulta/${idConsultaEditar}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ fecha, hora,tema,lugar })
+            body: JSON.stringify({ fecha, hora,lugar,tema })
         });
         return await response.json();
     } catch (error) {
@@ -298,7 +344,7 @@ async function guardarEdicionConsulta(event) {
     const nuevoLugar = document.getElementById("nuevoLugar").value;
     const nuevoTema = document.getElementById("nuevoTema").value;
 
-    const resultado = await actualizarConsultaBackend(nuevaFecha, nuevaHora,nuevoLugar,nuevoTema);
+    const resultado = await actualizarConsultaBackend(nuevaFecha, nuevaHora);
 
     if (resultado.success) {
         // Actualizar arreglo local y refrescar tabla
@@ -402,27 +448,27 @@ function obtener_solicitudes_docente(id_docente) {
         });
 }
 
-
 // =============================
-// 🔍 FILTRO DE SOLICITUDES 
+// 🔍 FILTRO DE SOLICITUDES
 // =============================
-function obtenerConsultasFiltradas() {
-    const fecha = document.getElementById("buscarFecha").value;
-    const hora = document.getElementById("buscarHora").value;
-    const mes = document.getElementById("buscarMes").value;
-    const documento = document.getElementById("buscarDocumento").value.trim(); // nuevo input
+function obtenerSolicitudesFiltradas() {
+    const fecha = document.getElementById("buscarFechaSolicitud").value;
+    const hora = document.getElementById("buscarHoraSolicitud").value;
+    const mes = document.getElementById("buscarMesSolicitud").value;
+    const estudiante = document.getElementById("buscarEstudianteSolicitud").value;
 
-    let filtradas = todasLasConsultas.filter(c => String(c.id_docente) === String(idDocente));
+    let Solicitudes_filtradas = [...todasLassolicitudes];
 
-    if (fecha) filtradas = filtradas.filter(c => c.fecha === fecha);
-    if (hora) filtradas = filtradas.filter(c => c.hora === hora);
-    if (mes) filtradas = filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
-    if (documento) filtradas = filtradas.filter(c => String(c.id_estudiante).includes(documento));
+    if (fecha) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.fecha === fecha);
+    if (hora) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.hora === hora);
+    if (mes) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
+    if (estudiante) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => String(c.id_estudiante) === estudiante);
 
-    actualizarTablaConsultas(filtradas);
+    actualizarTablaSolicitudes(Solicitudes_filtradas);
+
+    localStorage.setItem("Solicitudes_filtradas", JSON.stringify(Solicitudes_filtradas));
+    localStorage.setItem("nombre_docente", nombreUsuario);
 }
-
-
 
 function actualizarTablaSolicitudes(solicitudes) {
     const tbody = document.querySelector("#tablaSolicitudes tbody");
@@ -615,6 +661,8 @@ document.addEventListener("DOMContentLoaded", () => {
     registrarConsulta();
     cargarmodulos();
     obtener_consultas_docente(idDocente);
+    obtenerEstudiantesDocente();
+    obtenerEstudiantesDocentesolicitud();
     obtener_solicitudes_docente(idDocente);
 });
 

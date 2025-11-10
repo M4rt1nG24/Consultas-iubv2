@@ -56,8 +56,10 @@
         <option value="12">Diciembre</option>
       </select>
 
-      <label>ID del Estudiante:</label>
-      <input type="text" id="buscarIdEstudiante" placeholder="Ingrese el ID del estudiante">
+      <label>Estudiante:</label>
+      <select id="buscarEstudiante">
+        <option value="">Todos</option>
+      </select>
 
       <button onclick="obtenerConsultasFiltradas()">Filtrar</button>
       <button onclick="exportarExcel()">Exportar a Excel</button>
@@ -114,8 +116,10 @@
         <option value="12">Diciembre</option>
       </select>
 
-      <label>ID del Estudiante:</label>
-      <input type="text" id="buscarIdEstudianteSolicitud" placeholder="Ingrese el ID del estudiante">
+      <label>Estudiante:</label>
+      <select id="buscarEstudianteSolicitud">
+        <option value="">Todos</option>
+      </select>
 
       <button onclick="obtenerSolicitudesFiltradas()">Filtrar</button>
     </div>
@@ -178,41 +182,41 @@
     <div class="proximamente-icono">🛠️</div>
   </section>
 
-  <!-- ==========================
-       🔹 MODAL EDITAR CONSULTA
-  =========================== -->
-  <div id="modalEditar" class="modal">
-    <div class="modal-content">
-      <h3>Editar Consulta</h3>
-      <form id="formEditarConsulta">
-        <input type="hidden" id="idConsultaEditar">
+<!-- ==========================
+     🔹 MODAL EDITAR CONSULTA
+=========================== -->
+<div id="modalEditar" class="modal">
+  <div class="modal-content">
+    <h3>Editar Consulta</h3>
+    <form id="formEditarConsulta">
+      <input type="hidden" id="idConsultaEditar">
 
-        <label for="nuevaFecha">Nueva Fecha:</label>
-        <input type="date" id="nuevaFecha" required>
+      <label for="nuevaFecha">Nueva Fecha:</label>
+      <input type="date" id="nuevaFecha" required>
 
-        <label for="nuevaHora">Nueva Hora:</label>
-        <input type="time" id="nuevaHora" required>
+      <label for="nuevaHora">Nueva Hora:</label>
+      <input type="time" id="nuevaHora" required>
 
-        <label for="nuevoTema">Nuevo Tema:</label>
-        <input type="text" id="nuevoTema" placeholder="Ingrese el nuevo tema" required>
+      <label for="nuevoTema">Nuevo Tema:</label>
+      <input type="text" id="nuevoTema" placeholder="Ingrese el nuevo tema" required>
 
-        <label for="nuevoLugar">Nuevo Lugar:</label>
-        <input type="text" id="nuevoLugar" placeholder="Ingrese el nuevo lugar" required>
+      <label for="nuevoLugar">Nuevo Lugar:</label>
+      <input type="text" id="nuevoLugar" placeholder="Ingrese el nuevo lugar" required>
 
-        <div class="modal-actions">
-          <button type="submit" class="btn-guardar">💾 Guardar</button>
-          <button type="button" class="btn-cancelar" onclick="cerrarModalEdicion()">❌ Cancelar</button>
-        </div>
-      </form>
-    </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn-guardar">💾 Guardar</button>
+        <button type="button" class="btn-cancelar" onclick="cerrarModalEdicion()">❌ Cancelar</button>
+      </div>
+    </form>
   </div>
+</div>
+
 
   <!-- ==========================
        🔹 SCRIPTS
   =========================== -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="Javascript/Docentes.js"></script>
 </body>
 </html>
-
