@@ -651,6 +651,272 @@ function filtrarReportes() {
 
   actualizarTablaReportes(filtrados);
 }
+/* ============================================================
+   🌐 CONFIGURACIÓN GLOBAL
+============================================================ */
+const FRONTEND_URL = "https://m4rt1ng24.github.io/ConsultasIUB/";  // URL del frontend
+const API_URL = "https://tu-api-flask.onrender.com"; // cambia por tu backend real (Render, Railway, etc.)
+
+let todasLasConsultas = [];
+let todasLasSolicitudes = [];
+
+/* ============================================================
+   🔐 AUTENTICACIÓN Y SESIÓN
+============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+  const nombreDocente = localStorage.getItem("nombre_docente");
+  const idDocente = localStorage.getItem("id_docente");
+
+  if (!nombreDocente || !idDocente) {
+    alert("⚠️ Debes iniciar sesión nuevamente.");
+    window.location.href = `${FRONTEND_URL}index.html`;
+    return;
+  }
+
+  document.getElementById("nombreDocente").textContent = `👨‍🏫 ${nombreDocente}`;
+  obtenerConsultas();
+  obtenerSolicitudes();
+  obtenerModulos();
+});
+
+/* ============================================================
+   🚪 CERRAR SESIÓN
+============================================================ */
+function cerrarSesion() {
+  localStorage.clear();
+  window.location.href = `${FRONTEND_URL}index.html`;
+}
+
+/* ============================================================
+   📑 CONSULTAS REGISTRADAS
+============================================================ */
+async function obtenerConsultas() {
+  try {
+    const idDocente = localStorage.getItem("id_docente");
+    const response = await fetch(`${API_URL}/consultas?id_docente=${idDocente}`);
+    const data = await response.json();
+    todasLasConsultas = data;
+    llenarTablaConsultas(data);
+  } catch (error) {
+    console.error("Error al obtener consultas:", error);
+  }
+}
+
+function llenarTablaConsultas(consultas) {
+  const tbody = document.querySelector("#tablaconsultas tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+  consultas.forEach(c => {
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+      <td>${c.id_consulta}</td>
+      <td>${c.nombre_estudiante}</td>
+      <td>${c.documento_estudiante}</td>
+      <td>${c.modulo}</td>
+      <td>${c.tema}</td>
+      <td>${c.programa}</td>
+      <td>${c.hora}</td>
+      <td>${c.fecha}</td>
+      <td>${c.lugar}</td>
+      <td>${c.firma || "Sin firma"}</td>
+      <td>
+        <button onclick="abrirModalEdicion(${c.id_consulta})">✏️ Editar</button>
+      </td>
+    `;
+    tbody.appendChild(fila);
+  });
+}
+
+/* ============================================================
+   🔍 FILTRAR CONSULTAS POR DOCUMENTO
+============================================================ */
+function obtenerConsultasFiltradas() {
+  const fecha = document.getElementById("buscarFecha")?.value;
+  const hora = document.getElementById("buscarHora")?.value;
+  const mes = document.getElementById("buscarMes")?.value;
+  const documento = document.getElementById("buscarDocumento")?.value.trim();
+
+  let filtradas = [...todasLasConsultas];
+
+  if (fecha) filtradas = filtradas.filter(c => c.fecha === fecha);
+  if (hora) filtradas = filtradas.filter(c => c.hora === hora);
+  if (mes) filtradas = filtradas.filter(c => new Date(c.fecha).getMonth() + 1 == mes);
+  if (documento) filtradas = filtradas.filter(c => c.documento_estudiante == documento);
+
+  llenarTablaConsultas(filtradas);
+}
+
+/* ============================================================
+   📩 SOLICITUDES DE CONSULTAS
+============================================================ */
+async function obtenerSolicitudes() {
+  try {
+    const idDocente = localStorage.getItem("id_docente");
+    const response = await fetch(`${API_URL}/solicitudes?id_docente=${idDocente}`);
+    const data = await response.json();
+    todasLasSolicitudes = data;
+    llenarTablaSolicitudes(data);
+  } catch (error) {
+    console.error("Error al obtener solicitudes:", error);
+  }
+}
+
+function llenarTablaSolicitudes(solicitudes) {
+  const tbody = document.querySelector("#tablaSolicitudes tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+  solicitudes.forEach(s => {
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+      <td>${s.id_solicitud}</td>
+      <td>${s.nombre_estudiante}</td>
+      <td>${s.programa}</td>
+      <td>${s.modulo}</td>
+      <td>${s.tema}</td>
+      <td>${s.fecha}</td>
+      <td>${s.hora}</td>
+      <td>${s.lugar}</td>
+      <td>${s.estado}</td>
+      <td>
+        <button onclick="aceptarSolicitud(${s.id_solicitud})">✔️ Aceptar</button>
+      </td>
+    `;
+    tbody.appendChild(fila);
+  });
+}
+
+/* ============================================================
+   🧾 REGISTRO DE NUEVA CONSULTA
+============================================================ */
+document.getElementById("consultaForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const idDocente = localStorage.getItem("id_docente");
+
+  const consulta = {
+    documento_estudiante: document.getElementById("numeroDocumentoEstudiante").value,
+    id_docente: idDocente,
+    modulo: document.getElementById("buscar_modulo").value,
+    tema: document.getElementById("temaConsulta").value,
+    fecha: document.getElementById("fechaConsulta").value,
+    hora: document.getElementById("horaConsulta").value,
+    lugar: document.getElementById("Lugar_consulta").value
+  };
+
+  try {
+    const res = await fetch(`${API_URL}/registrar_consulta`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(consulta)
+    });
+
+    const data = await res.json();
+    alert(data.message || "Consulta registrada correctamente ✅");
+    obtenerConsultas();
+    e.target.reset();
+  } catch (error) {
+    console.error("Error al registrar consulta:", error);
+    alert("❌ Error al registrar la consulta.");
+  }
+});
+
+/* ============================================================
+   🧩 MÓDULOS
+============================================================ */
+async function obtenerModulos() {
+  try {
+    const res = await fetch(`${API_URL}/modulos`);
+    const modulos = await res.json();
+    const select = document.getElementById("buscar_modulo");
+    if (!select) return;
+
+    select.innerHTML = `<option value="">Seleccione un módulo</option>`;
+    modulos.forEach(m => {
+      const option = document.createElement("option");
+      option.value = m.nombre_modulo;
+      option.textContent = m.nombre_modulo;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Error al obtener módulos:", error);
+  }
+}
+
+/* ============================================================
+   🧾 MODAL EDITAR CONSULTA
+============================================================ */
+function abrirModalEdicion(idConsulta) {
+  document.getElementById("modalEditar").style.display = "block";
+  document.getElementById("idConsultaEditar").value = idConsulta;
+}
+
+function cerrarModalEdicion() {
+  document.getElementById("modalEditar").style.display = "none";
+}
+
+document.getElementById("formEditarConsulta")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const idConsulta = document.getElementById("idConsultaEditar").value;
+
+  const datos = {
+    nueva_fecha: document.getElementById("nuevaFecha").value,
+    nueva_hora: document.getElementById("nuevaHora").value
+  };
+
+  try {
+    const res = await fetch(`${API_URL}/editar_consulta/${idConsulta}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(datos)
+    });
+
+    const data = await res.json();
+    alert(data.message || "Consulta actualizada correctamente ✅");
+    cerrarModalEdicion();
+    obtenerConsultas();
+  } catch (error) {
+    console.error("Error al editar consulta:", error);
+  }
+});
+
+/* ============================================================
+   📱 LECTOR QR (html5-qrcode)
+============================================================ */
+function iniciarLectorQR() {
+  const contenedorQR = document.getElementById("lectorQR");
+  if (!contenedorQR) {
+    console.warn("Elemento con id='lectorQR' no encontrado en el HTML.");
+    return;
+  }
+
+  const html5QrCode = new Html5Qrcode("lectorQR");
+  html5QrCode.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
+    (decodedText) => {
+      document.getElementById("numeroDocumentoEstudiante").value = decodedText;
+      html5QrCode.stop();
+      alert("📸 Documento escaneado correctamente.");
+    },
+    (errorMessage) => { /* Ignorar errores menores */ }
+  ).catch(err => console.error("Error al iniciar lector QR:", err));
+}
+
+/* ============================================================
+   🧭 NAVEGACIÓN ENTRE SECCIONES
+============================================================ */
+function openTab(evt, tabName) {
+  const tabcontent = document.querySelectorAll(".tabcontent");
+  const tablinks = document.querySelectorAll(".tablink");
+
+  tabcontent.forEach(tab => tab.classList.remove("active"));
+  tablinks.forEach(tab => tab.classList.remove("active"));
+
+  document.getElementById(tabName).classList.add("active");
+  evt.currentTarget.classList.add("active");
+}
+
 
 
 
