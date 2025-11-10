@@ -332,7 +332,7 @@ async function actualizarConsultaBackend(fecha, hora,lugar,tema) {
         return { success: false, message: "Error de conexión con el servidor" };
     }
 }
-
+//buenas
 // =============================
 // 🔹 Guardar cambios al enviar formulario
 // =============================
