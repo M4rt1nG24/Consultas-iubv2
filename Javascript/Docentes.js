@@ -166,26 +166,30 @@ function obtenerEstudiantesDocentesolicitud() {
 
 let todasLassolicitudes = [];
 
+function obtenerConsultasFiltradas() {
+    const fecha = document.getElementById("buscarFechaSolicitud")?.value || "";
+    const hora = document.getElementById("buscarHoraSolicitud")?.value || "";
+    const mes = document.getElementById("buscarMesSolicitud")?.value || "";
+    const idEstudiante = document.getElementById("buscarIdEstudiante")?.value || "";
 
-function obtenerSolicitudesFiltradas() {
-    const fecha = document.getElementById("buscarFechaSolicitud").value;
-    const hora = document.getElementById("buscarHoraSolicitud").value;
-    const mes = document.getElementById("buscarMesSolicitud").value;
-    const estudiante = document.getElementById("documento_estudiante").value;
+    // Copiamos todas las solicitudes
+    let solicitudesFiltradas = [...todasLassolicitudes];
 
+    // Filtros opcionales
+    if (fecha) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.fecha === fecha);
+    if (hora) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.hora === hora);
+    if (mes) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.fecha?.startsWith(mes));
+    if (idEstudiante) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.id_estudiante == idEstudiante);
 
-    let Solicitudes_filtradas = todasLassolicitudes.filter(c => String(c.id_docente) === idDocente);
-
-    if (fecha) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.fecha === fecha);
-    if (hora) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.hora === hora);
-    if (mes) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
-    if (estudiante) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => String(c.id_estudiante) === estudiante);
+    // Mostrar resultados
+    mostrarSolicitudes(solicitudesFiltradas);
 
     actualizarTablaSolicitudes(Solicitudes_filtradas);
 
     localStorage.setItem("Solicitudes_filtradas", JSON.stringify(Solicitudes_filtradas));
     localStorage.setItem("nombre_docente", nombreUsuario);
 }
+
 
 
 // =============================
