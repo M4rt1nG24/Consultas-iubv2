@@ -454,38 +454,21 @@ function obtener_solicitudes_docente(id_docente) {
 function obtenerSolicitudesFiltradas() {
     const fecha = document.getElementById("buscarFechaSolicitud").value;
     const hora = document.getElementById("buscarHoraSolicitud").value;
+    const mes = document.getElementById("buscarMesSolicitud").value;
     const estudiante = document.getElementById("buscarEstudianteSolicitud").value;
-
-    // 🔹 Obtener múltiples meses seleccionados
-    const mesesSeleccionados = Array.from(document.getElementById("buscarMesSolicitud").selectedOptions)
-                                   .map(opt => parseInt(opt.value))
-                                   .filter(Boolean);
 
     let Solicitudes_filtradas = [...todasLassolicitudes];
 
-    if (fecha)
-        Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.fecha === fecha);
-
-    if (hora)
-        Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.hora === hora);
-
-    // 🔹 Filtrar por varios meses
-    if (mesesSeleccionados.length > 0) {
-        Solicitudes_filtradas = Solicitudes_filtradas.filter(c => {
-            const mesConsulta = new Date(c.fecha).getMonth() + 1;
-            return mesesSeleccionados.includes(mesConsulta);
-        });
-    }
-
-    if (estudiante)
-        Solicitudes_filtradas = Solicitudes_filtradas.filter(c => String(c.id_estudiante) === estudiante);
+    if (fecha) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.fecha === fecha);
+    if (hora) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.hora === hora);
+    if (mes) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
+    if (estudiante) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => String(c.id_estudiante) === estudiante);
 
     actualizarTablaSolicitudes(Solicitudes_filtradas);
 
     localStorage.setItem("Solicitudes_filtradas", JSON.stringify(Solicitudes_filtradas));
     localStorage.setItem("nombre_docente", nombreUsuario);
 }
-
 
 function actualizarTablaSolicitudes(solicitudes) {
     const tbody = document.querySelector("#tablaSolicitudes tbody");
