@@ -295,13 +295,16 @@ let idConsultaEditar = null;
 // =============================
 // 🔹 Abrir modal de edición
 // =============================
-function abrirModalEdicion(id, fecha, hora) {
-    idConsultaEditar = id;
-    document.getElementById("idConsultaEditar").value = id;
-    document.getElementById("nuevaFecha").value = fecha;
-    document.getElementById("nuevaHora").value = hora;
-    document.getElementById("modalEditar").style.display = "flex";
+function abrirModalEdicion(id, fecha, hora, tema, lugar) {
+  idConsultaEditar = id;
+  document.getElementById("idConsultaEditar").value = id;
+  document.getElementById("nuevaFecha").value = fecha;
+  document.getElementById("nuevaHora").value = hora;
+  document.getElementById("nuevoTema").value = tema;
+  document.getElementById("nuevoLugar").value = lugar;
+  document.getElementById("modalEditar").style.display = "flex";
 }
+
 
 // =============================
 // 🔹 Cerrar modal
@@ -338,6 +341,8 @@ async function guardarEdicionConsulta(event) {
 
     const nuevaFecha = document.getElementById("nuevaFecha").value;
     const nuevaHora = document.getElementById("nuevaHora").value;
+    const nuevoLugar = document.getElementById("nuevoLugar").value;
+    const nuevoTema = document.getElementById("nuevoTema").value;
 
     const resultado = await actualizarConsultaBackend(nuevaFecha, nuevaHora);
 
