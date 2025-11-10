@@ -1,7 +1,7 @@
 // =============================
 // 🌐 URLs del proyecto
 // =============================
-const FRONTEND_URL = "https://m4rt1ng24.github.io/ConsultasIUB/";
+const FRONTEND_URL = "https://m4rt1ng24.github.io/Consultas-iubv2/";
 const API_URL = "https://api-prueba-2-r35v.onrender.com";
 
 // =============================
