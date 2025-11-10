@@ -130,18 +130,6 @@ function obtenerConsultasFiltradas() {
     localStorage.setItem("nombre_docente", nombreUsuario);
 }
 
-// =============================
-// 🧑‍🎓 ESTUDIANTES DEL DOCENTE
-// =============================
-function obtenerEstudiantesDocente() {
-    fetch(`https://api-prueba-2-r35v.onrender.com/estudiantes_docente/${idDocente}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) llenarSelectEstudiantes(data.estudiantes);
-            else llenarSelectEstudiantes([]);
-        })
-        .catch(err => console.error("Error al traer estudiantes:", err));
-}
 
 
 
