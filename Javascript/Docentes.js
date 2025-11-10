@@ -178,50 +178,25 @@ function llenarSelectEstudiantesolicitud(estudiantes) {
 let todasLassolicitudes = [];
 
 
-// =============================
-// 🔍 FILTRO DE CONSULTAS
-// =============================
-function obtenerConsultasFiltradas() {
-    const fecha = document.getElementById("buscarFecha").value;
-    const hora = document.getElementById("buscarHora").value;
-    const mes = document.getElementById("buscarMes").value;
-    const documento = document.getElementById("buscarDocumentoEstudiante").value.trim();
-
-    let filtradas = todasLasConsultas.filter(c => String(c.id_docente) === idDocente);
-
-    if (fecha) filtradas = filtradas.filter(c => c.fecha === fecha);
-    if (hora) filtradas = filtradas.filter(c => c.hora === hora);
-    if (mes) filtradas = filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
-    if (documento) filtradas = filtradas.filter(c => String(c.id_estudiante).includes(documento));
-
-    actualizarTablaConsultas(filtradas);
-
-    localStorage.setItem("consultas_filtradas", JSON.stringify(filtradas));
-    localStorage.setItem("nombre_docente", nombreUsuario);
-}
-
-// =============================
-// 🔍 FILTRO DE SOLICITUDES
-// =============================
 function obtenerSolicitudesFiltradas() {
     const fecha = document.getElementById("buscarFechaSolicitud").value;
     const hora = document.getElementById("buscarHoraSolicitud").value;
     const mes = document.getElementById("buscarMesSolicitud").value;
-    const documento = document.getElementById("buscarDocumentoSolicitud").value.trim();
+    const estudiante = document.getElementById("buscarEstudianteSolicitud").value;
 
-    let filtradas = [...todasLassolicitudes];
 
-    if (fecha) filtradas = filtradas.filter(c => c.fecha === fecha);
-    if (hora) filtradas = filtradas.filter(c => c.hora === hora);
-    if (mes) filtradas = filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
-    if (documento) filtradas = filtradas.filter(c => String(c.id_estudiante).includes(documento));
+    let Solicitudes_filtradas = todasLassolicitudes.filter(c => String(c.id_docente) === idDocente);
 
-    actualizarTablaSolicitudes(filtradas);
+    if (fecha) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.fecha === fecha);
+    if (hora) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.hora === hora);
+    if (mes) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
+    if (estudiante) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => String(c.id_estudiante) === estudiante);
 
-    localStorage.setItem("Solicitudes_filtradas", JSON.stringify(filtradas));
+    actualizarTablaSolicitudes(Solicitudes_filtradas);
+
+    localStorage.setItem("Solicitudes_filtradas", JSON.stringify(Solicitudes_filtradas));
     localStorage.setItem("nombre_docente", nombreUsuario);
 }
-
 
 
 // =============================
