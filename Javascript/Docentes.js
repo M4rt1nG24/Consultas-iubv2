@@ -451,24 +451,28 @@ function obtener_solicitudes_docente(id_docente) {
 // =============================
 // 🔍 FILTRO DE SOLICITUDES
 // =============================
+// =============================
+// 🔍 FILTRO DE SOLICITUDES (por ID del estudiante)
+// =============================
 function obtenerSolicitudesFiltradas() {
     const fecha = document.getElementById("buscarFechaSolicitud").value;
     const hora = document.getElementById("buscarHoraSolicitud").value;
     const mes = document.getElementById("buscarMesSolicitud").value;
-    const estudiante = document.getElementById("buscarEstudianteSolicitud").value;
+    const idEstudiante = document.getElementById("buscarIdEstudianteSolicitud").value.trim(); // 🆕 campo nuevo
 
-    let Solicitudes_filtradas = [...todasLassolicitudes];
+    let solicitudesFiltradas = todasLassolicitudes.filter(s => String(s.id_docente) === String(idDocente));
 
-    if (fecha) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.fecha === fecha);
-    if (hora) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.hora === hora);
-    if (mes) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
-    if (estudiante) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => String(c.id_estudiante) === estudiante);
+    if (fecha) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.fecha === fecha);
+    if (hora) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.hora === hora);
+    if (mes) solicitudesFiltradas = solicitudesFiltradas.filter(s => (new Date(s.fecha).getMonth() + 1) === parseInt(mes));
+    if (idEstudiante) solicitudesFiltradas = solicitudesFiltradas.filter(s => String(s.id_estudiante).includes(idEstudiante));
 
-    actualizarTablaSolicitudes(Solicitudes_filtradas);
+    actualizarTablaSolicitudes(solicitudesFiltradas);
 
-    localStorage.setItem("Solicitudes_filtradas", JSON.stringify(Solicitudes_filtradas));
+    localStorage.setItem("Solicitudes_filtradas", JSON.stringify(solicitudesFiltradas));
     localStorage.setItem("nombre_docente", nombreUsuario);
 }
+
 
 function actualizarTablaSolicitudes(solicitudes) {
     const tbody = document.querySelector("#tablaSolicitudes tbody");
