@@ -448,30 +448,26 @@ function obtener_solicitudes_docente(id_docente) {
         });
 }
 
-// =============================
-// 🔍 FILTRO DE SOLICITUDES
-// =============================
-// =============================
-// 🔍 FILTRO DE SOLICITUDES (por ID del estudiante)
-// =============================
-function obtenerSolicitudesFiltradas() {
-    const fecha = document.getElementById("buscarFechaSolicitud").value;
-    const hora = document.getElementById("buscarHoraSolicitud").value;
-    const mes = document.getElementById("buscarMesSolicitud").value;
-    const idEstudiante = document.getElementById("buscarIdEstudianteSolicitud").value.trim(); // 🆕 campo nuevo
 
-    let solicitudesFiltradas = todasLassolicitudes.filter(s => String(s.id_docente) === String(idDocente));
+// =============================
+// 🔍 FILTRO DE SOLICITUDES 
+// =============================
+function obtenerConsultasFiltradas() {
+    const fecha = document.getElementById("buscarFecha").value;
+    const hora = document.getElementById("buscarHora").value;
+    const mes = document.getElementById("buscarMes").value;
+    const documento = document.getElementById("buscarDocumento").value.trim(); // nuevo input
 
-    if (fecha) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.fecha === fecha);
-    if (hora) solicitudesFiltradas = solicitudesFiltradas.filter(s => s.hora === hora);
-    if (mes) solicitudesFiltradas = solicitudesFiltradas.filter(s => (new Date(s.fecha).getMonth() + 1) === parseInt(mes));
-    if (idEstudiante) solicitudesFiltradas = solicitudesFiltradas.filter(s => String(s.id_estudiante).includes(idEstudiante));
+    let filtradas = todasLasConsultas.filter(c => String(c.id_docente) === String(idDocente));
 
-    actualizarTablaSolicitudes(solicitudesFiltradas);
+    if (fecha) filtradas = filtradas.filter(c => c.fecha === fecha);
+    if (hora) filtradas = filtradas.filter(c => c.hora === hora);
+    if (mes) filtradas = filtradas.filter(c => (new Date(c.fecha).getMonth() + 1) === parseInt(mes));
+    if (documento) filtradas = filtradas.filter(c => String(c.id_estudiante).includes(documento));
 
-    localStorage.setItem("Solicitudes_filtradas", JSON.stringify(solicitudesFiltradas));
-    localStorage.setItem("nombre_docente", nombreUsuario);
+    actualizarTablaConsultas(filtradas);
 }
+
 
 
 function actualizarTablaSolicitudes(solicitudes) {
