@@ -352,8 +352,8 @@ async function guardarEdicionConsulta(event) {
         if (index !== -1) {
             todasLasConsultas[index].fecha = nuevaFecha;
             todasLasConsultas[index].hora = nuevaHora;
-            todasLasConsultas[index].tema =nuevoTema;
-            todasLasConsultas[index].lugar=nuevoLugar;
+            todasLasConsultas[index].tema = nuevoTema;
+            todasLasConsultas[index].lugar= nuevoLugar;
             actualizarTablaConsultas(todasLasConsultas);
         }
         alert("✅ Consulta actualizada correctamente.");
@@ -434,11 +434,10 @@ function obtener_solicitudes_docente(id_docente) {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                // 🛑 AÑADIR ESTA LÍNEA PARA GUARDAR LOS DATOS
                 todasLassolicitudes = data.solicitudes; 
-                actualizarTablaSolicitudes(todasLassolicitudes); // Usar el arreglo completo
+                actualizarTablaSolicitudes(todasLassolicitudes); 
             } else {
-                todasLassolicitudes = []; // Limpiar si falla
+                todasLassolicitudes = []; 
                 actualizarTablaSolicitudes([]);
             }
         })
