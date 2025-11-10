@@ -56,15 +56,16 @@
         <option value="12">Diciembre</option>
       </select>
 
-      <label>Estudiante:</label>
-      <select id="buscarEstudiante">
-        <option value="">Todos</option>
-      </select>
+      <label>ID Estudiante:</label>
+      <input type="text" id="buscarIdEstudiante" placeholder="Ingrese número de documento">
 
       <button onclick="obtenerConsultasFiltradas()">Filtrar</button>
       <button onclick="exportarExcel()">Exportar a Excel</button>
       <button onclick="exportarformato()">Exportar a formato</button>
     </div>
+
+    <div id="lectorQR" style="width:300px; margin:10px auto;"></div>
+    <button onclick="iniciarLectorQR()">📷 Escanear QR</button>
 
     <table id="tablaconsultas">
       <thead>
@@ -116,10 +117,8 @@
         <option value="12">Diciembre</option>
       </select>
 
-      <label>Estudiante:</label>
-      <select id="buscarEstudianteSolicitud">
-        <option value="">Todos</option>
-      </select>
+      <label>ID Estudiante:</label>
+      <input type="text" id="buscarIdEstudianteSolicitud" placeholder="Ingrese número de documento">
 
       <button onclick="obtenerSolicitudesFiltradas()">Filtrar</button>
     </div>
