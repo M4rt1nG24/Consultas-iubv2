@@ -124,7 +124,7 @@ function obtenerConsultasFiltradas() {
   const fecha = document.getElementById("buscarFecha")?.value || "";
   const hora = document.getElementById("buscarHora")?.value || "";
   const mes = document.getElementById("buscarMes")?.value || "";
-  const documento = document.getElementById("buscarDocumentoEstudiante")?.value || "";
+  const documento = document.getElementById("buscarIdEstudiante")?.value || "";
 
   let filtradas = todasLasConsultas.filter(c => String(c.id_docente) === idDocente);
 
@@ -136,31 +136,6 @@ function obtenerConsultasFiltradas() {
   actualizarTablaConsultas(filtradas);
   localStorage.setItem("consultas_filtradas", JSON.stringify(filtradas));
   localStorage.setItem("nombre_docente", nombreUsuario);
-}
-
-// =============================
-// 🧑‍🎓 ESTUDIANTES DEL DOCENTE
-// =============================
-function obtenerEstudiantesDocente() {
-  fetch(`${API_URL}/estudiantes_docente/${idDocente}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) llenarSelectEstudiantes(data.estudiantes);
-      else llenarSelectEstudiantes([]);
-    })
-    .catch(err => console.error("Error al traer estudiantes:", err));
-}
-
-function llenarSelectEstudiantes(estudiantes) {
-  const select = document.getElementById("buscarEstudiante");
-  if (!select) return;
-  select.innerHTML = '<option value="">Todos</option>';
-  estudiantes.forEach(e => {
-    const option = document.createElement("option");
-    option.value = e.id;
-    option.textContent = e.nombre;
-    select.appendChild(option);
-  });
 }
 
 // =============================
