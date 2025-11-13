@@ -315,7 +315,7 @@ async function cargarDocentes() {
         if (data.success && data.consultas.length > 0) {
             const docentesUnicos = [];
             const idsUsados = new Set();
-
+            
             data.consultas.forEach(c => {
                 if (!idsUsados.has(c.id_docente)) {
                     idsUsados.add(c.id_docente);
