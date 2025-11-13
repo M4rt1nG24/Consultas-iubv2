@@ -201,7 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("✅ Solicitud registrada con éxito");
                 formSolicitud.reset();
                 obtener_consultas_por_estudiante(id_estudiante);
-                actualizarTablaSolicitudes();
                 cargarDocentes();
             } else {
                 alert("❌ Error al registrar la solicitud");
