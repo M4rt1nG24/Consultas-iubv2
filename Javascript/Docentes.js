@@ -297,7 +297,7 @@ window.addEventListener("click", function(e) {
 // 📅 REGISTRAR CONSULTA
 // =============================
 function registrarConsulta() {
-    document.getElementById("registroConsultas").addEventListener("submit", e => {
+    document.getElementById("consultaForm").addEventListener("submit", e => {
         e.preventDefault();
 
         const fecha = document.getElementById("fechaConsulta").value;
