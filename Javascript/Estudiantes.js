@@ -304,36 +304,42 @@ function actualizarTablaSolicitudes(solicitudes) {
 // =============================
 // 🎯 Cargar docentes con consultas del estudiante (para filtro)
 // =============================
+// =============================
+// 🎯 Cargar docentes con consultas del estudiante (para filtro)
+// =============================
 async function cargarDocentes() {
     try {
         const res = await fetch(`https://api-prueba-2-r35v.onrender.com/consultas_estudiante/${idUsuario}`);
         const data = await res.json();
 
         const filtro = document.getElementById("buscarDocente");
-        filtro.innerHTML = '<option value="">Seleccione un docente</option>';
+        filtro.innerHTML = '<option value="">Todos</option>'; //
 
         if (data.success && data.consultas.length > 0) {
-            const docentesUnicos = [];
             const idsUsados = new Set();
 
             data.consultas.forEach(c => {
-                if (!idsUsados.has(c.id_docente)) {
-                    idsUsados.add(c.id_docente);
-                    docentesUnicos.push({ id: c.id_docente, nombre: c.nombre_docente });
+                // 🔹 Convertir siempre a string y validar que tenga valor
+                const id = String(c.id_docente || "").trim();
+                const nombre = (c.nombre_docente || "").trim();
+
+                if (id && !idsUsados.has(id)) {
+                    idsUsados.add(id);
+
+                    const option = document.createElement("option");
+                    option.value = id;
+                    option.textContent = nombre || `Docente ${id}`;
+                    filtro.appendChild(option);
                 }
             });
-
-            docentesUnicos.forEach(d => {
-                const option = document.createElement("option");
-                option.value = d.id;
-                option.textContent = d.nombre;
-                filtro.appendChild(option);
-            });
+        } else {
+            console.warn("⚠️ No hay consultas para este estudiante.");
         }
     } catch (error) {
         console.error("Error cargando docentes filtrados:", error);
     }
 }
+
 
 // =============================
 // 🚪 Cerrar sesión
