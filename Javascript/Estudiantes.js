@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("✅ Solicitud registrada con éxito");
                 formSolicitud.reset();
                 obtener_consultas_por_estudiante(id_estudiante);
-                cargarDocentes();
+                cargarDocentes(); // refrescar filtro si hay nuevo docente
             } else {
                 alert("❌ Error al registrar la solicitud");
             }
@@ -315,7 +315,7 @@ async function cargarDocentes() {
         if (data.success && data.consultas.length > 0) {
             const docentesUnicos = [];
             const idsUsados = new Set();
-            
+
             data.consultas.forEach(c => {
                 if (!idsUsados.has(c.id_docente)) {
                     idsUsados.add(c.id_docente);
