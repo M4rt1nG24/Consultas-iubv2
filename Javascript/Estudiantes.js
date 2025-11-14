@@ -112,7 +112,7 @@ function actualizarTablaConsultas(lista) {
         img.style.maxWidth = "100px";
         img.style.maxHeight = "50px";
         img.style.borderRadius = "4px";
-        img.style.boxShadow = "0 0 3px rgba(39, 19, 19, 0.3)";
+        img.style.boxShadow = "0 0 3px rgba(0,0,0,0.3)";
         celdaFirma.appendChild(img);
       } else {
         celdaFirma.textContent = "⚠️ Formato no reconocido";
