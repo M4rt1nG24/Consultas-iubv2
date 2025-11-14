@@ -85,9 +85,14 @@ function iniciarEscaneo(idConsulta, idEstudiante) {
 
 
 // Alias para compatibilidad con HTML
-function iniciarLectorQR(idConsulta, idEstudiante) {
-  iniciarEscaneo(idConsulta, idEstudiante);
+function abrirModalQR(idConsulta, idEstudiante) {
+  document.getElementById("modalQR").style.display = "block";
+
+  setTimeout(() => {
+    iniciarEscaneo(idConsulta, idEstudiante);
+  }, 300);
 }
+
 
 // =============================
 // 📚 CARGAR MÓDULOS
