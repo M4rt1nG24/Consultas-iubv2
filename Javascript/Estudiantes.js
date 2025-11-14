@@ -251,7 +251,7 @@ async function cargarModulos() {
         (data.modulos || []).forEach(m => {
             const option = document.createElement("option");
             option.value = m.id;
-            option.textContent = m.nombre;
+            option.textContent = `${p.id} - ${p.nombre}`;
             select.appendChild(option);
         });
     } catch (error) {
