@@ -245,7 +245,7 @@ async function actualizarConsultaBackend(fecha, hora) {
         const response = await fetch(`https://api-prueba-2-r35v.onrender.com/editar_consulta/${idConsultaEditar}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ fecha, hora })
+            body: JSON.stringify({ fecha, hora,lugar_consulta,tema })
         });
         return await response.json();
     } catch (error) {
