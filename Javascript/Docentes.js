@@ -40,6 +40,7 @@ if (!idDocente || !rolUsuario) {
 // =============================
 function iniciarEscaneo(idConsulta, idEstudiante) {
     const lector = new Html5Qrcode("lectorQR");
+    let escaneoRealizado = false;
 
     lector.start(
         { facingMode: "environment" },
