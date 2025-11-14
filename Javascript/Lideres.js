@@ -1,24 +1,28 @@
+// =============================
+// 🌐 URLs globales
+// =============================
+const API_URL = "https://api-prueba-2-r35v.onrender.com";
+
 let todasLasConsultas = [];
 let idUsuario = localStorage.getItem('id_usuario');
-let rolUsuario = localStorage.getItem('rol'); // Se obtiene los datos guardados al iniciar sesión
+let rolUsuario = localStorage.getItem('rol');
 let nombreUsuario = localStorage.getItem("nombre_usuario");
+
 
 // =============================
 // 🔒 Seguridad de acceso
 // =============================
-
 if (!idUsuario || !rolUsuario) {
     window.location.href = "index.html";
 } else if (rolUsuario !== "Lider") {
     window.location.href = "index.html";
 } else {
-    // Mostrar nombre almacenado o traer desde backend
     const nombreDiv = document.getElementById("nombreUsuario");
 
     if (nombreUsuario) {
         if (nombreDiv) nombreDiv.textContent = `Hola, ${nombreUsuario}`;
     } else {
-        fetch(`https://api-prueba-2-r35v.onrender.com/Lider/${idUsuario}`)
+        fetch(`${API_URL}/Lider/${idUsuario}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.Lider) {
@@ -34,7 +38,6 @@ if (!idUsuario || !rolUsuario) {
 }
 
 
-
 // =============================
 // 📥 Al cargar la página
 // =============================
@@ -47,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
     obtener_modulos();
     cargarProgramas();
 
-    // ✅ Corregido: el ID debe coincidir con el del formulario HTML
     document.getElementById("registro_programas").addEventListener("submit", e => {
         e.preventDefault();
         registrar_programa();
@@ -59,11 +61,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+
 // =============================
 // 📥 Consultas
 // =============================
 function obtener_consultas_lider() {
-    fetch("https://api-prueba-2-r35v.onrender.com/consultas_lider")
+    fetch(`${API_URL}/consultas_lider`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -83,31 +86,24 @@ function obtenerConsultasFiltradas() {
 
     let filtradas = [...todasLasConsultas];
 
-    // Filtrado por campos
     if (fecha) filtradas = filtradas.filter(c => c.fecha === fecha);
     if (hora) filtradas = filtradas.filter(c => c.hora === hora);
     if (mes) filtradas = filtradas.filter(c => new Date(c.fecha).getMonth() + 1 === parseInt(mes));
     if (profesor) filtradas = filtradas.filter(c => String(c.id_docente) === profesor);
     if (estudiante) filtradas = filtradas.filter(c => String(c.id_estudiante) === estudiante);
 
-    // 🧠 Guardar nombre del docente seleccionado
     let nombre_docente = "";
     if (profesor) {
         const select = document.getElementById("buscarProfesor");
-        const opcionSeleccionada = select.options[select.selectedIndex];
-        nombre_docente = opcionSeleccionada.textContent;
+        nombre_docente = select.options[select.selectedIndex].textContent;
         localStorage.setItem("nombre_docente", nombre_docente);
     } else {
         localStorage.removeItem("nombre_docente");
     }
 
-    // 🧾 Guardar consultas filtradas
     localStorage.setItem("consultas_filtradas", JSON.stringify(filtradas));
-
-    // 🔄 Actualizar tabla
     actualizarTablaConsultas(filtradas);
 }
-
 
 function actualizarTablaConsultas(consultas) {
     const tbody = document.querySelector("#tablaConsultas tbody");
@@ -133,43 +129,36 @@ function actualizarTablaConsultas(consultas) {
         fila.insertCell(6).textContent = c.fecha;
         fila.insertCell(7).textContent = c.hora;
         fila.insertCell(8).textContent = c.lugar_consulta || "N/A";
-          // =============================
-    // 🖋️ Validación de firma
-    // =============================
-    const celdaFirma = fila.insertCell(9);
-    const firmaValor = c.firma ? c.firma.trim() : "";
 
-    if (firmaValor && firmaValor !== "No Firmado") {
+        const celdaFirma = fila.insertCell(9);
+        const firmaValor = c.firma ? c.firma.trim() : "";
 
-      // Caso 1: Texto "Firmado por QR"
-      if (firmaValor.toLowerCase() === "firmado por qr") {
-        celdaFirma.textContent = "📱 Firmado por QR";
-        celdaFirma.style.color = "#007bff";
-        celdaFirma.style.fontWeight = "bold";
-        celdaFirma.title = "Firma verificada mediante código QR";
+        if (firmaValor && firmaValor !== "No Firmado") {
 
-      // Caso 2: Imagen base64 (firma manual)
-      } else if (firmaValor.startsWith("data:image")) {
-        const img = document.createElement("img");
-        img.src = firmaValor;
-        img.alt = "Firma del estudiante";
-        img.style.maxWidth = "100px";
-        img.style.maxHeight = "50px";
-        img.style.borderRadius = "4px";
-        img.style.boxShadow = "0 0 3px rgba(0,0,0,0.3)";
-        celdaFirma.appendChild(img);
+            if (firmaValor.toLowerCase() === "firmado por qr") {
+                celdaFirma.textContent = "📱 Firmado por QR";
+                celdaFirma.style.color = "#007bff";
+                celdaFirma.style.fontWeight = "bold";
 
-      // Caso 3: Valor desconocido o inválido
-      } else {
-        celdaFirma.textContent = "⚠️ Formato de firma no reconocido";
-        celdaFirma.style.color = "orange";
-      }
+            } else if (firmaValor.startsWith("data:image")) {
+                const img = document.createElement("img");
+                img.src = firmaValor;
+                img.alt = "Firma del estudiante";
+                img.style.maxWidth = "100px";
+                img.style.maxHeight = "50px";
+                img.style.borderRadius = "4px";
+                img.style.boxShadow = "0 0 3px rgba(0,0,0,0.3)";
+                celdaFirma.appendChild(img);
 
-    } else {
-      celdaFirma.textContent = "❌ No Firmado";
-      celdaFirma.style.color = "red";
-      celdaFirma.style.fontWeight = "bold";
-    }
+            } else {
+                celdaFirma.textContent = "⚠️ Formato de firma no reconocido";
+                celdaFirma.style.color = "orange";
+            }
+        } else {
+            celdaFirma.textContent = "❌ No Firmado";
+            celdaFirma.style.color = "red";
+            celdaFirma.style.fontWeight = "bold";
+        }
     });
 }
 
@@ -178,7 +167,7 @@ function actualizarTablaConsultas(consultas) {
 // 📥 Docentes
 // =============================
 function obtenerDocentes() {
-    fetch("https://api-prueba-2-r35v.onrender.com/obtener_docentes")
+    fetch(`${API_URL}/obtener_docentes`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -188,94 +177,6 @@ function obtenerDocentes() {
         })
         .catch(err => console.error("Error:", err));
 }
-
-
-// =============================
-// 🔍 Filtrar estudiante por documento
-// =============================
-function obtenerestudianteFiltrado() {
-    const input = document.getElementById("documento_usuario");
-    const documento = input.value.trim();
-
-    if (!documento) {
-        alert("⚠️ Debes ingresar un número de documento para buscar.");
-        return;
-    }
-
-    fetch("https://api-prueba-2-r35v.onrender.com/obtener_estudiantes")
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                // Buscar el estudiante por ID (documento)
-                const estudiante = data.estudiantes.find(e => String(e.id) === documento);
-
-                const tbody = document.querySelector("#tablaEstudiantes tbody");
-                tbody.innerHTML = "";
-
-                if (estudiante) {
-                    const fila = tbody.insertRow();
-                    fila.insertCell(0).textContent = estudiante.id;
-                    fila.insertCell(1).textContent = estudiante.nombre;
-                    fila.insertCell(2).textContent = estudiante.nombre_programa;
-                } else {
-                    const fila = tbody.insertRow();
-                    const celda = fila.insertCell(0);
-                    celda.colSpan = 3;
-                    celda.textContent = "❌ No se encontró ningún estudiante con ese documento.";
-                    celda.style.textAlign = "center";
-                }
-            } else {
-                alert("⚠️ Error al obtener estudiantes desde el servidor.");
-            }
-        })
-        .catch(err => {
-            console.error("Error al filtrar estudiante:", err);
-            alert("❌ Error de conexión con el servidor.");
-        });
-}
-
-function obtenerDocenteFiltrado() {
-    const input = document.getElementById("documento_docente");
-    const documento = input.value.trim();
-
-    if (!documento) {
-        alert("⚠️ Debes ingresar un número de documento para buscar.");
-        return;
-    }
-
-    fetch("https://api-prueba-2-r35v.onrender.com/obtener_docentes")
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                // Buscar el docente por ID (documento)
-                const docente = data.docentes.find(e => String(e.id) === documento);
-
-                const tbody = document.querySelector("#tablaDocentes tbody");
-                tbody.innerHTML = "";
-
-                if (docente) {
-                    const fila = tbody.insertRow();
-                    fila.insertCell(0).textContent = docente.id;
-                    fila.insertCell(1).textContent = docente.nombre;
-                    fila.insertCell(2).textContent = docente.nombre_programa;
-                } else {
-                    const fila = tbody.insertRow();
-                    const celda = fila.insertCell(0);
-                    celda.colSpan = 3;
-                    celda.textContent = "❌ No se encontró ningún Docente con ese documento.";
-                    celda.style.textAlign = "center";
-                }
-            } else {
-                alert("⚠️ Error al obtener Docente desde el servidor.");
-            }
-        })
-        .catch(err => {
-            console.error("Error al filtrar Docente:", err);
-            alert("❌ Error de conexión con el servidor.");
-        });
-}
-
-
 
 function actualizarTablaDocentes(docentes) {
     const tbody = document.querySelector("#tablaDocentes tbody");
@@ -298,11 +199,76 @@ function llenarSelectProfesores(docentes) {
     });
 }
 
+
+// =============================
+// 🔍 Filtrar estudiante
+// =============================
+function obtenerestudianteFiltrado() {
+    const documento = document.getElementById("documento_usuario").value.trim();
+
+    if (!documento) return alert("⚠️ Debes ingresar un número de documento.");
+
+    fetch(`${API_URL}/obtener_estudiantes`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const estudiante = data.estudiantes.find(e => String(e.id) === documento);
+
+                const tbody = document.querySelector("#tablaEstudiantes tbody");
+                tbody.innerHTML = "";
+
+                if (estudiante) {
+                    const fila = tbody.insertRow();
+                    fila.insertCell(0).textContent = estudiante.id;
+                    fila.insertCell(1).textContent = estudiante.nombre;
+                    fila.insertCell(2).textContent = estudiante.nombre_programa;
+                } else {
+                    const fila = tbody.insertRow();
+                    const celda = fila.insertCell(0);
+                    celda.colSpan = 3;
+                    celda.textContent = "❌ No se encontró ningún estudiante.";
+                    celda.style.textAlign = "center";
+                }
+            }
+        });
+}
+
+function obtenerDocenteFiltrado() {
+    const documento = document.getElementById("documento_docente").value.trim();
+
+    if (!documento) return alert("⚠️ Debes ingresar un número de documento.");
+
+    fetch(`${API_URL}/obtener_docentes`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const docente = data.docentes.find(e => String(e.id) === documento);
+
+                const tbody = document.querySelector("#tablaDocentes tbody");
+                tbody.innerHTML = "";
+
+                if (docente) {
+                    const fila = tbody.insertRow();
+                    fila.insertCell(0).textContent = docente.id;
+                    fila.insertCell(1).textContent = docente.nombre;
+                    fila.insertCell(2).textContent = docente.nombre_programa;
+                } else {
+                    const fila = tbody.insertRow();
+                    const celda = fila.insertCell(0);
+                    celda.colSpan = 3;
+                    celda.textContent = "❌ No se encontró ningún docente.";
+                    celda.style.textAlign = "center";
+                }
+            }
+        });
+}
+
+
 // =============================
 // 📥 Estudiantes
 // =============================
 function obtenerEstudiantes() {
-    fetch("https://api-prueba-2-r35v.onrender.com/obtener_estudiantes")
+    fetch(`${API_URL}/obtener_estudiantes`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -312,29 +278,6 @@ function obtenerEstudiantes() {
         })
         .catch(err => console.error("Error:", err));
 }
-
-function cargarProgramas() {
-    fetch('https://api-prueba-2-r35v.onrender.com/programas')  
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const programas = data.programas;
-                const select = document.getElementById('programaAcademico');
-                select.innerHTML = '<<option value="">Seleccione un programa</option>'; 
-                programas.forEach(p => {
-                    const option = document.createElement('option');
-                    option.value = p.id; 
-                    option.textContent = p.nombre_programa;
-                    select.appendChild(option);
-                });
-            } else {
-                console.error("⚠️ Error al cargar programas:", data);
-            }
-        })
-        .catch(error => console.error('❌ Error al cargar programas:', error));
-}
-
-
 
 function actualizarTablaEstudiantes(estudiantes) {
     const tbody = document.querySelector("#tablaEstudiantes tbody");
@@ -358,16 +301,17 @@ function llenarSelectEstudiantes(estudiantes) {
     });
 }
 
+
 // =============================
 // 📥 Programas
 // =============================
 function obtener_programas() {
-    fetch("https://api-prueba-2-r35v.onrender.com/programas")
+    fetch(`${API_URL}/programas`)
         .then(res => res.json())
         .then(data => {
             if (data.success) actualizarTablaprogramas(data.programas);
         })
-        .catch(err => console.error("Error al conectar con el servidor:", err));
+        .catch(err => console.error("Error:", err));
 }
 
 function actualizarTablaprogramas(programas) {
@@ -377,7 +321,6 @@ function actualizarTablaprogramas(programas) {
         const fila = tbody.insertRow();
         fila.insertCell(0).textContent = p.id;
         fila.insertCell(1).textContent = p.nombre_programa;
-
     });
 }
 
@@ -385,62 +328,54 @@ function registrar_programa() {
     const id = document.getElementById("idPrograma").value.trim();
     const nombre = document.getElementById("nombrePrograma").value.trim();
 
-    if (!id || !nombre) {
-        alert("Todos los campos son obligatorios");
-        return;
-    }
+    if (!id || !nombre) return alert("Todos los campos son obligatorios.");
 
-    fetch("https://api-prueba-2-r35v.onrender.com/programas", {
+    fetch(`${API_URL}/programas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, nombre })
     })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            document.getElementById("registro_programas").reset();
-            obtener_programas();
-        } else alert("Error: " + data.message);
-    })
-    .catch(err => console.error("Error al conectar con el servidor:", err));
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                document.getElementById("registro_programas").reset();
+                obtener_programas();
+            } else alert("Error: " + data.message);
+        });
+}
+
+
+// =============================
+// 📥 Módulos
+// =============================
+function obtener_modulos() {
+    fetch(`${API_URL}/modulos`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) actualizarTablamodulos(data.modulos);
+        });
 }
 
 function registrar_modulo() {
     const id = document.getElementById("idModulo").value.trim();
     const nombre = document.getElementById("nombreModulo").value.trim();
 
-    if (!id || !nombre) {
-        alert("Todos los campos son obligatorios");
-        return;
-    }
+    if (!id || !nombre) return alert("Todos los campos son obligatorios");
 
-    fetch("https://api-prueba-2-r35v.onrender.com/modulos", {
+    fetch(`${API_URL}/modulos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, nombre })
     })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            document.getElementById("registro_modulo").reset(); // ✅ corregido ID
-            obtener_modulos();
-        } else alert("Error: " + data.message);
-    })
-    .catch(err => console.error("Error al conectar con el servidor:", err));
-}
-
-// =============================
-// 📥 Módulos
-// =============================
-function obtener_modulos() {
-    fetch("https://api-prueba-2-r35v.onrender.com/modulos")
         .then(res => res.json())
         .then(data => {
-            if (data.success) actualizarTablamodulos(data.modulos);
-        })
-        .catch(err => console.error("Error al conectar con el servidor:", err));
+            if (data.success) {
+                alert(data.message);
+                document.getElementById("registro_modulo").reset();
+                obtener_modulos();
+            }
+        });
 }
 
 function actualizarTablamodulos(modulos) {
@@ -453,6 +388,10 @@ function actualizarTablamodulos(modulos) {
     });
 }
 
+
+// =============================
+// 🧑‍🎓 Registrar usuario
+// =============================
 function registrarUsuario() {
     const form = document.getElementById("registroUsuarioForm");
     if (!form) return;
@@ -463,136 +402,91 @@ function registrarUsuario() {
     if (selectRol && inputPrograma) {
         inputPrograma.value = "";
         inputPrograma.disabled = true;
-        inputPrograma.placeholder = "Solo disponible para estudiantes";
 
         selectRol.addEventListener("change", function () {
             if (this.value === "Estudiante") {
                 inputPrograma.disabled = false;
-                inputPrograma.placeholder = "Ingrese el programa académico";
             } else {
                 inputPrograma.value = "";
                 inputPrograma.disabled = true;
-                inputPrograma.placeholder = "Solo disponible para estudiantes";
             }
-        });
-
-        form.addEventListener("reset", () => {
-            inputPrograma.disabled = true;
-            inputPrograma.placeholder = "Solo disponible para estudiantes";
         });
     }
 
     form.addEventListener("submit", e => {
         e.preventDefault();
 
-        // ===============================
-        // 🧩 Captura y limpieza de datos
-        // ===============================
-        const rol = form.rolUsuario.value.trim();
-        const id = form.idUsuario.value.trim();
-        const nombre = form.nombreUsuario.value.trim().replace(/\s{2,}/g, " "); // quita espacios dobles
-        const id_programa = inputPrograma.value.trim();
-        const contra = form.contraUsuario.value.replace(/\s+/g, ""); // elimina todos los espacios
+        const datos = {
+            rol: form.rolUsuario.value.trim(),
+            id: form.idUsuario.value.trim(),
+            nombre: form.nombreUsuario.value.trim().replace(/\s{2,}/g, " "),
+            id_programa: inputPrograma.value.trim(),
+            contra: form.contraUsuario.value.replace(/\s+/g, "")
+        };
 
-        const datos = { rol, id, nombre, id_programa, contra };
+        if (!datos.rol || !datos.id || !datos.nombre || !datos.contra)
+            return alert("⚠️ Todos los campos son obligatorios.");
 
-        // ===============================
-        // 🔒 Validaciones de seguridad
-        // ===============================
-
-        // 1️⃣ Campos obligatorios
-        if (!rol || !id || !nombre || !contra) {
-            alert("⚠️ Todos los campos son obligatorios.");
-            return;
-        }
-
-        // 2️⃣ Programa académico solo si es estudiante
-        if (rol === "Estudiante" && !id_programa) {
-            alert("⚠️ Debes ingresar el programa académico del estudiante.");
-            return;
-        }
-
-        // 3️⃣ Validación de contraseña segura
         const regexContra = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-        if (!regexContra.test(contra)) {
-            alert("⚠️ La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial.");
-            return;
+        if (!regexContra.test(datos.contra)) {
+            return alert("⚠️ La contraseña debe tener mínimo 8 caracteres y contener mayúscula, minúscula, número y carácter especial.");
         }
 
-        // Si no es estudiante, se envía vacío el programa
-        if (rol !== "Estudiante") datos.id_programa = "";
+        if (datos.rol !== "Estudiante") datos.id_programa = "";
 
-        // ===============================
-        // 📡 Envío al backend
-        // ===============================
-        fetch("https://api-prueba-2-r35v.onrender.com/registrar_usuario", {
+        fetch(`${API_URL}/registrar_usuario`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert("✅ Usuario registrado con éxito.");
-                form.reset();
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Usuario registrado con éxito");
 
-                inputPrograma.disabled = true;
-                inputPrograma.placeholder = "Solo disponible para estudiantes";
+                    form.reset();
+                    inputPrograma.disabled = true;
 
-                // Recargar tablas o datos
-                obtenerDocentes();
-                obtenerEstudiantes();
-                cargarProgramas();
-            } else {
-                alert("❌ Error al registrar usuario: " + (data.message || "Desconocido"));
-            }
-        })
-        .catch(err => {
-            console.error("Error:", err);
-            alert("⚠️ Error en la conexión con el servidor.");
-        });
+                    obtenerDocentes();
+                    obtenerEstudiantes();
+                    cargarProgramas();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            });
     });
 
-    // ===============================
-    // ⛔ Evita que se escriban espacios en contraseña
-    // ===============================
     const contraInput = document.getElementById("contraUsuario");
     if (contraInput) {
         contraInput.addEventListener("keydown", e => {
-            if (e.key === " ") {
-                e.preventDefault();
-                alert("🚫 No se permiten espacios en la contraseña.");
-            }
+            if (e.key === " ") e.preventDefault();
         });
     }
 }
 
 
-
-
+// =============================
+// 📚 Cargar Programas
+// =============================
 function cargarProgramas() {
-    fetch('https://api-prueba-2-r35v.onrender.com/programas')  
-        .then(response => response.json())
+    fetch(`${API_URL}/programas`)
+        .then(res => res.json())
         .then(data => {
             if (data.success) {
-                const programas = data.programas;
                 const select = document.getElementById('programaAcademico');
-                select.innerHTML = '<option value="">Seleccione un programa</option>'; 
-                programas.forEach(p => {
+                select.innerHTML = '<option value="">Seleccione un programa</option>';
+
+                data.programas.forEach(p => {
                     const option = document.createElement('option');
-                    option.value = p.id; 
+                    option.value = p.id;
                     option.textContent = p.nombre_programa;
                     select.appendChild(option);
                 });
-            } else {
-                console.error(" Error al cargar programas:", data);
             }
-        })
-        .catch(error => console.error(' Error al cargar programas:', error));
+        });
 }
 
 cargarProgramas();
-
 
 
 // =============================
@@ -619,8 +513,3 @@ function cerrarSesion() {
     localStorage.clear();
     window.location.href = "index.html";
 }
-
-
-
-
-
