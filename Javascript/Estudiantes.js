@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =============================
-// 📘 Cargar módulos
+// 📘 Cargar módulos  (todos) para solicitud
 // =============================
 async function cargarModulos() {
     try {
