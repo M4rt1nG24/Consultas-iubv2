@@ -201,18 +201,20 @@
     </div>
   </div>
 
-  <!-- ==========================
-       🔹 MODAL QR PARA FIRMAR
-  =========================== -->
-  <div id="modalQR" class="modal" style="display:none;">
-    <div class="modal-content">
-      <h3>Escanear código QR</h3>
+<!-- ==========================
+     🔹 MODAL QR PARA FIRMAR
+=========================== -->
+<div id="modalQR" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h3>Escanear código QR</h3>
 
-      <!-- ESTE ES EL QUE FALTABA -->
-      <div id="lectorQR" style="width: 280px; margin: auto;"></div>
+    <!-- Lector QR -->
+    <div id="lectorQR" style="width: 280px; margin: auto;"></div>
 
-      <button onclick="cerrarModalQR()">Cerrar</button>
-    </div>
+    <button onclick="cerrarModalQR()">Cerrar</button>
+  </div>
+</div> <!-- ← ESTE CIERRE FALTABA -->
+>
 
   <!-- ==========================
        🔹 SCRIPTS
