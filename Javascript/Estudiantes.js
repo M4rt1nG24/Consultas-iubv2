@@ -74,8 +74,8 @@ function obtenerConsultasFiltradas() {
     actualizarTablaConsultas(filtradas);
 }
 
-// =============================
-// 🧾 Renderizar tabla
+
+// 🧾 Renderizar tabla de consultas
 // =============================
 function actualizarTablaConsultas(lista) {
     const tabla = document.querySelector("#tablaconsultas tbody");
@@ -83,6 +83,7 @@ function actualizarTablaConsultas(lista) {
 
     lista.forEach(consulta => {
         const fila = tabla.insertRow();
+
         fila.insertCell(0).textContent = consulta.id || "";
         fila.insertCell(1).textContent = consulta.nombre_estudiante || "";
         fila.insertCell(2).textContent = consulta.nombre_modulo || "";
@@ -92,23 +93,63 @@ function actualizarTablaConsultas(lista) {
         fila.insertCell(6).textContent = consulta.hora || "";
         fila.insertCell(7).textContent = consulta.nombre_docente || "";
 
-        const celdaFirmar = fila || "".insertCell(8);
-        if (consulta.firma && consulta.firma !== "No Firmado") {
-            const img = document.createElement("img");
-            img.src = consulta.firma;
-            img.alt = "Firma";
-            img.style.maxWidth = "100px";
-            img.style.maxHeight = "50px";
-            celdaFirmar.appendChild(img);
+        // =====================================
+        // 🖋️ COLUMNA DE FIRMA (Columna 8)
+        // =====================================
+        const celdaFirma = fila.insertCell(8);
+        const firmaValor = consulta.firma ? consulta.firma.trim() : "";
+
+        if (firmaValor && firmaValor !== "No Firmado") {
+
+            // Firma por QR
+            if (firmaValor.toLowerCase() === "firmado por qr") {
+                celdaFirma.textContent = "📱 Firmado por QR";
+                celdaFirma.style.color = "#007bff";
+                celdaFirma.style.fontWeight = "bold";
+
+            // Firma imagen base64
+            } else if (firmaValor.startsWith("data:image")) {
+                const img = document.createElement("img");
+                img.src = firmaValor;
+                img.alt = "Firma";
+                img.style.maxWidth = "100px";
+                img.style.maxHeight = "50px";
+                img.style.borderRadius = "4px";
+                img.style.boxShadow = "0 0 3px rgba(0,0,0,0.3)";
+                celdaFirma.appendChild(img);
+
+            } else {
+                // Formato desconocido
+                celdaFirma.textContent = "⚠️ Formato no reconocido";
+                celdaFirma.style.color = "orange";
+            }
+
+        } else {
+            // No firmado
+            celdaFirma.textContent = "❌ No Firmado";
+            celdaFirma.style.color = "red";
+            celdaFirma.style.fontWeight = "bold";
+        }
+
+        // =====================================
+        // ✍️ COLUMNA BOTÓN FIRMAR (Columna 9)
+        // =====================================
+        const celdaBoton = fila.insertCell(9);
+
+        if (firmaValor && firmaValor !== "No Firmado") {
+            celdaBoton.textContent = "✔️ Ya firmado";
+            celdaBoton.style.color = "green";
+            celdaBoton.style.fontWeight = "bold";
         } else {
             const boton = document.createElement("button");
             boton.textContent = "✍️ Firmar";
             boton.classList.add("btn-firmar");
             boton.onclick = () => abrirModalFirma(consulta.id);
-            celdaFirmar.appendChild(boton);
+            celdaBoton.appendChild(boton);
         }
     });
 }
+
 
 
 // =============================
