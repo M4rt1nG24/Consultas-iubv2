@@ -43,7 +43,7 @@ function iniciarEscaneo(idConsulta, idEstudiante) {
   const lector = new Html5Qrcode("lectorQR");
 
   lector.start(
-    { facingMode: "user" }, // usar "environment" si es celular
+    { facingMode: "environment" },
     { fps: 10, qrbox: 250 },
 
     qrCodeMessage => {
