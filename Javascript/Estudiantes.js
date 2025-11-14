@@ -73,16 +73,16 @@ function obtenerConsultasFiltradas() {
 
     actualizarTablaConsultas(filtradas);
 }
+
 // =============================
 // 🧾 Renderizar tabla
 // =============================
 function actualizarTablaConsultas(lista) {
-    const tabla = document.querySelector("#tablaConsultas tbody");
+    const tabla = document.querySelector("#tablaconsultas tbody");
     tabla.innerHTML = "";
 
     lista.forEach(consulta => {
         const fila = tabla.insertRow();
-
         fila.insertCell(0).textContent = consulta.id || "";
         fila.insertCell(1).textContent = consulta.nombre_estudiante || "";
         fila.insertCell(2).textContent = consulta.nombre_modulo || "";
@@ -92,53 +92,14 @@ function actualizarTablaConsultas(lista) {
         fila.insertCell(6).textContent = consulta.hora || "";
         fila.insertCell(7).textContent = consulta.nombre_docente || "";
 
-        // =============================
-        // 🖋️ COLUMNA DE FIRMA
-        // =============================
-        const celdaFirma = fila.insertCell(8);
-        const firmaValor = consulta.firma ? consulta.firma.trim() : "";
-
-        if (firmaValor && firmaValor !== "No Firmado") {
-
-            // Caso 1: Firmado por QR
-            if (firmaValor.toLowerCase() === "firmado por qr") {
-                celdaFirma.textContent = "📱 Firmado por QR";
-                celdaFirma.style.color = "#007bff";
-                celdaFirma.style.fontWeight = "bold";
-
-            // Caso 2: Firma en imagen (base64)
-            } else if (firmaValor.startsWith("data:image")) {
-                const img = document.createElement("img");
-                img.src = firmaValor;
-                img.alt = "Firma del estudiante";
-                img.style.maxWidth = "100px";
-                img.style.maxHeight = "50px";
-                img.style.borderRadius = "4px";
-                img.style.boxShadow = "0 0 3px rgba(0,0,0,0.3)";
-                celdaFirma.appendChild(img);
-
-            // Caso 3: Valor inválido
-            } else {
-                celdaFirma.textContent = "⚠️ Formato no reconocido";
-                celdaFirma.style.color = "orange";
-            }
-
-        } else {
-            // Caso: No firmado
-            celdaFirma.textContent = "❌ No Firmado";
-            celdaFirma.style.color = "red";
-            celdaFirma.style.fontWeight = "bold";
-        }
-
-        // =============================
-        // ✍️ BOTÓN PARA FIRMAR
-        // =============================
-        const celdaFirmar = fila.insertCell(9);
-
-        if (firmaValor && firmaValor !== "No Firmado") {
-            celdaFirmar.textContent = "✔️ Ya firmado";
-            celdaFirmar.style.color = "green";
-            celdaFirmar.style.fontWeight = "bold";
+        const celdaFirmar = fila || "".insertCell(8);
+        if (consulta.firma && consulta.firma !== "No Firmado") {
+            const img = document.createElement("img");
+            img.src = consulta.firma;
+            img.alt = "Firma";
+            img.style.maxWidth = "100px";
+            img.style.maxHeight = "50px";
+            celdaFirmar.appendChild(img);
         } else {
             const boton = document.createElement("button");
             boton.textContent = "✍️ Firmar";
@@ -339,10 +300,11 @@ function actualizarTablaSolicitudes(solicitudes) {
 }
 
 
+
 // =============================
 // 🎯 Cargar docentes con consultas del estudiante (para filtro)
 // =============================
-function cargarDocentes() {
+async function cargarDocentes() {
     try {
         const res = await fetch(`https://api-prueba-2-r35v.onrender.com/consultas_estudiante/${idUsuario}`);
         const data = await res.json();
