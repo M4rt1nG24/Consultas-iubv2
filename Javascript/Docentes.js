@@ -39,47 +39,37 @@ if (!idDocente || !rolUsuario) {
 // 📷 ESCANEO QR
 // =============================
 function iniciarEscaneo(idConsulta, idEstudiante) {
+    const lector = new Html5Qrcode("lectorQR");
 
-  const lector = new Html5Qrcode("lectorQR");
-
-  lector.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
-
-    qrCodeMessage => {
-      const documento = qrCodeMessage.replace(/^0+/, "");
-
-      if (String(documento) === String(idEstudiante)) {
-
-        fetch(`${API_URL}/firmar_consulta/${idConsulta}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ firma: "Firmado por QR" })
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            alert("Consulta firmada con éxito");
-            obtener_consultas_docente(idDocente);
-          } else {
-            alert(data.message || "No se pudo firmar");
-          }
-        })
-        .catch(err => console.error("Error al firmar:", err))
-        .finally(() => lector.stop());
-
-      } else {
-        alert("El QR no corresponde al estudiante");
-        lector.stop();
-      }
-    },
-
-    err => console.log("Escaneando...", err)
-
-  ).catch(err => {
-    console.error("Error al iniciar cámara:", err);
-    alert("No se pudo acceder a la cámara:\n" + err);
-  });
+    lector.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        qrCodeMessage => {
+            const documento = qrCodeMessage.replace(/^0+/, "");
+            if (String(documento) === String(idEstudiante)) {
+                fetch(`http://127.0.0.1:5000/firmar_consulta/${idConsulta}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ firma: "Firmado por QR" })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("✅ Consulta firmada con éxito");
+                            obtener_consultas_docente(idDocente);
+                        } else {
+                            alert(data.message || "No se pudo firmar la consulta");
+                        }
+                    })
+                    .catch(err => console.error("Error al firmar:", err))
+                    .finally(() => lector.stop());
+            } else {
+                alert("⚠️ El QR no corresponde al estudiante de esta consulta");
+                lector.stop();
+            }
+        },
+        () => {}
+    );
 }
 
 
