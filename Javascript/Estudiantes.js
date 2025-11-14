@@ -1,4 +1,10 @@
 // =============================
+// 🌐 URLs del proyecto
+// =============================
+const FRONTEND_URL = "https://m4rt1ng24.github.io/Consultas-iubv2/";
+const API_URL = "https://api-prueba-2-r35v.onrender.com";
+
+// =============================
 // ⚙️ Configuración inicial
 // =============================
 let consultas = [];
@@ -12,16 +18,16 @@ let signatureInstance = null;
 // =============================
 if (!idUsuario || !rolUsuario) {
     alert("⚠️ Debes iniciar sesión para acceder.");
-    window.location.href = "index.html";
+    window.location.href = FRONTEND_URL + "index.html";
 } else if (rolUsuario !== "Estudiante") {
     alert("⚠️ No tienes permisos para acceder a esta sección.");
-    window.location.href = "index.html";
+    window.location.href = FRONTEND_URL + "index.html";
 } else {
     const nombreDiv = document.getElementById("nombreUsuario");
     if (nombreUsuario) {
         nombreDiv.textContent = `Hola, ${nombreUsuario}`;
     } else {
-        fetch(`https://api-prueba-2-r35v.onrender.com/estudiante/${idUsuario}`)
+        fetch(`${API_URL}/estudiante/${idUsuario}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.estudiante) {
@@ -40,7 +46,7 @@ if (!idUsuario || !rolUsuario) {
 // 📥 Obtener consultas del estudiante
 // =============================
 function obtener_consultas_por_estudiante(id) {
-    fetch(`https://api-prueba-2-r35v.onrender.com/consultas_estudiante/${id}`)
+    fetch(`${API_URL}/consultas_estudiante/${id}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -92,7 +98,8 @@ function actualizarTablaConsultas(lista) {
         fila.insertCell(6).textContent = consulta.hora || "";
         fila.insertCell(7).textContent = consulta.nombre_docente || "";
 
-        const celdaFirmar = fila || "".insertCell(8);
+        const celdaFirmar = fila.insertCell(8);
+
         if (consulta.firma && consulta.firma !== "No Firmado") {
             const img = document.createElement("img");
             img.src = consulta.firma;
@@ -109,7 +116,6 @@ function actualizarTablaConsultas(lista) {
         }
     });
 }
-
 
 // =============================
 // ✍️ Modal de firma digital
@@ -131,7 +137,7 @@ function abrirModalFirma(id_consulta) {
         const canvas = root.querySelector("canvas");
         const firmaDataURL = canvas.toDataURL("image/png");
 
-        fetch(`https://api-prueba-2-r35v.onrender.com/firmar_consulta/${id_consulta}`, {
+        fetch(`${API_URL}/firmar_consulta/${id_consulta}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ firma: firmaDataURL })
@@ -162,196 +168,3 @@ function cerrarModalFirma() {
 window.onload = () => {
     if (idUsuario) obtener_consultas_por_estudiante(idUsuario);
 };
-
-// =============================
-// 📚 Cargar datos iniciales
-// =============================
-document.addEventListener("DOMContentLoaded", () => {
-    cargarModulos();
-    cargarDocentesSolicitud();
-    cargarDocentes();
-    obtener_solicitudes_estudiante(idUsuario);
-
-    const formSolicitud = document.getElementById("formSolicitud");
-    formSolicitud.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const id_estudiante = localStorage.getItem("id_usuario");
-        const id_modulo = document.getElementById("modulo").value;
-        const id_docente = document.getElementById("docente").value;
-        const tema = document.getElementById("tema").value.trim();
-        const fecha = document.getElementById("fecha").value;
-        const hora = document.getElementById("hora").value;
-        const lugar = document.getElementById("lugar").value.trim();
-
-        if (!id_modulo || !id_docente) {
-            alert("⚠️ Debes seleccionar un módulo y un docente.");
-            return;
-        }
-
-        try {
-            const res = await fetch("https://api-prueba-2-r35v.onrender.com/solicitar_consulta", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id_estudiante, id_modulo, id_docente, tema, fecha, hora, lugar })
-            });
-            const data = await res.json();
-
-            if (data.success) {
-                alert("✅ Solicitud registrada con éxito");
-                formSolicitud.reset();
-                obtener_consultas_por_estudiante(id_estudiante);
-                cargarDocentes(); // refrescar filtro si hay nuevo docente
-            } else {
-                alert("❌ Error al registrar la solicitud");
-            }
-        } catch (error) {
-            console.error("Error al enviar solicitud:", error);
-            alert("❌ No se pudo enviar la solicitud.");
-        }
-    });
-});
-
-// =============================
-// 📘 Cargar módulos
-// =============================
-async function cargarModulos() {
-    try {
-        const res = await fetch("https://api-prueba-2-r35v.onrender.com/modulos");
-        const data = await res.json();
-        const select = document.getElementById("modulo");
-        select.innerHTML = '<option value="">Seleccione un módulo</option>';
-        (data.modulos || []).forEach(m => {
-            const option = document.createElement("option");
-            option.value = m.id;
-            option.textContent = m.nombre;
-            select.appendChild(option);
-        });
-    } catch (error) {
-        console.error("Error cargando módulos:", error);
-    }
-}
-
-// =============================
-// 👨‍🏫 Cargar docentes (todos) para solicitud
-// =============================
-async function cargarDocentesSolicitud() {
-    try {
-        const res = await fetch("https://api-prueba-2-r35v.onrender.com/obtener_docentes");
-        const data = await res.json();
-        const select = document.getElementById("docente");
-        select.innerHTML = '<option value="">Seleccione un docente</option>';
-        (data.docentes || []).forEach(d => {
-            const option = document.createElement("option");
-            option.value = d.id;
-            option.textContent = d.nombre;
-            select.appendChild(option);
-        });
-    } catch (error) {
-        console.error("Error cargando docentes (solicitud):", error);
-    }
-}
-
-// =============================
-// 📋 OBTENER SOLICITUDES DEL ESTUDIANTE
-// =============================
-function obtener_solicitudes_estudiante(id_estudiante) {
-    fetch(`https://api-prueba-2-r35v.onrender.com/obtener_solicitudes_estudiante/${id_estudiante}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                actualizarTablaSolicitudes(data.solicitudes);
-            } else {
-                actualizarTablaSolicitudes([]);
-            }
-        })
-        .catch(err => console.error("Error al obtener solicitudes:", err));
-}
-
-// =============================
-// 🧾 ACTUALIZAR TABLA HTML
-// =============================
-function actualizarTablaSolicitudes(solicitudes) {
-    const tbody = document.querySelector("#tablaSolicitudes tbody");
-    tbody.innerHTML = "";
-
-    if (!solicitudes || solicitudes.length === 0) {
-        const fila = tbody.insertRow();
-        const celda = fila.insertCell(0);
-        celda.colSpan = 10;
-        celda.textContent = "⚠️ No hay solicitudes de consulta.";
-        celda.style.textAlign = "center";
-        return;
-    }
-
-    solicitudes.forEach(s => {
-        const fila = tbody.insertRow();
-        fila.insertCell(0).textContent = s.id;
-        fila.insertCell(1).textContent = s.nombre_estudiante;
-        fila.insertCell(2).textContent = s.nombre_programa || "N/A";
-        fila.insertCell(3).textContent = s.nombre_modulo;
-        fila.insertCell(4).textContent = s.tema;
-        fila.insertCell(5).textContent = s.fecha;
-        fila.insertCell(6).textContent = s.hora;
-        fila.insertCell(7).textContent = s.lugar_consulta;
-        fila.insertCell(8).textContent = s.estado;
-        fila.insertCell(9).textContent = s.nombre_docente;
-    });
-}
-
-
-// =============================
-// 🎯 Cargar docentes con consultas del estudiante (para filtro)
-// =============================
-function cargarDocentes() {
-    try {
-        const res = await fetch(`https://api-prueba-2-r35v.onrender.com/consultas_estudiante/${idUsuario}`);
-        const data = await res.json();
-
-        const filtro = document.getElementById("buscarDocente");
-        filtro.innerHTML = '<option value="">Todos</option>'; //
-
-        if (data.success && data.consultas.length > 0) {
-            const idsUsados = new Set();
-
-            data.consultas.forEach(c => {
-                // 🔹 Convertir siempre a string y validar que tenga valor
-                const id = String(c.id_docente || "").trim();
-                const nombre = (c.nombre_docente || "").trim();
-
-                if (id && !idsUsados.has(id)) {
-                    idsUsados.add(id);
-
-                    const option = document.createElement("option");
-                    option.value = id;
-                    option.textContent = nombre || `Docente ${id}`;
-                    filtro.appendChild(option);
-                }
-            });
-        } else {
-            console.warn("⚠️ No hay consultas para este estudiante.");
-        }
-    } catch (error) {
-        console.error("Error cargando docentes filtrados:", error);
-    }
-}
-
-
-// =============================
-// 🚪 Cerrar sesión
-// =============================
-function cerrarSesion() {
-    localStorage.clear();
-    window.location.href = "index.html";
-}
-
-
-// =============================
-// 📑 Tabs
-// =============================
-function openTab(evt, tabName) {
-    document.querySelectorAll(".tabcontent").forEach(tab => tab.style.display = "none");
-    document.querySelectorAll(".tablink").forEach(btn => btn.classList.remove("active"));
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.classList.add("active");
-}
