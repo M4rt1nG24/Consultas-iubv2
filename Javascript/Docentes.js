@@ -43,7 +43,7 @@ function iniciarEscaneo(idConsulta, idEstudiante) {
   const lector = new Html5Qrcode("lectorQR");
 
   lector.start(
-    { facingMode: "environment" },   // CAMBIAR A "user" SI USAS PC
+    { facingMode: "user" }, // usar "environment" si es celular
     { fps: 10, qrbox: 250 },
 
     qrCodeMessage => {
@@ -59,28 +59,29 @@ function iniciarEscaneo(idConsulta, idEstudiante) {
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-            alert("✅ Consulta firmada con éxito");
+            alert("Consulta firmada con éxito");
             obtener_consultas_docente(idDocente);
           } else {
-            alert(data.message || "No se pudo firmar la consulta");
+            alert(data.message || "No se pudo firmar");
           }
         })
         .catch(err => console.error("Error al firmar:", err))
         .finally(() => lector.stop());
 
       } else {
-        alert("⚠️ El QR no corresponde al estudiante de esta consulta");
+        alert("El QR no corresponde al estudiante");
         lector.stop();
       }
     },
 
-    error => console.log("Lectura activa:", error)
+    err => console.log("Escaneando...", err)
 
   ).catch(err => {
-    console.error("ERROR AL INICIAR CÁMARA:", err);
-    alert("❌ No se pudo acceder a la cámara:\n" + err);
+    console.error("Error al iniciar cámara:", err);
+    alert("No se pudo acceder a la cámara:\n" + err);
   });
 }
+
 
 
 // Alias para compatibilidad con HTML
