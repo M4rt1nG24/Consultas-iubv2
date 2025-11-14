@@ -300,14 +300,10 @@ function actualizarTablaSolicitudes(solicitudes) {
 }
 
 
-
 // =============================
 // 🎯 Cargar docentes con consultas del estudiante (para filtro)
 // =============================
-// =============================
-// 🎯 Cargar docentes con consultas del estudiante (para filtro)
-// =============================
-async function cargarDocentes() {
+function cargarDocentes() {
     try {
         const res = await fetch(`https://api-prueba-2-r35v.onrender.com/consultas_estudiante/${idUsuario}`);
         const data = await res.json();
