@@ -266,7 +266,7 @@ async function guardarEdicionConsulta(event) {
     const nuevoTema = document.getElementById("nuevoTema").value;
 
 
-    const resultado = await actualizarConsultaBackend(nuevaFecha, nuevaHora,);
+    const resultado = await actualizarConsultaBackend(nuevaFecha, nuevaHora,nuevoLugar,nuevoTema);
 
     if (resultado.success) {
         // Actualizar arreglo local y refrescar tabla
