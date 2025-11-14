@@ -40,7 +40,7 @@ if (!idDocente || !rolUsuario) {
 // =============================
 function iniciarEscaneo(idConsulta, idEstudiante) {
 
-  let escaneoHecho = false; // 🟢 Evita múltiples lecturas
+  let escaneoHecho = false; // 🟢 Evita repetición
 
   const lector = new Html5Qrcode("lectorQR");
 
@@ -50,13 +50,13 @@ function iniciarEscaneo(idConsulta, idEstudiante) {
 
     qrCodeMessage => {
 
-      if (escaneoHecho) return; // ⛔ Bloquea escaneos repetidos
+      if (escaneoHecho) return; // ⛔ Solo 1 lectura
 
       const documento = qrCodeMessage.replace(/^0+/, "");
 
       if (String(documento) === String(idEstudiante)) {
 
-        escaneoHecho = true; // Bloquear nuevas lecturas
+        escaneoHecho = true;
 
         fetch(`${API_URL}/firmar_consulta/${idConsulta}`, {
           method: "POST",
@@ -76,19 +76,20 @@ function iniciarEscaneo(idConsulta, idEstudiante) {
         .finally(() => lector.stop());
 
       } else {
-        escaneoHecho = true; // Bloquear también aquí
+        escaneoHecho = true;
         alert("El QR no corresponde al estudiante");
         lector.stop();
       }
     },
 
-    err => console.log("Escaneando...", err)
+    err => {} // ⛔ Evita spam de errores normales en consola
 
   ).catch(err => {
     console.error("Error al iniciar cámara:", err);
     alert("No se pudo acceder a la cámara:\n" + err);
   });
 }
+
 
 
 
