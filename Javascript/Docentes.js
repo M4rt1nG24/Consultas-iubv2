@@ -39,39 +39,52 @@ if (!idDocente || !rolUsuario) {
 // 📷 ESCANEO QR
 // =============================
 function iniciarEscaneo(idConsulta, idEstudiante) {
+
+    let escaneoRealizado = false; // 🟢 Evita escaneos múltiples
+
     const lector = new Html5Qrcode("lectorQR");
-    let escaneoRealizado = false;
 
     lector.start(
         { facingMode: "environment" },
         { fps: 10, qrbox: 250 },
+
         qrCodeMessage => {
+
+            if (escaneoRealizado) return; // ⛔ Ya se procesó un escaneo
+
             const documento = qrCodeMessage.replace(/^0+/, "");
+
             if (String(documento) === String(idEstudiante)) {
+                escaneoRealizado = true; // Bloquea nuevas lecturas
+
                 fetch(`http://127.0.0.1:5000/firmar_consulta/${idConsulta}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ firma: "Firmado por QR" })
                 })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert("✅ Consulta firmada con éxito");
-                            obtener_consultas_docente(idDocente);
-                        } else {
-                            alert(data.message || "No se pudo firmar la consulta");
-                        }
-                    })
-                    .catch(err => console.error("Error al firmar:", err))
-                    .finally(() => lector.stop());
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("✅ Consulta firmada con éxito");
+                        obtener_consultas_docente(idDocente);
+                    } else {
+                        alert(data.message || "No se pudo firmar la consulta");
+                    }
+                })
+                .catch(err => console.error("Error al firmar:", err))
+                .finally(() => lector.stop());
+
             } else {
+                escaneoRealizado = true; // bloquear para evitar spam de alertas
                 alert("⚠️ El QR no corresponde al estudiante de esta consulta");
                 lector.stop();
             }
         },
-        () => {}
+
+        () => { }
     );
 }
+
 
 
 
