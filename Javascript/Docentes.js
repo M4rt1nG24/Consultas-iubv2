@@ -40,6 +40,8 @@ if (!idDocente || !rolUsuario) {
 // =============================
 function iniciarEscaneo(idConsulta, idEstudiante) {
 
+  let escaneoHecho = false; // 🟢 Evita múltiples lecturas
+
   const lector = new Html5Qrcode("lectorQR");
 
   lector.start(
@@ -47,9 +49,14 @@ function iniciarEscaneo(idConsulta, idEstudiante) {
     { fps: 10, qrbox: 250 },
 
     qrCodeMessage => {
+
+      if (escaneoHecho) return; // ⛔ Bloquea escaneos repetidos
+
       const documento = qrCodeMessage.replace(/^0+/, "");
 
       if (String(documento) === String(idEstudiante)) {
+
+        escaneoHecho = true; // Bloquear nuevas lecturas
 
         fetch(`${API_URL}/firmar_consulta/${idConsulta}`, {
           method: "POST",
@@ -69,6 +76,7 @@ function iniciarEscaneo(idConsulta, idEstudiante) {
         .finally(() => lector.stop());
 
       } else {
+        escaneoHecho = true; // Bloquear también aquí
         alert("El QR no corresponde al estudiante");
         lector.stop();
       }
