@@ -98,35 +98,31 @@ function actualizarTablaConsultas(lista) {
         fila.insertCell(6).textContent = consulta.hora || "";
         fila.insertCell(7).textContent = consulta.nombre_docente || "";
 
-        const celdaFirma = fila.insertCell(8);
-
-// Validamos la firma correcta desde el objeto "consulta"
-const firmaValor = consulta.firma ? consulta.firma.trim() : "";
-
-if (firmaValor && firmaValor !== "No Firmado") {
-    if (firmaValor.toLowerCase() === "firmado por qr") {
+        const celdaFirmar = fila.insertCell(8);
+    const firmaValor = c.firma ? c.firma.trim() : "";
+    if (firmaValor && firmaValor !== "No Firmado") {
+      if (firmaValor.toLowerCase() === "firmado por qr") {
         celdaFirma.textContent = "📱 Firmado por QR";
         celdaFirma.style.color = "#007bff";
         celdaFirma.style.fontWeight = "bold";
-    } else if (firmaValor.startsWith("data:image")) {
+      } else if (firmaValor.startsWith("data:image")) {
         const img = document.createElement("img");
         img.src = firmaValor;
         img.alt = "Firma del estudiante";
         img.style.maxWidth = "100px";
         img.style.maxHeight = "50px";
         img.style.borderRadius = "4px";
-        img.style.boxShadow = "0 0 3px rgba(0,0,0,0.3)";
+        img.style.boxShadow = "0 0 3px rgba(39, 19, 19, 0.3)";
         celdaFirma.appendChild(img);
-    } else {
+      } else {
         celdaFirma.textContent = "⚠️ Formato no reconocido";
         celdaFirma.style.color = "orange";
+      }
+    } else {
+      celdaFirma.textContent = "❌ No Firmado";
+      celdaFirma.style.color = "red";
+      celdaFirma.style.fontWeight = "bold";
     }
-} else {
-    celdaFirma.textContent = "❌ No Firmado";
-    celdaFirma.style.color = "red";
-    celdaFirma.style.fontWeight = "bold";
-}
-
     });
 }
 
