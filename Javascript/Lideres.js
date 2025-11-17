@@ -172,7 +172,6 @@ function obtenerDocentes() {
         .then(data => {
             if (data.success) {
                 actualizarTablaDocentes(data.docentes);
-                llenarSelectProfesores(data.docentes);
             }
         })
         .catch(err => console.error("Error:", err));
