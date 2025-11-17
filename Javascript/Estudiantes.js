@@ -323,7 +323,7 @@ function actualizarTablaSolicitudes(solicitudes) {
         fila.insertCell(7).textContent = s.lugar_consulta;
         fila.insertCell(8).textContent = s.estado;
         fila.insertCell(9).textContent = s.nombre_docente;
-        fila.insertCell(9).textContent = s.comentario_docente;
+        fila.insertCell(10).textContent = s.comentario_docente;
     });
 }
 
