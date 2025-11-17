@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
     obtener_consultas_lider();
     obtenerDocentes();
     obtener_programas();
-    obtenerEstudiantes();
     registrarUsuario();
     obtener_modulos();
     cargarProgramas();
