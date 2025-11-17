@@ -307,7 +307,6 @@ function obtenerEstudiantes() {
         .then(data => {
             if (data.success) {
                 actualizarTablaEstudiantes(data.estudiantes);
-                llenarSelectEstudiantes(data.estudiantes);
             }
         })
         .catch(err => console.error("Error:", err));
