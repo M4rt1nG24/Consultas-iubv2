@@ -40,7 +40,7 @@ if (!idDocente || !rolUsuario) {
 // =============================
 function iniciarEscaneo(idConsulta, idEstudiante) {
 
-  let escaneoHecho = false; // 🟢 Evita repetición
+  let escaneoHecho = false; // Evita repetición
 
   const lector = new Html5Qrcode("lectorQR");
 
@@ -50,7 +50,7 @@ function iniciarEscaneo(idConsulta, idEstudiante) {
 
     qrCodeMessage => {
 
-      if (escaneoHecho) return; // ⛔ Solo 1 lectura
+      if (escaneoHecho) return; // Solo 1 lectura
 
       const documento = qrCodeMessage.replace(/^0+/, "");
 
@@ -82,7 +82,7 @@ function iniciarEscaneo(idConsulta, idEstudiante) {
       }
     },
 
-    err => {} // ⛔ Evita spam de errores normales en consola
+    err => {} //  Evita spam de errores normales en consola
 
   ).catch(err => {
     console.error("Error al iniciar cámara:", err);
