@@ -126,6 +126,46 @@ function abrirSelectorFirma(tipo) {
   document.getElementById(`inputFirma_${tipo}`).click();
 }
 
+const API_URL = "https://api-prueba-2-r35v.onrender.com";
+
+// Obtener el ID del docente desde localStorage
+const idDocente = localStorage.getItem("id_usuario");
+
+// Función para obtener el nombre del docente y colocarlo en el formato
+function cargarNombreDocente() {
+    if (!idDocente) {
+        console.warn("No se encontró el ID del docente.");
+        return;
+    }
+
+    fetch(`${API_URL}/docente/${idDocente}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.docente) {
+
+                // Nombre recibido desde la BD
+                const nombre = data.nombre;
+
+                // Guardar en localStorage por si se requiere nuevamente
+                localStorage.setItem("nombre_docente_formato", nombre);
+
+                // Colocar el nombre en el formato (cambia el ID según tu HTML)
+                const campoNombreFormato = document.getElementById("nombreDocenteFormato");
+
+                if (campoNombreFormato) {
+                    campoNombreFormato.textContent = nombre;
+                }
+
+            } else {
+                console.warn("No se encontró información del docente.");
+            }
+        })
+        .catch(err => console.error("Error al obtener nombre del docente:", err));
+}
+
+// Ejecutar al cargar la página
+document.addEventListener("DOMContentLoaded", cargarNombreDocente);
+
 // ================================
 // 💾 GUARDAR TODO EL HTML COMO PDF + GUARDAR EN BD
 // ================================
