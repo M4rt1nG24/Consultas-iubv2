@@ -591,7 +591,6 @@ function cargarProgramas() {
         .catch(error => console.error(' Error al cargar programas:', error));
 }
 
-cargarProgramas();
 
 
 
