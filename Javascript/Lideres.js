@@ -73,7 +73,7 @@ function obtener_consultas_lider() {
         })
         .catch(err => console.error("Error:", err));
 }
-
+// LIKE SI VISTE ESTO
 function obtenerConsultasFiltradas() {
     const fecha = document.getElementById("buscarFecha").value;
     const hora = document.getElementById("buscarHora").value;
