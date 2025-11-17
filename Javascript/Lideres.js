@@ -347,16 +347,6 @@ function actualizarTablaEstudiantes(estudiantes) {
     });
 }
 
-function llenarSelectEstudiantes(estudiantes) {
-    const select = document.getElementById("buscarEstudiante");
-    select.innerHTML = '<option value="">Todos</option>';
-    estudiantes.forEach(e => {
-        const option = document.createElement("option");
-        option.value = e.id;
-        option.textContent = e.nombre;
-        select.appendChild(option);
-    });
-}
 
 // =============================
 // 📥 Programas
