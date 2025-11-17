@@ -79,7 +79,7 @@ function obtenerConsultasFiltradas() {
     const hora = document.getElementById("buscarHora").value;
     const mes = document.getElementById("buscarMes").value;
     const profesor = document.getElementById("buscarProfesor").value;
-    const estudiante = document.getElementById("buscarIdEstudianteSolicitud").trim;
+    const estudiante = document.getElementById("buscarIdEstudianteSolicitud").value.trim();
 
     let filtradas = [...todasLasConsultas];
 
