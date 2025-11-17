@@ -78,7 +78,7 @@ function obtenerConsultasFiltradas() {
     const fecha = document.getElementById("buscarFecha").value;
     const hora = document.getElementById("buscarHora").value;
     const mes = document.getElementById("buscarMes").value;
-    const profesor = document.getElementById("buscarProfesor").value;
+    const profesor = document.getElementById("buscarIdDocente").value;
     const estudiante = document.getElementById("buscarIdEstudiante").value;
 
     let filtradas = [...todasLasConsultas];
@@ -89,17 +89,6 @@ function obtenerConsultasFiltradas() {
     if (mes) filtradas = filtradas.filter(c => new Date(c.fecha).getMonth() + 1 === parseInt(mes));
     if (profesor) filtradas = filtradas.filter(c => String(c.id_docente) === profesor);
     if (estudiante) filtradas = filtradas.filter(c => String(c.id_estudiante) === estudiante);
-
-    // 🧠 Guardar nombre del docente seleccionado
-    let nombre_docente = "";
-    if (profesor) {
-        const select = document.getElementById("buscarProfesor");
-        const opcionSeleccionada = select.options[select.selectedIndex];
-        nombre_docente = opcionSeleccionada.textContent;
-        localStorage.setItem("nombre_docente", nombre_docente);
-    } else {
-        localStorage.removeItem("nombre_docente");
-    }
 
     // 🧾 Guardar consultas filtradas
     localStorage.setItem("consultas_filtradas", JSON.stringify(filtradas));
@@ -287,16 +276,7 @@ function actualizarTablaDocentes(docentes) {
     });
 }
 
-function llenarSelectProfesores(docentes) {
-    const select = document.getElementById("buscarProfesor");
-    select.innerHTML = '<option value="">Todos</option>';
-    docentes.forEach(d => {
-        const option = document.createElement("option");
-        option.value = d.id;
-        option.textContent = d.nombre;
-        select.appendChild(option);
-    });
-}
+
 
 // =============================
 // 📥 Estudiantes
