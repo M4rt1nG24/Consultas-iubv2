@@ -327,7 +327,7 @@ function actualizarTablaSolicitudes(solicitudes) {
     });
 }
 
-
+//hola que hace
 
 // =============================
 // 🎯 Cargar docentes con consultas del estudiante (para filtro)
