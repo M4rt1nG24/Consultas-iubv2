@@ -402,10 +402,7 @@ function obtenerSolicitudesFiltradas() {
     const mes = document.getElementById("buscarMesSolicitud").value;
     const estudiante = document.getElementById("buscarIdEstudianteSolicitud").value;
 
-    // Antes:
-    // let Solicitudes_filtradas = todasLassolicitudes.filter(c => String(c.id_docente) === idDocente); 
-    
-    // 💡 Corrección/Mejora: Si ya traes solo las del docente, usa el arreglo completo como inicio
+
     let Solicitudes_filtradas = [...todasLassolicitudes]; // Inicia con una copia del arreglo completo
 
     if (fecha) Solicitudes_filtradas = Solicitudes_filtradas.filter(c => c.fecha === fecha);
