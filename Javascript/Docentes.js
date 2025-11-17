@@ -461,20 +461,40 @@ function actualizarTablaSolicitudes(solicitudes) {
 }
 
 async function responderSolicitud(id_solicitud, accion) {
+
+    // Mostrar cuadro para comentario
+    const comentario = prompt(`Ingrese un comentario para ${accion} la solicitud:`);
+
+    if (!comentario || comentario.trim() === "") {
+        alert("⚠️ Debe ingresar un comentario para continuar.");
+        return;
+    }
+
     try {
         const res = await fetch("https://api-prueba-2-r35v.onrender.com/responder_solicitud", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id_solicitud, accion })
+            body: JSON.stringify({ 
+                id_solicitud, 
+                accion, 
+                comentario_docente: comentario 
+            })
         });
+
         const data = await res.json();
+
         alert(data.message);
+
+        // Actualizar tablas
         obtener_solicitudes_docente(idDocente);
         obtener_consultas_docente(idDocente);
+
     } catch (error) {
         console.error("Error:", error);
+        alert("Error al enviar respuesta.");
     }
 }
+
 
 // =============================
 // 📤 EXPORTAR EXCEL
