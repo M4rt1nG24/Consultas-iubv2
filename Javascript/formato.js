@@ -126,7 +126,7 @@ function abrirSelectorFirma(tipo) {
   document.getElementById(`inputFirma_${tipo}`).click();
 }
 
-const API_URL = "https://api-prueba-2-r35v.onrender.com";
+const API_URL = "https://msbyspxptq.us-east-2.awsapprunner.com";
 
 // Obtener el ID del docente desde localStorage
 const idDocente = localStorage.getItem("id_usuario");
