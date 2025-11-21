@@ -8,7 +8,7 @@ function loginUsuario() {
     const password = document.getElementById('password').value.trim();
     const mensajeLogin = document.getElementById('error-message');
 
-    fetch('https://msbyspxptq.us-east-2.awsapprunner.com//login', {
+    fetch('https://msbyspxptq.us-east-2.awsapprunner.com/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }) 
