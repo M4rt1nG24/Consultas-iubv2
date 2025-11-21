@@ -330,41 +330,6 @@ function actualizarTablaSolicitudes(solicitudes) {
 
 //hola que hace
 
-// =============================
-// 🎯 Cargar docentes con consultas del estudiante (para filtro)
-// =============================
-async function cargarDocentes() {
-    try {
-        const res = await fetch(`https://msbyspxptq.us-east-2.awsapprunner.com/consultas_estudiante/${idUsuario}`);
-        const data = await res.json();
-
-        const filtro = document.getElementById("buscarDocente");
-        filtro.innerHTML = '<option value="">Todos</option>'; //
-
-        if (data.success && data.consultas.length > 0) {
-            const idsUsados = new Set();
-
-            data.consultas.forEach(c => {
-                // 🔹 Convertir siempre a string y validar que tenga valor
-                const id = String(c.id_docente || "").trim();
-                const nombre = (c.nombre_docente || "").trim();
-
-                if (id && !idsUsados.has(id)) {
-                    idsUsados.add(id);
-
-                    const option = document.createElement("option");
-                    option.value = id;
-                    option.textContent = nombre || `Docente ${id}`;
-                    filtro.appendChild(option);
-                }
-            });
-        } else {
-            console.warn("⚠️ No hay consultas para este estudiante.");
-        }
-    } catch (error) {
-        console.error("Error cargando docentes filtrados:", error);
-    }
-}
 
 
 // =============================
