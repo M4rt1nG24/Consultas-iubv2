@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // =============================
         // 🚀 Enviar datos al backend
         // =============================
-        fetch('https://api-prueba-2-r35v.onrender.com/registrar_usuario', { 
+        fetch('https://msbyspxptq.us-east-2.awsapprunner.com/registrar_usuario', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 📚 Cargar Programas
 // =============================
 function cargarProgramas() {
-    fetch('https://api-prueba-2-r35v.onrender.com/programas')  
+    fetch('https://msbyspxptq.us-east-2.awsapprunner.com/programas')  
         .then(response => response.json())
         .then(data => {
             if (data.success) {
