@@ -336,7 +336,7 @@ function actualizarTablaSolicitudes(solicitudes) {
 // =============================
 async function cargarDocentes() {
     try {
-        const res = await fetch(`${API_URL}/consultas_estudiante/${idUsuario}`);
+        const res = await fetch(`${API_URL}a/consultas_estudiante/${idUsuario}`);
         const data = await res.json();
 
         const filtro = document.getElementById("buscarDocente");
