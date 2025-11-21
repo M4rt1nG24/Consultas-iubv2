@@ -234,7 +234,7 @@ async function guardarReporte() {
   };
 
   try {
-    const respuesta = await fetch("https://api-prueba-2-r35v.onrender.com/guardar_reporte", {
+    const respuesta = await fetch("https://msbyspxptq.us-east-2.awsapprunner.com/guardar_reporte", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(datos),
