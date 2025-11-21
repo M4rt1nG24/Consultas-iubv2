@@ -3,12 +3,14 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
     loginUsuario();
 });
 
+const API_URL = "https://msbyspxptq.us-east-2.awsapprunner.com";
+
 function loginUsuario() {
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
     const mensajeLogin = document.getElementById('error-message');
 
-    fetch('https://msbyspxptq.us-east-2.awsapprunner.com/login', {
+    fetch(`${API_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }) 
