@@ -21,7 +21,7 @@ if (!idUsuario || !rolUsuario) {
     if (nombreUsuario) {
         nombreDiv.textContent = `Hola, ${nombreUsuario}`;
     } else {
-        fetch(`https://api-prueba-2-r35v.onrender.com/estudiante/${idUsuario}`)
+        fetch(`https://msbyspxptq.us-east-2.awsapprunner.com/estudiante/${idUsuario}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.estudiante) {
@@ -40,7 +40,7 @@ if (!idUsuario || !rolUsuario) {
 // 📥 Obtener consultas del estudiante
 // =============================
 function obtener_consultas_por_estudiante(id) {
-    fetch(`https://api-prueba-2-r35v.onrender.com/consultas_estudiante/${id}`)
+    fetch(`https://msbyspxptq.us-east-2.awsapprunner.com/consultas_estudiante/${id}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -158,7 +158,7 @@ function abrirModalFirma(id_consulta) {
         const canvas = root.querySelector("canvas");
         const firmaDataURL = canvas.toDataURL("image/png");
 
-        fetch(`https://api-prueba-2-r35v.onrender.com/firmar_consulta/${id_consulta}`, {
+        fetch(`https://msbyspxptq.us-east-2.awsapprunner.com/firmar_consulta/${id_consulta}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ firma: firmaDataURL })
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const res = await fetch("https://api-prueba-2-r35v.onrender.com/solicitar_consulta", {
+            const res = await fetch("https://msbyspxptq.us-east-2.awsapprunner.com/solicitar_consulta", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id_estudiante, id_modulo, id_docente, tema, fecha, hora, lugar })
@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // =============================
 async function cargarModulos() {
     try {
-        const res = await fetch("https://api-prueba-2-r35v.onrender.com/modulos");
+        const res = await fetch("https://msbyspxptq.us-east-2.awsapprunner.com/modulos");
         const data = await res.json();
         const select = document.getElementById("modulo");
         select.innerHTML = '<option value="">Seleccione un módulo</option>';
@@ -264,7 +264,7 @@ async function cargarModulos() {
 // =============================
 async function cargarDocentesSolicitud() {
     try {
-        const res = await fetch("https://api-prueba-2-r35v.onrender.com/obtener_docentes");
+        const res = await fetch("https://msbyspxptq.us-east-2.awsapprunner.com/obtener_docentes");
         const data = await res.json();
         const select = document.getElementById("docente");
         select.innerHTML = '<option value="">Seleccione un docente</option>';
@@ -283,7 +283,7 @@ async function cargarDocentesSolicitud() {
 // 📋 OBTENER SOLICITUDES DEL ESTUDIANTE
 // =============================
 function obtener_solicitudes_estudiante(id_estudiante) {
-    fetch(`https://api-prueba-2-r35v.onrender.com/obtener_solicitudes_estudiante/${id_estudiante}`)
+    fetch(`https://msbyspxptq.us-east-2.awsapprunner.com/obtener_solicitudes_estudiante/${id_estudiante}`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -334,7 +334,7 @@ function actualizarTablaSolicitudes(solicitudes) {
 // =============================
 async function cargarDocentes() {
     try {
-        const res = await fetch(`https://api-prueba-2-r35v.onrender.com/consultas_estudiante/${idUsuario}`);
+        const res = await fetch(`https://msbyspxptq.us-east-2.awsapprunner.com/consultas_estudiante/${idUsuario}`);
         const data = await res.json();
 
         const filtro = document.getElementById("buscarDocente");
