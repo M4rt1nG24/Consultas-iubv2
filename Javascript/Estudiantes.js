@@ -162,7 +162,7 @@ document.getElementById("cerrarModal").addEventListener("click", () => {
 // =====================================
 function cargarCalendarioDocente(idDocente) {
 
-    fetch(`${API_URL}/consultas_docente/${idDocente}`)
+    fetch(`https://msbyspxptq.us-east-2.awsapprunner.com/consultas_docente/${idDocente}`)
         .then(res => res.json())
         .then(data => {
             if (!data.success) {
