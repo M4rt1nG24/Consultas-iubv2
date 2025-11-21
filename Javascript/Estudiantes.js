@@ -136,6 +136,86 @@ function actualizarTablaConsultas(lista) {
     });
 }
 
+// =====================================
+// 🌐 FULLCALENDAR - DISPONIBILIDAD DOCENTE
+// =====================================
+
+document.getElementById("btnCalendario").addEventListener("click", () => {
+    const idDocente = idUsuario; // porque el líder también es docente → AJUSTA SI NECESITAS OTRO ID
+
+    // Mostrar modal
+    const modal = document.getElementById("modalCalendario");
+    modal.style.display = "flex";
+
+    // Renderizar el calendario
+    cargarCalendarioDocente(idDocente);
+});
+
+document.getElementById("cerrarModal").addEventListener("click", () => {
+    document.getElementById("modalCalendario").style.display = "none";
+});
+
+
+
+// =====================================
+// 🔧 Función principal del calendario
+// =====================================
+function cargarCalendarioDocente(idDocente) {
+
+    fetch(`${API_URL}/consultas_docente/${idDocente}`)
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) {
+                console.error("Error al obtener disponibilidad del docente");
+                return;
+            }
+
+            const consultas = data.consultas;
+
+            const eventos = consultas.map(c => ({
+                title: `Consulta (${c.nombre_estudiante})`,
+                start: `${c.fecha}T${c.hora}`,
+                end: calcularHoraFin(c.fecha, c.hora),
+                backgroundColor: "#007bff",
+                borderColor: "#0056b3"
+            }));
+
+            const calendarioEl = document.getElementById("calendarioDocente");
+            calendarioEl.innerHTML = ""; // LIMPIAR para evitar duplicados
+
+            const calendar = new FullCalendar.Calendar(calendarioEl, {
+                initialView: "timeGridWeek",
+                locale: "es",
+                allDaySlot: false,
+                slotMinTime: "07:00:00",
+                slotMaxTime: "20:00:00",
+                events: eventos,
+                height: 550,
+                headerToolbar: {
+                    left: "prev,next today",
+                    center: "title",
+                    right: "dayGridMonth,timeGridWeek,timeGridDay"
+                }
+            });
+
+            calendar.render();
+        })
+        .catch(err => console.error("Error:", err));
+}
+
+
+
+// =====================================
+// 🕒 Calcular fin de la cita (1 hora)
+// =====================================
+function calcularHoraFin(fecha, horaInicio) {
+    const [h, m] = horaInicio.split(":").map(Number);
+    const fechaObj = new Date(`${fecha}T${horaInicio}`);
+    fechaObj.setHours(h + 1);
+    return fechaObj.toISOString().slice(0, 19);
+}
+
+
 
 
 
