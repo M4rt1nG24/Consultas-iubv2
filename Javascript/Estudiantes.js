@@ -69,7 +69,6 @@ function obtenerConsultasFiltradas() {
     if (fecha) filtradas = filtradas.filter(c => c.fecha === fecha);
     if (hora) filtradas = filtradas.filter(c => c.hora === hora);
     if (mes) filtradas = filtradas.filter(c => new Date(c.fecha).getMonth() + 1 == mes);
-    if (docente) filtradas = filtradas.filter(c => String(c.id_docente) === docente);
 
     actualizarTablaConsultas(filtradas);
 }
