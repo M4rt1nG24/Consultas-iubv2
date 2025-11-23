@@ -1,7 +1,7 @@
 // =============================
 // 🌐 URLs del proyecto
 // =============================
-const FRONTEND_URL = "https://m4rt1ng24.github.io/Consultas-iubv2/";
+const FRONTEND_URL = "https://consultas-iub.online";
 const API_URL = "https://msbyspxptq.us-east-2.awsapprunner.com";
 
 // =============================
