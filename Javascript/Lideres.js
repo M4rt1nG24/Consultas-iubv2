@@ -348,7 +348,7 @@ function actualizarTablaprogramas(programas) {
 
     });
 }
-
+ // buenas
 function registrar_programa() {
     const id = document.getElementById("idPrograma").value.trim();
     const nombre = document.getElementById("nombrePrograma").value.trim();
