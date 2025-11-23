@@ -3,7 +3,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
     loginUsuario();
 });
 
-const API_URL = "https://fvbpfuy3pd.us-east-2.awsapprunner.com/";
+const API_URL = "https://fvbpfuy3pd.us-east-2.awsapprunner.com";
 
 function loginUsuario() {
     const username = document.getElementById('username').value.trim();
