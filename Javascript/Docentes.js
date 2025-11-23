@@ -2,7 +2,7 @@
 // 🌐 URLs del proyecto
 // =============================
 const FRONTEND_URL = "https://consultas-iub.online";
-const API_URL = "https://msbyspxptq.us-east-2.awsapprunner.com";
+const API_URL = "https://fvbpfuy3pd.us-east-2.awsapprunner.com";
 
 // =============================
 // 🔒 Seguridad de acceso + Mostrar nombre del docente desde la DB

@@ -126,7 +126,7 @@ function abrirSelectorFirma(tipo) {
   document.getElementById(`inputFirma_${tipo}`).click();
 }
 
-const API_URL = "https://msbyspxptq.us-east-2.awsapprunner.com";
+const API_URL = "https://fvbpfuy3pd.us-east-2.awsapprunner.com";
 
 // Obtener el ID del docente desde localStorage
 const idDocente = localStorage.getItem("id_usuario");
@@ -234,7 +234,7 @@ async function guardarReporte() {
   };
 
   try {
-    const respuesta = await fetch("https://msbyspxptq.us-east-2.awsapprunner.com/guardar_reporte", {
+    const respuesta = await fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/guardar_reporte", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(datos),

@@ -18,7 +18,7 @@ if (!idUsuario || !rolUsuario) {
     if (nombreUsuario) {
         if (nombreDiv) nombreDiv.textContent = `Hola, ${nombreUsuario}`;
     } else {
-        fetch(`https://msbyspxptq.us-east-2.awsapprunner.com/Lider/${idUsuario}`)
+        fetch(`https://fvbpfuy3pd.us-east-2.awsapprunner.com/Lider/${idUsuario}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.Lider) {
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 📥 Consultas
 // =============================
 function obtener_consultas_lider() {
-    fetch("https://msbyspxptq.us-east-2.awsapprunner.com/consultas_lider")
+    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/consultas_lider")
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -167,7 +167,7 @@ function actualizarTablaConsultas(consultas) {
 // 📥 Docentes
 // =============================
 function obtenerDocentes() {
-    fetch("https://msbyspxptq.us-east-2.awsapprunner.com/obtener_docentes")
+    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/obtener_docentes")
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -190,7 +190,7 @@ function obtenerestudianteFiltrado() {
         return;
     }
 
-    fetch("https://msbyspxptq.us-east-2.awsapprunner.com/obtener_estudiantes")
+    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/obtener_estudiantes")
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -231,7 +231,7 @@ function obtenerDocenteFiltrado() {
         return;
     }
 
-    fetch("https://msbyspxptq.us-east-2.awsapprunner.com/obtener_docentes")
+    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/obtener_docentes")
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -281,7 +281,7 @@ function actualizarTablaDocentes(docentes) {
 // 📥 Estudiantes
 // =============================
 function obtenerEstudiantes() {
-    fetch("https://msbyspxptq.us-east-2.awsapprunner.com/obtener_estudiantes")
+    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/obtener_estudiantes")
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -292,7 +292,7 @@ function obtenerEstudiantes() {
 }
 
 function cargarProgramas() {
-    fetch('https://msbyspxptq.us-east-2.awsapprunner.com/programas')  
+    fetch('https://fvbpfuy3pd.us-east-2.awsapprunner.com/programas')  
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -330,7 +330,7 @@ function actualizarTablaEstudiantes(estudiantes) {
 // 📥 Programas
 // =============================
 function obtener_programas() {
-    fetch("https://msbyspxptq.us-east-2.awsapprunner.com/programas")
+    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/programas")
         .then(res => res.json())
         .then(data => {
             if (data.success) actualizarTablaprogramas(data.programas);
@@ -358,7 +358,7 @@ function registrar_programa() {
         return;
     }
 
-    fetch("https://msbyspxptq.us-east-2.awsapprunner.com/programas", {
+    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/programas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, nombre })
@@ -383,7 +383,7 @@ function registrar_modulo() {
         return;
     }
 
-    fetch("https://msbyspxptq.us-east-2.awsapprunner.com/modulos", {
+    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/modulos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, nombre })
@@ -403,7 +403,7 @@ function registrar_modulo() {
 // 📥 Módulos
 // =============================
 function obtener_modulos() {
-    fetch("https://api-prueba-2-r35v.onrender.com/modulos")
+    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/modulos")
         .then(res => res.json())
         .then(data => {
             if (data.success) actualizarTablamodulos(data.modulos);
@@ -493,7 +493,7 @@ function registrarUsuario() {
         // ===============================
         // 📡 Envío al backend
         // ===============================
-        fetch("https://msbyspxptq.us-east-2.awsapprunner.com/registrar_usuario", {
+        fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/registrar_usuario", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
@@ -539,7 +539,7 @@ function registrarUsuario() {
 
 
 function cargarProgramas() {
-    fetch('https://msbyspxptq.us-east-2.awsapprunner.com/programas')  
+    fetch('https://fvbpfuy3pd.us-east-2.awsapprunner.com/programas')  
         .then(response => response.json())
         .then(data => {
             if (data.success) {
