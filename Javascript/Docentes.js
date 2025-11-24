@@ -245,13 +245,18 @@ let idConsultaEditar = null;
 // =============================
 // 🔹 Abrir modal de edición
 // =============================
-function abrirModalEdicion(id, fecha, hora) {
+function abrirModalEdicion(id, fecha, hora, tema, lugar) {
     idConsultaEditar = id;
+
     document.getElementById("idConsultaEditar").value = id;
     document.getElementById("nuevaFecha").value = fecha;
     document.getElementById("nuevaHora").value = hora;
+    document.getElementById("nuevoLugar").value = lugar || "";
+    document.getElementById("nuevoTema").value = tema || "";
+
     document.getElementById("modalEditar").style.display = "flex";
 }
+
 
 // =============================
 // 🔹 Cerrar modal
