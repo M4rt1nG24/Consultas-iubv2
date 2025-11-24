@@ -304,9 +304,9 @@ async function guardarEdicionConsulta(event) {
         const index = todasLasConsultas.findIndex(c => c.id === idConsultaEditar);
         if (index !== -1) {
             todasLasConsultas[index].fecha = nuevaFecha;
-            todasLasConsultas[index].hora = nuevaHora;
-            todasLasConsultas[index].lugar_consulta = nuevoLugar;
             todasLasConsultas[index].tema = nuevoTema;
+            todasLasConsultas[index].lugar_consulta = nuevoLugar;
+            todasLasConsultas[index].hora = nuevaHora;
             actualizarTablaConsultas(todasLasConsultas);
         }
         alert("✅ Consulta actualizada correctamente.");
