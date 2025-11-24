@@ -62,18 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
 // =============================
 // 📥 Consultas
 // =============================
-function obtener_consultas_lider() {
-    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/consultas_lider")
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                todasLasConsultas = data.consultas;
-                actualizarTablaConsultas(todasLasConsultas);
-            }
-        })
-        .catch(err => console.error("Error:", err));
-}
-// LIKE SI VISTE ESTO XD
 function obtenerConsultasFiltradas() {
     const fecha = document.getElementById("buscarFecha").value;
     const hora = document.getElementById("buscarHora").value;
@@ -83,7 +71,7 @@ function obtenerConsultasFiltradas() {
 
     let filtradas = [...todasLasConsultas];
 
-    // Filtrado por campos
+    // Filtrar por campos
     if (fecha) filtradas = filtradas.filter(c => c.fecha === fecha);
     if (hora) filtradas = filtradas.filter(c => c.hora === hora);
     if (mes) filtradas = filtradas.filter(c => new Date(c.fecha).getMonth() + 1 === parseInt(mes));
@@ -93,7 +81,7 @@ function obtenerConsultasFiltradas() {
     // 🧾 Guardar consultas filtradas
     localStorage.setItem("consultas_filtradas", JSON.stringify(filtradas));
 
-    // 🎯 Guardar nombre del docente (si existe y si el usuario filtró por docente)
+    // 🔥 Guardar nombre del docente si se filtró por docente
     if (profesor && filtradas.length > 0) {
         const nombreDocente = filtradas[0].nombre_docente; 
         localStorage.setItem("nombre_docente_filtrado", nombreDocente);
@@ -104,6 +92,7 @@ function obtenerConsultasFiltradas() {
     // 🔄 Actualizar tabla
     actualizarTablaConsultas(filtradas);
 }
+
 
 
 
