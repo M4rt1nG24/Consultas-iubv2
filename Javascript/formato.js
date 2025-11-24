@@ -126,48 +126,50 @@ function abrirSelectorFirma(tipo) {
   document.getElementById(`inputFirma_${tipo}`).click();
 }
 
+// =============================
+// 🔗 API
+// =============================
 const API_URL = "https://fvbpfuy3pd.us-east-2.awsapprunner.com";
-
-// Obtener el ID del docente desde localStorage
 const idDocente = localStorage.getItem("id_usuario");
 
-// Función para obtener el nombre del docente y colocarlo en el formato
+// =============================
+// 🧑‍🏫 CARGAR NOMBRE DEL DOCENTE CORRECTAMENTE
+// =============================
 function cargarNombreDocente() {
-    if (!idDocente) {
-        console.warn("No se encontró el ID del docente.");
-        return;
-    }
+  if (!idDocente) {
+    console.warn("No se encontró el ID del docente.");
+    return;
+  }
 
-    fetch(`${API_URL}/docente/${idDocente}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.success && data.docente) {
+  fetch(`${API_URL}/docente/${idDocente}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.docente) {
 
-                // Nombre recibido desde la BD
-                const nombre = data.nombre;
+        // Nombre correcto desde tu API
+        const nombre = data.docente.nombre;
 
-                // Guardar en localStorage por si se requiere nuevamente
-                localStorage.setItem("nombre_docente_formato", nombre);
+        // Guardar en localStorage
+        localStorage.setItem("nombre_docente_formato", nombre);
 
-                // Colocar el nombre en el formato (cambia el ID según tu HTML)
-                const campoNombreFormato = document.getElementById("nombreDocenteFormato");
+        // Mostrar en el HTML
+        const campoNombreFormato = document.getElementById("nombreDocenteFormato");
+        if (campoNombreFormato) {
+          campoNombreFormato.textContent = nombre;
+        }
 
-                if (campoNombreFormato) {
-                    campoNombreFormato.textContent = nombre;
-                }
-
-            } else {
-                console.warn("No se encontró información del docente.");
-            }
-        })
-        .catch(err => console.error("Error al obtener nombre del docente:", err));
+      } else {
+        console.warn("No se encontró información del docente.");
+      }
+    })
+    .catch(err => console.error("Error al obtener nombre del docente:", err));
 }
 
 // Ejecutar al cargar la página
 document.addEventListener("DOMContentLoaded", cargarNombreDocente);
 
 // ================================
-// 💾 GUARDAR TODO EL HTML COMO PDF + GUARDAR EN BD
+// 💾 GUARDAR HTML COMO PDF + BD
 // ================================
 async function guardarReporte() {
   const nombreReporte = prompt("Ingrese el nombre del reporte:");
@@ -182,14 +184,11 @@ async function guardarReporte() {
     return;
   }
 
-  // 📸 Capturar TODO el body del HTML
   const contenido = document.body;
 
-  // Ocultar botones durante la captura
   const botones = contenido.querySelectorAll("button");
   botones.forEach(btn => (btn.style.visibility = "hidden"));
 
-  // Generar imagen del documento
   const canvas = await html2canvas(contenido, {
     scale: 2,
     useCORS: true,
@@ -197,12 +196,10 @@ async function guardarReporte() {
     scrollY: -window.scrollY
   });
 
-  // Restaurar visibilidad de los botones
   botones.forEach(btn => (btn.style.visibility = "visible"));
 
   const imgData = canvas.toDataURL("image/png");
 
-  // Crear PDF con jsPDF
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF("p", "pt", "a4");
 
@@ -215,7 +212,6 @@ async function guardarReporte() {
   pdf.addImage(imgData, "PNG", 25, position + 20, imgWidth, imgHeight);
   heightLeft -= pageHeight;
 
-  // Si el contenido ocupa más de una página
   while (heightLeft > 0) {
     position = heightLeft - imgHeight;
     pdf.addPage();
@@ -223,10 +219,8 @@ async function guardarReporte() {
     heightLeft -= pageHeight;
   }
 
-  // Convertir a base64
   const pdfBase64 = pdf.output("datauristring").split(",")[1];
 
-  // 📤 Enviar al backend
   const datos = {
     id_usuario: idUsuario,
     nombre_reporte: nombreReporte,
@@ -234,7 +228,7 @@ async function guardarReporte() {
   };
 
   try {
-    const respuesta = await fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/guardar_reporte", {
+    const respuesta = await fetch(`${API_URL}/guardar_reporte`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(datos),
@@ -252,9 +246,8 @@ async function guardarReporte() {
   }
 }
 
-
 // =============================
-// 🖨️ Repetir observaciones y programa en impresión
+// 🖨️ Repetir observaciones al imprimir
 // =============================
 window.addEventListener("beforeprint", () => {
   const observacionTextarea = document.querySelector(".columna-derecha textarea");
