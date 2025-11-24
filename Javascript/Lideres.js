@@ -39,7 +39,7 @@ if (!idUsuario || !rolUsuario) {
 // 📥 Al cargar la página
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
-
+    obtener_consultas_lider();
     obtenerDocentes();
     obtener_programas();
     obtenerEstudiantes();
@@ -62,6 +62,18 @@ document.addEventListener("DOMContentLoaded", () => {
 // =============================
 // 📥 Consultas
 // =============================
+function obtener_consultas_lider() {
+    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/consultas_lider")
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                todasLasConsultas = data.consultas;
+                actualizarTablaConsultas(todasLasConsultas);
+            }
+        })
+        .catch(err => console.error("Error:", err));
+}
+// LIKE SI VISTE ESTO XD
 function obtenerConsultasFiltradas() {
     const fecha = document.getElementById("buscarFecha").value;
     const hora = document.getElementById("buscarHora").value;
@@ -92,7 +104,6 @@ function obtenerConsultasFiltradas() {
     // 🔄 Actualizar tabla
     actualizarTablaConsultas(filtradas);
 }
-
 
 
 
