@@ -93,9 +93,18 @@ function obtenerConsultasFiltradas() {
     // 🧾 Guardar consultas filtradas
     localStorage.setItem("consultas_filtradas", JSON.stringify(filtradas));
 
+    // 🎯 Guardar nombre del docente (si existe y si el usuario filtró por docente)
+    if (profesor && filtradas.length > 0) {
+        const nombreDocente = filtradas[0].nombre_docente; 
+        localStorage.setItem("nombre_docente_filtrado", nombreDocente);
+    } else {
+        localStorage.removeItem("nombre_docente_filtrado");
+    }
+
     // 🔄 Actualizar tabla
     actualizarTablaConsultas(filtradas);
 }
+
 
 
 function actualizarTablaConsultas(consultas) {
