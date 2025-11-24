@@ -161,7 +161,7 @@ function obtenerConsultasFiltradas() {
 
   actualizarTablaConsultas(filtradas);
   localStorage.setItem("consultas_filtradas", JSON.stringify(filtradas));
-  localStorage.setItem("nombre_docente_filtrado", nombreUsuario);
+  localStorage.setItem("nombre_docente", nombreUsuario);
 }
 
 // =============================
