@@ -306,7 +306,7 @@ async function guardarEdicionConsulta(event) {
             todasLasConsultas[index].fecha = nuevaFecha;
             todasLasConsultas[index].hora = nuevaHora;
             todasLasConsultas[index].lugar_consulta = nuevoLugar;
-            todasLasConsultas[index].hora = nuevoTema;
+            todasLasConsultas[index].hora = nuevaHora;
             actualizarTablaConsultas(todasLasConsultas);
         }
         alert("✅ Consulta actualizada correctamente.");
