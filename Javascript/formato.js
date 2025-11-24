@@ -284,6 +284,6 @@ window.addEventListener("beforeprint", () => {
 // Mostrar nombre docente y cargar tabla
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("nombre_docente_filtrado").textContent = nombreDocente;
+  document.getElementById("nombre_docente").textContent = nombreDocente;
   cargarAsistenciaFiltrada();
 });
