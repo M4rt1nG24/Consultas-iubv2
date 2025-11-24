@@ -39,7 +39,7 @@ if (!idUsuario || !rolUsuario) {
 // 📥 Al cargar la página
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
-    obtener_consultas_lider();
+
     obtenerDocentes();
     obtener_programas();
     obtenerEstudiantes();
