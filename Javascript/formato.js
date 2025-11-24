@@ -3,7 +3,7 @@
 // =============================
 const idUsuario = localStorage.getItem("id_usuario");
 const rolUsuario = localStorage.getItem("rol");
-const nombreDocente = localStorage.getItem("nombre_docente_filtrado") || "Sin docente seleccionado";
+const nombreDocente = localStorage.getItem("nombre_usuario") || "Sin docente seleccionado";
 
 if (!idUsuario || !rolUsuario) {
   alert("⚠️ Debes iniciar sesión para acceder.");
