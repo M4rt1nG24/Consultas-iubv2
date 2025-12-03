@@ -257,7 +257,7 @@ async function cargarModulos() {
         console.error("Error cargando módulos:", error);
     }
 }
-
+//HOLA
 // =============================
 // 👨‍🏫 Cargar docentes (todos) para solicitud
 // =============================
