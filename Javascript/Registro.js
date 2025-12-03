@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // =============================
         // 🚀 Enviar datos al backend
         // =============================
-        fetch('https://fvbpfuy3pd.us-east-2.awsapprunner.com/registrar_usuario', { 
+        fetch('https://4jdp777rcc.us-east-1.awsapprunner.com/registrar_usuario', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 📚 Cargar Programas
 // =============================
 function cargarProgramas() {
-    fetch('https://fvbpfuy3pd.us-east-2.awsapprunner.com/programas')  
+    fetch('https://4jdp777rcc.us-east-1.awsapprunner.com/programas')  
         .then(response => response.json())
         .then(data => {
             if (data.success) {
