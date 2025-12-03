@@ -1,7 +1,7 @@
 // =======================================
 // 🌐 Variable global del backend
 // =======================================
-const API_URL = "https://fvbpfuy3pd.us-east-2.awsapprunner.com";
+const API_URL = "https://4jdp777rcc.us-east-1.awsapprunner.com";
 
 let todasLasConsultas = [];
 let idUsuario = localStorage.getItem('id_usuario');
