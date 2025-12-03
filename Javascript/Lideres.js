@@ -1,24 +1,27 @@
+// =======================================
+// 🌐 Variable global del backend
+// =======================================
+const API_URL = "https://fvbpfuy3pd.us-east-2.awsapprunner.com";
+
 let todasLasConsultas = [];
 let idUsuario = localStorage.getItem('id_usuario');
-let rolUsuario = localStorage.getItem('rol'); // Se obtiene los datos guardados al iniciar sesión
+let rolUsuario = localStorage.getItem('rol');
 let nombreUsuario = localStorage.getItem("nombre_usuario");
 
 // =============================
 // 🔒 Seguridad de acceso
 // =============================
-
 if (!idUsuario || !rolUsuario) {
     window.location.href = "index.html";
 } else if (rolUsuario !== "Lider") {
     window.location.href = "index.html";
 } else {
-    // Mostrar nombre almacenado o traer desde backend
     const nombreDiv = document.getElementById("nombreUsuario");
 
     if (nombreUsuario) {
         if (nombreDiv) nombreDiv.textContent = `Hola, ${nombreUsuario}`;
     } else {
-        fetch(`https://fvbpfuy3pd.us-east-2.awsapprunner.com/Lider/${idUsuario}`)
+        fetch(`${API_URL}/Lider/${idUsuario}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.Lider) {
@@ -33,8 +36,6 @@ if (!idUsuario || !rolUsuario) {
     }
 }
 
-
-
 // =============================
 // 📥 Al cargar la página
 // =============================
@@ -47,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
     obtener_modulos();
     cargarProgramas();
 
-    // ✅ Corregido: el ID debe coincidir con el del formulario HTML
     document.getElementById("registro_programas").addEventListener("submit", e => {
         e.preventDefault();
         registrar_programa();
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 📥 Consultas
 // =============================
 function obtener_consultas_lider() {
-    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/consultas_lider")
+    fetch(`${API_URL}/consultas_lider`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -73,7 +73,7 @@ function obtener_consultas_lider() {
         })
         .catch(err => console.error("Error:", err));
 }
-// LIKE SI VISTE ESTO XD
+
 function obtenerConsultasFiltradas() {
     const fecha = document.getElementById("buscarFecha").value;
     const hora = document.getElementById("buscarHora").value;
@@ -83,29 +83,23 @@ function obtenerConsultasFiltradas() {
 
     let filtradas = [...todasLasConsultas];
 
-    // Filtrar por campos
     if (fecha) filtradas = filtradas.filter(c => c.fecha === fecha);
     if (hora) filtradas = filtradas.filter(c => c.hora === hora);
     if (mes) filtradas = filtradas.filter(c => new Date(c.fecha).getMonth() + 1 === parseInt(mes));
     if (profesor) filtradas = filtradas.filter(c => String(c.id_docente) === profesor);
     if (estudiante) filtradas = filtradas.filter(c => String(c.id_estudiante) === estudiante);
 
-    // 🧾 Guardar consultas filtradas
     localStorage.setItem("consultas_filtradas", JSON.stringify(filtradas));
 
-    // 🔥 Guardar nombre del docente si se filtró por docente
     if (profesor && filtradas.length > 0) {
-        const nombreDocente = filtradas[0].nombre_docente; 
+        const nombreDocente = filtradas[0].nombre_docente;
         localStorage.setItem("nombre_docente_filtrado", nombreDocente);
     } else {
         localStorage.removeItem("nombre_docente_filtrado");
     }
 
-    // 🔄 Actualizar tabla
     actualizarTablaConsultas(filtradas);
 }
-
-
 
 function actualizarTablaConsultas(consultas) {
     const tbody = document.querySelector("#tablaConsultas tbody");
@@ -131,122 +125,58 @@ function actualizarTablaConsultas(consultas) {
         fila.insertCell(6).textContent = c.fecha;
         fila.insertCell(7).textContent = c.hora;
         fila.insertCell(8).textContent = c.lugar_consulta || "N/A";
-          // =============================
-    // 🖋️ Validación de firma
-    // =============================
-    const celdaFirma = fila.insertCell(9);
-    const firmaValor = c.firma ? c.firma.trim() : "";
 
-    if (firmaValor && firmaValor !== "No Firmado") {
+        const celdaFirma = fila.insertCell(9);
+        const firmaValor = c.firma ? c.firma.trim() : "";
 
-      // Caso 1: Texto "Firmado por QR"
-      if (firmaValor.toLowerCase() === "firmado por qr") {
-        celdaFirma.textContent = "📱 Firmado por QR";
-        celdaFirma.style.color = "#007bff";
-        celdaFirma.style.fontWeight = "bold";
-        celdaFirma.title = "Firma verificada mediante código QR";
-
-      // Caso 2: Imagen base64 (firma manual)
-      } else if (firmaValor.startsWith("data:image")) {
-        const img = document.createElement("img");
-        img.src = firmaValor;
-        img.alt = "Firma del estudiante";
-        img.style.maxWidth = "100px";
-        img.style.maxHeight = "50px";
-        img.style.borderRadius = "4px";
-        img.style.boxShadow = "0 0 3px rgba(0,0,0,0.3)";
-        celdaFirma.appendChild(img);
-
-      // Caso 3: Valor desconocido o inválido
-      } else {
-        celdaFirma.textContent = "⚠️ Formato de firma no reconocido";
-        celdaFirma.style.color = "orange";
-      }
-
-    } else {
-      celdaFirma.textContent = "❌ No Firmado";
-      celdaFirma.style.color = "red";
-      celdaFirma.style.fontWeight = "bold";
-    }
+        if (firmaValor && firmaValor !== "No Firmado") {
+            if (firmaValor.toLowerCase() === "firmado por qr") {
+                celdaFirma.textContent = "📱 Firmado por QR";
+                celdaFirma.style.color = "#007bff";
+                celdaFirma.style.fontWeight = "bold";
+            } else if (firmaValor.startsWith("data:image")) {
+                const img = document.createElement("img");
+                img.src = firmaValor;
+                img.alt = "Firma del estudiante";
+                img.style.maxWidth = "100px";
+                img.style.maxHeight = "50px";
+                img.style.borderRadius = "4px";
+                img.style.boxShadow = "0 0 3px rgba(0,0,0,0.3)";
+                celdaFirma.appendChild(img);
+            } else {
+                celdaFirma.textContent = "⚠️ Formato de firma no reconocido";
+                celdaFirma.style.color = "orange";
+            }
+        } else {
+            celdaFirma.textContent = "❌ No Firmado";
+            celdaFirma.style.color = "red";
+            celdaFirma.style.fontWeight = "bold";
+        }
     });
 }
-
 
 // =============================
 // 📥 Docentes
 // =============================
 function obtenerDocentes() {
-    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/obtener_docentes")
+    fetch(`${API_URL}/obtener_docentes`)
         .then(res => res.json())
         .then(data => {
-            if (data.success) {
-                actualizarTablaDocentes(data.docentes);
-            }
+            if (data.success) actualizarTablaDocentes(data.docentes);
         })
         .catch(err => console.error("Error:", err));
 }
 
-
-// =============================
-// 🔍 Filtrar estudiante por documento
-// =============================
-function obtenerestudianteFiltrado() {
-    const input = document.getElementById("documento_usuario");
-    const documento = input.value.trim();
-
-    if (!documento) {
-        alert("⚠️ Debes ingresar un número de documento para buscar.");
-        return;
-    }
-
-    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/obtener_estudiantes")
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                // Buscar el estudiante por ID (documento)
-                const estudiante = data.estudiantes.find(e => String(e.id) === documento);
-
-                const tbody = document.querySelector("#tablaEstudiantes tbody");
-                tbody.innerHTML = "";
-
-                if (estudiante) {
-                    const fila = tbody.insertRow();
-                    fila.insertCell(0).textContent = estudiante.id;
-                    fila.insertCell(1).textContent = estudiante.nombre;
-                    fila.insertCell(2).textContent = estudiante.nombre_programa;
-                } else {
-                    const fila = tbody.insertRow();
-                    const celda = fila.insertCell(0);
-                    celda.colSpan = 3;
-                    celda.textContent = "❌ No se encontró ningún estudiante con ese documento.";
-                    celda.style.textAlign = "center";
-                }
-            } else {
-                alert("⚠️ Error al obtener estudiantes desde el servidor.");
-            }
-        })
-        .catch(err => {
-            console.error("Error al filtrar estudiante:", err);
-            alert("❌ Error de conexión con el servidor.");
-        });
-}
-
 function obtenerDocenteFiltrado() {
-    const input = document.getElementById("documento_docente");
-    const documento = input.value.trim();
+    const documento = document.getElementById("documento_docente").value.trim();
 
-    if (!documento) {
-        alert("⚠️ Debes ingresar un número de documento para buscar.");
-        return;
-    }
+    if (!documento) return alert("⚠️ Debes ingresar un número de documento.");
 
-    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/obtener_docentes")
+    fetch(`${API_URL}/obtener_docentes`)
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                // Buscar el docente por ID (documento)
                 const docente = data.docentes.find(e => String(e.id) === documento);
-
                 const tbody = document.querySelector("#tablaDocentes tbody");
                 tbody.innerHTML = "";
 
@@ -259,20 +189,12 @@ function obtenerDocenteFiltrado() {
                     const fila = tbody.insertRow();
                     const celda = fila.insertCell(0);
                     celda.colSpan = 3;
-                    celda.textContent = "❌ No se encontró ningún Docente con ese documento.";
+                    celda.textContent = "❌ No se encontró ningún docente.";
                     celda.style.textAlign = "center";
                 }
-            } else {
-                alert("⚠️ Error al obtener Docente desde el servidor.");
             }
-        })
-        .catch(err => {
-            console.error("Error al filtrar Docente:", err);
-            alert("❌ Error de conexión con el servidor.");
         });
 }
-
-
 
 function actualizarTablaDocentes(docentes) {
     const tbody = document.querySelector("#tablaDocentes tbody");
@@ -284,44 +206,17 @@ function actualizarTablaDocentes(docentes) {
     });
 }
 
-
-
 // =============================
 // 📥 Estudiantes
 // =============================
 function obtenerEstudiantes() {
-    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/obtener_estudiantes")
+    fetch(`${API_URL}/obtener_estudiantes`)
         .then(res => res.json())
         .then(data => {
-            if (data.success) {
-                actualizarTablaEstudiantes(data.estudiantes);
-            }
+            if (data.success) actualizarTablaEstudiantes(data.estudiantes);
         })
         .catch(err => console.error("Error:", err));
 }
-
-function cargarProgramas() {
-    fetch('https://fvbpfuy3pd.us-east-2.awsapprunner.com/programas')  
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const programas = data.programas;
-                const select = document.getElementById('programaAcademico');
-                select.innerHTML = '<<option value="">Seleccione un programa</option>'; 
-                programas.forEach(p => {
-                    const option = document.createElement('option');
-                    option.value = p.id; 
-                    option.textContent = p.nombre_programa;
-                    select.appendChild(option);
-                });
-            } else {
-                console.error("⚠️ Error al cargar programas:", data);
-            }
-        })
-        .catch(error => console.error('❌ Error al cargar programas:', error));
-}
-
-
 
 function actualizarTablaEstudiantes(estudiantes) {
     const tbody = document.querySelector("#tablaEstudiantes tbody");
@@ -334,12 +229,11 @@ function actualizarTablaEstudiantes(estudiantes) {
     });
 }
 
-
 // =============================
 // 📥 Programas
 // =============================
 function obtener_programas() {
-    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/programas")
+    fetch(`${API_URL}/programas`)
         .then(res => res.json())
         .then(data => {
             if (data.success) actualizarTablaprogramas(data.programas);
@@ -354,65 +248,58 @@ function actualizarTablaprogramas(programas) {
         const fila = tbody.insertRow();
         fila.insertCell(0).textContent = p.id;
         fila.insertCell(1).textContent = p.nombre_programa;
-
     });
 }
- // buenas
+
 function registrar_programa() {
     const id = document.getElementById("idPrograma").value.trim();
     const nombre = document.getElementById("nombrePrograma").value.trim();
 
-    if (!id || !nombre) {
-        alert("Todos los campos son obligatorios");
-        return;
-    }
+    if (!id || !nombre) return alert("Todos los campos son obligatorios");
 
-    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/programas", {
+    fetch(`${API_URL}/programas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, nombre })
     })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            document.getElementById("registro_programas").reset();
-            obtener_programas();
-        } else alert("Error: " + data.message);
-    })
-    .catch(err => console.error("Error al conectar con el servidor:", err));
-}
-
-function registrar_modulo() {
-    const id = document.getElementById("idModulo").value.trim();
-    const nombre = document.getElementById("nombreModulo").value.trim();
-
-    if (!id || !nombre) {
-        alert("Todos los campos son obligatorios");
-        return;
-    }
-
-    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/modulos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, nombre })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            document.getElementById("registro_modulo").reset(); // ✅ corregido ID
-            obtener_modulos();
-        } else alert("Error: " + data.message);
-    })
-    .catch(err => console.error("Error al conectar con el servidor:", err));
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                document.getElementById("registro_programas").reset();
+                obtener_programas();
+            } else alert("Error: " + data.message);
+        })
+        .catch(err => console.error("Error al conectar con el servidor:", err));
 }
 
 // =============================
 // 📥 Módulos
 // =============================
+function registrar_modulo() {
+    const id = document.getElementById("idModulo").value.trim();
+    const nombre = document.getElementById("nombreModulo").value.trim();
+
+    if (!id || !nombre) return alert("Todos los campos son obligatorios");
+
+    fetch(`${API_URL}/modulos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, nombre })
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                document.getElementById("registro_modulo").reset();
+                obtener_modulos();
+            } else alert("Error: " + data.message);
+        })
+        .catch(err => console.error("Error al conectar con el servidor:", err));
+}
+
 function obtener_modulos() {
-    fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/modulos")
+    fetch(`${API_URL}/modulos`)
         .then(res => res.json())
         .then(data => {
             if (data.success) actualizarTablamodulos(data.modulos);
@@ -430,6 +317,9 @@ function actualizarTablamodulos(modulos) {
     });
 }
 
+// =============================
+// 📥 Registrar usuario
+// =============================
 function registrarUsuario() {
     const form = document.getElementById("registroUsuarioForm");
     if (!form) return;
@@ -440,140 +330,73 @@ function registrarUsuario() {
     if (selectRol && inputPrograma) {
         inputPrograma.value = "";
         inputPrograma.disabled = true;
-        inputPrograma.placeholder = "Solo disponible para estudiantes";
 
         selectRol.addEventListener("change", function () {
-            if (this.value === "Estudiante") {
-                inputPrograma.disabled = false;
-                inputPrograma.placeholder = "Ingrese el programa académico";
-            } else {
-                inputPrograma.value = "";
-                inputPrograma.disabled = true;
-                inputPrograma.placeholder = "Solo disponible para estudiantes";
-            }
-        });
-
-        form.addEventListener("reset", () => {
-            inputPrograma.disabled = true;
-            inputPrograma.placeholder = "Solo disponible para estudiantes";
+            inputPrograma.disabled = this.value !== "Estudiante";
+            if (this.value !== "Estudiante") inputPrograma.value = "";
         });
     }
 
     form.addEventListener("submit", e => {
         e.preventDefault();
 
-        // ===============================
-        // 🧩 Captura y limpieza de datos
-        // ===============================
         const rol = form.rolUsuario.value.trim();
         const id = form.idUsuario.value.trim();
-        const nombre = form.nombreUsuario.value.trim().replace(/\s{2,}/g, " "); // quita espacios dobles
+        const nombre = form.nombreUsuario.value.trim();
         const id_programa = inputPrograma.value.trim();
-        const contra = form.contraUsuario.value.replace(/\s+/g, ""); // elimina todos los espacios
+        const contra = form.contraUsuario.value.trim();
+
+        if (!rol || !id || !nombre || !contra) return alert("⚠️ Todos los campos son obligatorios.");
 
         const datos = { rol, id, nombre, id_programa, contra };
 
-        // ===============================
-        // 🔒 Validaciones de seguridad
-        // ===============================
-
-        // 1️⃣ Campos obligatorios
-        if (!rol || !id || !nombre || !contra) {
-            alert("⚠️ Todos los campos son obligatorios.");
-            return;
-        }
-
-        // 2️⃣ Programa académico solo si es estudiante
-        if (rol === "Estudiante" && !id_programa) {
-            alert("⚠️ Debes ingresar el programa académico del estudiante.");
-            return;
-        }
-
-        // 3️⃣ Validación de contraseña segura
-        const regexContra = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-        if (!regexContra.test(contra)) {
-            alert("⚠️ La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial.");
-            return;
-        }
-
-        // Si no es estudiante, se envía vacío el programa
         if (rol !== "Estudiante") datos.id_programa = "";
 
-        // ===============================
-        // 📡 Envío al backend
-        // ===============================
-        fetch("https://fvbpfuy3pd.us-east-2.awsapprunner.com/registrar_usuario", {
+        fetch(`${API_URL}/registrar_usuario`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert("✅ Usuario registrado con éxito.");
-                form.reset();
-
-                inputPrograma.disabled = true;
-                inputPrograma.placeholder = "Solo disponible para estudiantes";
-
-                // Recargar tablas o datos
-                obtenerDocentes();
-                obtenerEstudiantes();
-                cargarProgramas();
-            } else {
-                alert("❌ Error al registrar usuario: " + (data.message || "Desconocido"));
-            }
-        })
-        .catch(err => {
-            console.error("Error:", err);
-            alert("⚠️ Error en la conexión con el servidor.");
-        });
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Usuario registrado correctamente");
+                    form.reset();
+                    inputPrograma.disabled = true;
+                    obtenerDocentes();
+                    obtenerEstudiantes();
+                    cargarProgramas();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(err => {
+                console.error("Error:", err);
+                alert("Error en conexión con el servidor.");
+            });
     });
-
-    // ===============================
-    // ⛔ Evita que se escriban espacios en contraseña
-    // ===============================
-    const contraInput = document.getElementById("contraUsuario");
-    if (contraInput) {
-        contraInput.addEventListener("keydown", e => {
-            if (e.key === " ") {
-                e.preventDefault();
-                alert("🚫 No se permiten espacios en la contraseña.");
-            }
-        });
-    }
 }
 
-
-
-
+// =============================
+// Utilidades
+// =============================
 function cargarProgramas() {
-    fetch('https://fvbpfuy3pd.us-east-2.awsapprunner.com/programas')  
+    fetch(`${API_URL}/programas`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const programas = data.programas;
                 const select = document.getElementById('programaAcademico');
-                select.innerHTML = '<option value="">Seleccione un programa</option>'; 
-                programas.forEach(p => {
+                select.innerHTML = '<option value="">Seleccione un programa</option>';
+                data.programas.forEach(p => {
                     const option = document.createElement('option');
-                    option.value = p.id; 
+                    option.value = p.id;
                     option.textContent = p.nombre_programa;
                     select.appendChild(option);
                 });
-            } else {
-                console.error(" Error al cargar programas:", data);
             }
-        })
-        .catch(error => console.error(' Error al cargar programas:', error));
+        });
 }
 
-
-
-
-// =============================
-// ⚙️ Utilidades
-// =============================
 function openTab(evt, tabName) {
     document.querySelectorAll(".tabcontent").forEach(tab => tab.classList.remove("active"));
     document.querySelectorAll(".tablink").forEach(btn => btn.classList.remove("active"));
@@ -595,8 +418,3 @@ function cerrarSesion() {
     localStorage.clear();
     window.location.href = "index.html";
 }
-
-
-
-
-
