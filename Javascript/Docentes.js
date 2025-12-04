@@ -235,7 +235,7 @@ function actualizarTablaConsultas(consultas) {
     // ✅ BOTÓN FIRMA VIRTUAL (solo si NO está firmada)
 if (!firmaValor || firmaValor === "No Firmado") {
   const btnVirtual = document.createElement("button");
-  btnVirtual.textContent = "💻 Firma Virtual";
+  btnVirtual.textContent = "Firma Virtual";
   btnVirtual.style.background = "#28a745";
   btnVirtual.style.color = "white";
   btnVirtual.onclick = () => firmarConsultaVirtual(c.id);
