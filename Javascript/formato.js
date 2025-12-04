@@ -67,7 +67,7 @@ function mostrarAsistencia(asistencias) {
         celdaFirma.textContent = "📱 Firmado por QR";
         celdaFirma.style.color = "#007bff";
         celdaFirma.style.fontWeight = "bold";
-      } if (firmaValor.toLowerCase().includes("firmado virtualmente por docente")) {
+      } if (firmaValor.toLowerCase().includes("firmado virtualmente por el docente")) {
         celdaFirma.textContent = "Firma virtual";
         celdaFirma.style.color = "#007bff";
         celdaFirma.style.fontWeight = "bold";
