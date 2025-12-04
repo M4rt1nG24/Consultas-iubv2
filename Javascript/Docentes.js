@@ -244,6 +244,32 @@ if (!firmaValor || firmaValor === "No Firmado") {
   });
 }
 
+function firmarConsultaVirtual(idConsulta) {
+  const confirmar = confirm("¿Desea firmar esta consulta como VIRTUAL?");
+
+  if (!confirmar) return;
+
+  fetch(`${API_URL}/firmar_consulta/${idConsulta}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ firma: "Firmado virtualmente por el docente" })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert("✅ Consulta firmada virtualmente con éxito.");
+      obtener_consultas_docente(idDocente);
+    } else {
+      alert(data.message || "No se pudo firmar la consulta.");
+    }
+  })
+  .catch(err => {
+    console.error("Error al firmar virtualmente:", err);
+    alert("Error de conexión.");
+  });
+}
+
+
 
 
 
