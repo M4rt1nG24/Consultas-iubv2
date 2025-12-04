@@ -197,10 +197,14 @@ function actualizarTablaConsultas(consultas) {
     const firmaValor = c.firma ? c.firma.trim() : "";
     if (firmaValor && firmaValor !== "No Firmado") {
       if (firmaValor.toLowerCase() === "firmado por qr") {
-        celdaFirma.textContent = "📱 Firmado por QR";
+        celdaFirma.textContent = "Firmado por QR";
         celdaFirma.style.color = "#007bff";
         celdaFirma.style.fontWeight = "bold";
-      } else if (firmaValor.startsWith("data:image")) {
+      } if (firmaValor.toLowerCase() === "firmado virtualmente por el docente") {
+        celdaFirma.textContent = "Virtual";
+        celdaFirma.style.color = "#007bff";
+        celdaFirma.style.fontWeight = "bold";
+      }else if (firmaValor.startsWith("data:image")) {
         const img = document.createElement("img");
         img.src = firmaValor;
         img.alt = "Firma del estudiante";
