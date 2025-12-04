@@ -231,6 +231,16 @@ function actualizarTablaConsultas(consultas) {
     btnEscanear.textContent = "📷 Escanear";
     btnEscanear.onclick = () => iniciarEscaneo(c.id, c.id_estudiante);
     celdaAcciones.appendChild(btnEscanear);
+
+    // ✅ BOTÓN FIRMA VIRTUAL (solo si NO está firmada)
+if (!firmaValor || firmaValor === "No Firmado") {
+  const btnVirtual = document.createElement("button");
+  btnVirtual.textContent = "💻 Firma Virtual";
+  btnVirtual.style.background = "#28a745";
+  btnVirtual.style.color = "white";
+  btnVirtual.onclick = () => firmarConsultaVirtual(c.id);
+  celdaAcciones.appendChild(btnVirtual);
+}
   });
 }
 
